@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# RomMaster
+# https://github.com/travis134/RomMaster
+# Description : main script
+#
+
+echo "Hello, RomMaster!"
