@@ -5,4 +5,122 @@
 # Description : main script
 #
 
-echo "Hello, RomMaster!"
+# Reads systems.txt into a space-delimited string containing the name of all
+# supported systems.
+read_systems() {
+    local systems
+
+    systems=$(cat systems.txt)
+
+    echo "$systems"
+}
+
+# Creates a filter string for eliminating results for all systems except for
+# the system desired.
+filter_desired() {
+    local desired
+    local filter
+
+    desired=$1
+    systems=$(read_systems)
+
+    filter="AND subject:($desired)"
+    for system in $systems; do
+        # Avoid over filtering if the system name is a substring of desired,
+        # i.e. if we want "snes" we wouldn't want to filter out "nes" because.
+        # all "snes" entries would also be eliminated.
+        if ! [[ $desired == *$system* ]]; then
+            filter+=" AND !subject:($system)"
+        fi
+    done
+
+    echo "$filter"
+}
+
+search_romsets() {
+    local system
+    local query
+    local search_url
+    local response
+    local results
+
+    system=$1
+
+    system_filter=$(filter_desired "$system")
+    query="q=mediatype:(software) AND subject:(romset) $system_filter"
+    projection="fl[]=identifier,title"
+    search_url="https://archive.org/advancedsearch.php?output=json&$query&$projection"
+
+    # Response body is JSON data formatted as:
+    # {
+    #   ...,
+    #   "response": {
+    #     "docs": [
+    #       {
+    #         "identifier": "foo",
+    #         "title": "bar"
+    #       },
+    #       ...
+    #     ],
+    #     ...
+    #   },
+    #   ...
+    # }
+    # 
+    # Identifier values can only contain alphanumeric characters (limited to
+    # ASCII), underscores (_), dashes (-), or periods (.). We'll take advantage
+    # of that by packing the identifier and title together with a space to
+    # delimit them.
+    # https://archive.org/services/docs/api/metadata-schema/index.html#archive-org-identifiers
+    response=$(curl -s "$search_url")
+    results=$(echo "$response" |
+        jq -r '.response.docs[]
+        | "\(.identifier) \(.title)"'
+    )
+
+    echo "$results"
+}
+
+read_romset_metadata() {
+    local romset
+    local identifier
+    local metadata_url
+    local results
+
+    romset=$1
+    # Throw away the packed title value, we don't need it for this operation.
+    read -r identifier _ <<< "$romset"
+    metadata_url="https://archive.org/metadata/$identifier"
+
+    # Response body is JSON data formatted as:
+    # {
+    #   ...,
+    #   "files": [
+    #     {
+    #       "name": "foo",
+    #       "size": "bar",
+    #       "format": "baz",
+    #       ...
+    #     },
+    #   ...
+    #   ],
+    #   ...
+    # }
+    response=$(curl -s "$metadata_url")
+    # TODO: Improve file format filtering:
+    # 1. Configurable via text file
+    # 2. Scoped per system (i.e. ISO Image not desirable for NES, etc.)
+    results=$(echo "$response" |
+        jq -r '.files[]
+        | select( .format == "7z" or .format == "ZIP" or .format == "ISO Image" or .format == "Unknown")
+        | "https://archive.org/download/'"$identifier"'/\(.name)"
+    ')
+
+    echo "$results"
+}
+
+# Example usage, still WIP.
+romsets=$(search_romsets "nes")
+romset=$(sed '2q;d' <<< "$romsets")
+metadata=$(read_romset_metadata "$romset")
+echo "$metadata"
