@@ -1,0 +1,1067 @@
+{
+    "systems": [
+        {
+            "id": "arcade",
+            "name": "Arcade",
+            "ext": [
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "atomiswave",
+            "name": "Atomiswave",
+            "ext": [
+                "lst",
+                "bin",
+                "dat",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "daphne",
+            "name": "Daphne",
+            "ext": [
+                "daphne"
+            ]
+        },
+        {
+            "id": "fbneo",
+            "name": "Final Burn Neo",
+            "ext": [
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "mame",
+            "name": "MAME",
+            "ext": [
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "naomi",
+            "name": "Naomi",
+            "ext": [
+                "lst",
+                "bin",
+                "dat",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "neogeo",
+            "name": "Neo Geo",
+            "ext": [
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "atari2600",
+            "name": "Atari 2600",
+            "ext": [
+                "a26",
+                "bin",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "atari5200",
+            "name": "Atari 5200",
+            "ext": [
+                "rom",
+                "xfd",
+                "atr",
+                "atx",
+                "cdm",
+                "cas",
+                "car",
+                "bin",
+                "a52",
+                "xex",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "atari7800",
+            "name": "Atari 7800",
+            "ext": [
+                "a78",
+                "bin",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "atarilynx",
+            "name": "Lynx",
+            "ext": [
+                "lnx",
+                "o",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "sufami",
+            "name": "SuFami Turbo",
+            "ext": [
+                "st",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "wonderswan",
+            "name": "Wonderswan",
+            "ext": [
+                "ws",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "wonderswancolor",
+            "name": "Wonderswan Color",
+            "ext": [
+                "wsc",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "uzebox",
+            "name": "Uzebox",
+            "ext": [
+                "uze"
+            ]
+        },
+        {
+            "id": "coleco",
+            "name": "ColecoVision",
+            "ext": [
+                "bin",
+                "col",
+                "rom",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "channelf",
+            "name": "Channel F",
+            "ext": [
+                "bin",
+                "chf",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "odyssey",
+            "name": "Odyssey 2",
+            "ext": [
+                "bin",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "intellivision",
+            "name": "Intellivision",
+            "ext": [
+                "int",
+                "bin",
+                "rom",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "vectrex",
+            "name": "Vectrex",
+            "ext": [
+                "bin",
+                "gam",
+                "vec",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "pcengine",
+            "name": "PC Engine",
+            "ext": [
+                "pce",
+                "bin",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "pcenginecd",
+            "name": "PC Engine CD",
+            "ext": [
+                "cue",
+                "ccd",
+                "chd",
+                "toc",
+                "m3u"
+            ]
+        },
+        {
+            "id": "pcfx",
+            "name": "PC-FX",
+            "ext": [
+                "chd",
+                "cue",
+                "ccd",
+                "toc"
+            ]
+        },
+        {
+            "id": "sgfx",
+            "name": "Super Grafx",
+            "ext": [
+                "pce",
+                "sgx",
+                "cue",
+                "ccd",
+                "chd",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "tg16",
+            "name": "TurboGrafx-16",
+            "ext": [
+                "pce",
+                "bin",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "tg16cd",
+            "name": "TurboGrafx-CD",
+            "ext": [
+                "cue",
+                "ccd",
+                "chd",
+                "toc",
+                "m3u"
+            ]
+        },
+        {
+            "id": "famicom",
+            "name": "Famicom",
+            "ext": [
+                "nes",
+                "unif",
+                "unf",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "fds",
+            "name": "Famicom Disk System",
+            "ext": [
+                "fds",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "gameanswatch",
+            "name": "Game and Watch",
+            "ext": [
+                "mgw",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "gb",
+            "name": "Game Boy",
+            "ext": [
+                "gb",
+                "gbc",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(gb) AND !subject:(hack)"
+        },
+        {
+            "id": "gbh",
+            "name": "Game Boy (Hacks)",
+            "ext": [
+                "gb",
+                "gbc",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(gb) AND subject:(hack)"
+        },
+        {
+            "id": "gba",
+            "name": "Game Boy Advance",
+            "ext": [
+                "gba",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(gba) AND !subject:(hack)"
+        },
+        {
+            "id": "gbah",
+            "name": "Game Boy Advance (Hacks)",
+            "ext": [
+                "gba",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(gba) AND subject:(hack)"
+        },
+        {
+            "id": "gbc",
+            "name": "Game Boy Color",
+            "ext": [
+                "gb",
+                "gbc",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(gbc) AND !subject:(hack)"
+        },
+        {
+            "id": "gbch",
+            "name": "Game Boy Color (Hacks)",
+            "ext": [
+                "gb",
+                "gbc",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(gbc) AND subject:(hack)"
+        },
+        {
+            "id": "snesmsu1",
+            "name": "MSU-1",
+            "ext": [
+                "smc",
+                "fig",
+                "sfc",
+                "swc",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "n64",
+            "name": "Nintendo 64",
+            "ext": [
+                "z64",
+                "n64",
+                "v64",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "nes",
+            "name": "Nintendo Entertainment System",
+            "ext": [
+                "nes",
+                "unif",
+                "unf",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(nes) AND !subject:(hack)"
+        },
+        {
+            "id": "nesh",
+            "name": "Nintendo Entertainment System (Hacks)",
+            "ext": [
+                "nes",
+                "unif",
+                "unf",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(nes) AND subject:(hack)"
+        },
+        {
+            "id": "pokemini",
+            "name": "Pokemon Mini",
+            "ext": [
+                "min",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "snes",
+            "name": "Super Nintendo",
+            "ext": [
+                "smc",
+                "fig",
+                "sfc",
+                "swc",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(snes) AND !subject:(hack)"
+        },
+        {
+            "id": "snesh",
+            "name": "NO_NAME",
+            "ext": [
+                "smc",
+                "fig",
+                "sfc",
+                "swc",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(snes) AND subject:(hack)"
+        },
+        {
+            "id": "sfc",
+            "name": "Super Famicom",
+            "ext": [
+                "smc",
+                "fig",
+                "sfc",
+                "swc",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "satellaview",
+            "name": "Satellaview",
+            "ext": [
+                "smc",
+                "fig",
+                "vs",
+                "sfc",
+                "bsx",
+                "swc",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "virtualboy",
+            "name": "Virtual Boy",
+            "ext": [
+                "vb",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "3do",
+            "name": "3D0",
+            "ext": [
+                "bin",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "videopac",
+            "name": "VideoPac",
+            "ext": [
+                "vin",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "dreamcast",
+            "name": "Dreamcast",
+            "ext": [
+                "cdi",
+                "gdi",
+                "chd",
+                "m3u"
+            ]
+        },
+        {
+            "id": "gamegear",
+            "name": "Game Gear",
+            "ext": [
+                "bin",
+                "gg",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(gamegear) AND !subject:(hack)"
+        },
+        {
+            "id": "gamegearh",
+            "name": "NO_NAME",
+            "ext": [
+                "bin",
+                "gg",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(gamegear) AND subject:(hack)"
+        },
+        {
+            "id": "megadrive-japan",
+            "name": "Sega Mega Drive (Japan)",
+            "ext": [
+                "bin",
+                "gen",
+                "md",
+                "sg",
+                "smd",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "sega32x",
+            "name": "Sega 32X",
+            "ext": [
+                "32x",
+                "smd",
+                "bin",
+                "md",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "segacd",
+            "name": "Sega CD",
+            "ext": [
+                "chd",
+                "cue",
+                "iso",
+                "m3u"
+            ]
+        },
+        {
+            "id": "megacd",
+            "name": "Sega Mega-CD",
+            "ext": [
+                "chd",
+                "cue",
+                "iso",
+                "m3u"
+            ]
+        },
+        {
+            "id": "genesis",
+            "name": "Sega Genesis",
+            "ext": [
+                "bin",
+                "gen",
+                "md",
+                "sg",
+                "smd",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(genesis) AND !subject:(hack)"
+        },
+        {
+            "id": "genh",
+            "name": "NO_NAME",
+            "ext": [
+                "bin",
+                "gen",
+                "md",
+                "sg",
+                "smd",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(genesis) AND subject:(hack)"
+        },
+        {
+            "id": "mastersystem",
+            "name": "Sega Master System",
+            "ext": [
+                "bin",
+                "sms",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "megadrive",
+            "name": "Sega Mega Drive",
+            "ext": [
+                "bin",
+                "gen",
+                "md",
+                "sg",
+                "smd",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "saturn",
+            "name": "Sega Saturn",
+            "ext": [
+                "cue",
+                "chd",
+                "iso"
+            ]
+        },
+        {
+            "id": "sg-1000",
+            "name": "SG-1000",
+            "ext": [
+                "bin",
+                "sg",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "neocd",
+            "name": "Neo Geo CD",
+            "ext": [
+                "cue",
+                "iso",
+                "chd"
+            ]
+        },
+        {
+            "id": "ngp",
+            "name": "Neo Geo Pocker",
+            "ext": [
+                "ngc",
+                "ngp",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "ngpc",
+            "name": "Neo Geo Pocket Color",
+            "ext": [
+                "ngc",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "psx",
+            "name": "PlayStation",
+            "ext": [
+                "bin",
+                "cue",
+                "img",
+                "mdg",
+                "pbp",
+                "toc",
+                "cbn",
+                "m3u",
+                "ccd",
+                "chd",
+                "iso"
+            ]
+        },
+        {
+            "id": "psp",
+            "name": "PlayStation Portable",
+            "ext": [
+                "iso",
+                "cso",
+                "pbp"
+            ]
+        },
+        {
+            "id": "pspminis",
+            "name": "PSP Minis",
+            "ext": [
+                "iso",
+                "cso",
+                "pbp"
+            ]
+        },
+        {
+            "id": "supervision",
+            "name": "Watara Supervision",
+            "ext": [
+                "sv",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "megaduck",
+            "name": "Mega Duck",
+            "ext": [
+                "bin",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "amstradcpc",
+            "name": "Amstrad CPC",
+            "ext": [
+                "dsk",
+                "sna",
+                "tap",
+                "cdt",
+                "kcr",
+                "voc",
+                "m3u",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "atari800",
+            "name": "Atari 8000",
+            "ext": [
+                "rom",
+                " cfd",
+                "atr",
+                "atx",
+                "cdm",
+                "cas",
+                "car",
+                "bin",
+                "a53",
+                "xex",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "atarist",
+            "name": "Atari ST",
+            "ext": [
+                "st",
+                "msa",
+                "stx",
+                "dim",
+                "ipf",
+                "m3u",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "amiga",
+            "name": "Amiga",
+            "ext": [
+                "zip",
+                "adf",
+                "uae",
+                "ipf",
+                "dms",
+                "adz",
+                "lha",
+                "m3u",
+                "hdf",
+                "hdz"
+            ]
+        },
+        {
+            "id": "amigacd32",
+            "name": "Amiga CD32",
+            "ext": [
+                "iso",
+                "cue",
+                "ha",
+                "chd"
+            ]
+        },
+        {
+            "id": "c128",
+            "name": "Commodore 128",
+            "ext": [
+                "d64",
+                "d71",
+                "d80",
+                "d81",
+                "d82",
+                "g64",
+                "g41",
+                "x64",
+                "t64",
+                "tap",
+                "prg",
+                "p00",
+                "crt",
+                "bin",
+                "d6z",
+                "d7z",
+                "d8z",
+                "g6z",
+                "g4z",
+                "x6z",
+                "cmd",
+                "m3u",
+                "vsf",
+                "nib",
+                "nbz",
+                "zip"
+            ]
+        },
+        {
+            "id": "c16",
+            "name": "Comodore 16",
+            "ext": [
+                "d64",
+                "d71",
+                "d80",
+                "d81",
+                "d82",
+                "g64",
+                "g41",
+                "x64",
+                "t64",
+                "tap",
+                "prg",
+                "p00",
+                "crt",
+                "bin",
+                "d6z",
+                "d7z",
+                "d8z",
+                "g6z",
+                "g4z",
+                "x6z",
+                "cmd",
+                "m3u",
+                "vsf",
+                "nib",
+                "nbz",
+                "zip"
+            ]
+        },
+        {
+            "id": "c64",
+            "name": "Commodore 64",
+            "ext": [
+                "d64",
+                "d71",
+                "d80",
+                "d81",
+                "d82",
+                "g64",
+                "g41",
+                "x64",
+                "t64",
+                "tap",
+                "prg",
+                "p00",
+                "crt",
+                "bin",
+                "d6z",
+                "d7z",
+                "d8z",
+                "g6z",
+                "g4z",
+                "x6z",
+                "cmd",
+                "m3u",
+                "vsf",
+                "nib",
+                "nbz",
+                "zip"
+            ]
+        },
+        {
+            "id": "vic20",
+            "name": "Comodore VIC-20",
+            "ext": [
+                "20",
+                "40",
+                "60",
+                "a0",
+                "b0",
+                "d64",
+                "d71",
+                "d80",
+                "d81",
+                "d82",
+                "g64",
+                "g41",
+                "x64",
+                "t64",
+                "tap",
+                "prg",
+                "p00",
+                "crt",
+                "bin",
+                "gz",
+                "d6z",
+                "d7z",
+                "d8z",
+                "g6z",
+                "g4z",
+                "x6z",
+                "cmd",
+                "m3u",
+                "vsf",
+                "nib",
+                "nbz",
+                "zip"
+            ]
+        },
+        {
+            "id": "pc",
+            "name": "MS-DOS",
+            "ext": [
+                "com",
+                "bat",
+                "exe",
+                "dosz"
+            ]
+        },
+        {
+            "id": "msx",
+            "name": "MSX",
+            "ext": [
+                "dsk",
+                "mx1",
+                "mx2",
+                "rom",
+                "zip",
+                "7z",
+                "m3u"
+            ]
+        },
+        {
+            "id": "msx2",
+            "name": "MSX2",
+            "ext": [
+                "dsk",
+                "mx1",
+                "mx2",
+                "rom",
+                "zip",
+                "7z",
+                "m3u"
+            ]
+        },
+        {
+            "id": "pc88",
+            "name": "PC-8800",
+            "ext": [
+                "d88",
+                "m3u"
+            ]
+        },
+        {
+            "id": "pc98",
+            "name": "PC-9800",
+            "ext": [
+                "d98",
+                "zip",
+                "98d",
+                "dfi",
+                "fdd",
+                "2hd",
+                "tfd",
+                "d88",
+                "88d",
+                "hdm",
+                "xdf",
+                "dup",
+                "hdi",
+                "thd",
+                "nhd",
+                "hdd",
+                "hdn"
+            ]
+        },
+        {
+            "id": "sc-3000",
+            "name": "SC-3000",
+            "ext": [
+                "bin",
+                "sg",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "x1",
+            "name": "Sharp X1",
+            "ext": [
+                "dx1",
+                "2d",
+                "2hd",
+                "tfd",
+                "d88",
+                "88d",
+                "hdm",
+                "xdf",
+                "dup",
+                "tap",
+                "cmd",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "x68000",
+            "name": "x68000",
+            "ext": [
+                "dim",
+                "img",
+                "d88",
+                "88d",
+                "hdm",
+                "dup",
+                "2hd",
+                "xdf",
+                "hdf",
+                "cmd",
+                "m3u",
+                "zip",
+                "1z"
+            ]
+        },
+        {
+            "id": "zxspectrum",
+            "name": "Sinclair ZX Spectrum",
+            "ext": [
+                "tzx",
+                "tap",
+                "z80",
+                "rzx",
+                "scl",
+                "trd",
+                "dsk",
+                "zip",
+                "7z"
+            ]
+        },
+        {
+            "id": "zx81",
+            "name": "Sinclair ZX81",
+            "ext": [
+                "tzx",
+                "p",
+                "zip",
+                "7z"
+            ]
+        }
+    ]
+}

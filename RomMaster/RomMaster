@@ -5,51 +5,72 @@
 # Description : main script
 #
 
-# Reads systems.txt into a space-delimited string containing the name of all
-# supported systems.
-read_systems() {
-    local systems
+# Reads config JSON in which contains information about supported systems, the
+# expected extensions for suitable roms, and query overrides for better search
+# results.
+read_config() {
+    local config
 
-    systems=$(cat systems.txt)
+    config=$(cat config.json)
 
-    echo "$systems"
+    echo "$config"
 }
 
-# Creates a filter string for eliminating results for all systems except for
+# Creates a query string for eliminating results for all systems except for
 # the system desired.
-filter_desired() {
+system_query() {
+    local desired_id
+    local config
     local desired
-    local filter
+    local default
+    local query
 
-    desired=$1
-    systems=$(read_systems)
+    desired_id=$1
+    config=$(read_config)
+    desired=$(echo "$config" \
+        | jq -r --arg desired_id "$desired_id" '.systems[]
+            | select(.id == $desired_id)'
+    )
+    default="subject:($desired_id)"
+    query=$(echo "$desired" \
+        | jq -r --arg default "$default" '.query // $default'
+    )
 
-    filter="AND subject:($desired)"
-    for system in $systems; do
-        # Avoid over filtering if the system name is a substring of desired,
-        # i.e. if we want "snes" we wouldn't want to filter out "nes" because.
-        # all "snes" entries would also be eliminated.
-        if ! [[ $desired == *$system* ]]; then
-            filter+=" AND !subject:($system)"
-        fi
-    done
 
-    echo "$filter"
+    # Avoid over filtering if the system name is a substring of desired,
+    # i.e. if we want "snes" we wouldn't want to filter out "nes" because.
+    # all "snes" entries would also be eliminated.
+    query+=$(echo "$config" \
+        | jq -r --arg desired_id "$desired_id" '.systems
+            | map(
+                select(.id | inside($desired_id) | not)
+                | " AND !subject:(\(.id))")
+            | join("")'
+    )
+
+    echo "$query"
 }
 
+# Searches for romsets that are compatible with a given system ID and returns
+# results as a JSON array of identifiers and titles.
 search_romsets() {
-    local system
+    local system_id
+    local system_filter
     local query
+    local projection
     local search_url
     local response
     local results
 
-    system=$1
+    system_id=$1
 
-    system_filter=$(filter_desired "$system")
-    query="q=mediatype:(software) AND subject:(romset) $system_filter"
-    projection="fl[]=identifier,title"
-    search_url="https://archive.org/advancedsearch.php?output=json&$query&$projection"
+    system_filter=$(system_query "$system_id")
+    # We need to URL encode the special characters using jq.
+    query=$(echo "mediatype:(software) AND subject:(romset) AND $system_filter" \
+        | jq -sRr @uri
+    )
+    projection="identifier,title"
+    search_url="https://archive.org/advancedsearch.php?output=json&q=$query&fl[]=$projection"
 
     # Response body is JSON data formatted as:
     # {
@@ -67,30 +88,37 @@ search_romsets() {
     #   ...
     # }
     # 
-    # Identifier values can only contain alphanumeric characters (limited to
-    # ASCII), underscores (_), dashes (-), or periods (.). We'll take advantage
-    # of that by packing the identifier and title together with a space to
-    # delimit them.
-    # https://archive.org/services/docs/api/metadata-schema/index.html#archive-org-identifiers
     response=$(curl -s "$search_url")
-    results=$(echo "$response" |
-        jq -r '.response.docs[]
-        | "\(.identifier) \(.title)"'
+    results=$(echo "$response" \
+        | jq .response.docs
     )
 
     echo "$results"
 }
 
-read_romset_metadata() {
+read_files() {
+    local system_id
     local romset
-    local identifier
+    local system_ext
+    local romset_id
     local metadata_url
+    local response
     local results
 
-    romset=$1
-    # Throw away the packed title value, we don't need it for this operation.
-    read -r identifier _ <<< "$romset"
-    metadata_url="https://archive.org/metadata/$identifier"
+    system_id=$1
+    romset=$2
+
+    config=$(read_config)
+    system_ext=$(echo "$config" \
+        | jq -r --arg system_id "$system_id" '.systems[]
+            | select(.id == $system_id)
+            | .ext' 
+    )
+    romset_id=$(echo "$romset" \
+        | jq -r .identifier
+    )
+
+    metadata_url="https://archive.org/metadata/$romset_id"
 
     # Response body is JSON data formatted as:
     # {
@@ -107,20 +135,19 @@ read_romset_metadata() {
     #   ...
     # }
     response=$(curl -s "$metadata_url")
-    # TODO: Improve file format filtering:
-    # 1. Configurable via text file
-    # 2. Scoped per system (i.e. ISO Image not desirable for NES, etc.)
-    results=$(echo "$response" |
-        jq -r '.files[]
-        | select( .format == "7z" or .format == "ZIP" or .format == "ISO Image" or .format == "Unknown")
-        | "https://archive.org/download/'"$identifier"'/\(.name)"
+    results=$(echo "$response" \
+        | jq -r --arg romset_id "$romset_id" '.files[]
+            | select( .format == "7z" or .format == "ZIP" or .format == "ISO Image" or .format == "Unknown")
+            | "https://archive.org/download/\($romset_id)/\(.name)"
     ')
 
     echo "$results"
 }
 
 # Example usage, still WIP.
-romsets=$(search_romsets "nes")
-romset=$(sed '2q;d' <<< "$romsets")
-metadata=$(read_romset_metadata "$romset")
-echo "$metadata"
+system_id=snes
+romsets=$(search_romsets "$system_id")
+romset=$(echo "$romsets" \
+    | jq -r .[0])
+files=$(read_files "$system_id" "$romset")
+echo "$files"
