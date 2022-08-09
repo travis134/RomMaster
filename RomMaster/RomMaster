@@ -12,7 +12,7 @@ log() {
     message=$1
     ts=$(date +"%Y-%m-%dT%H:%M:%S%z")
 
-    echo "$ts: $message" >&2
+    echo "${ts}: ${message}" >&2
 }
 
 # Reads config JSON in which contains information about supported systems, the
@@ -23,7 +23,7 @@ read_config() {
 
     config=$(cat config.json)
 
-    echo "$config"
+    echo "${config}"
 }
 
 # Creates a query string for eliminating results for all systems except for
@@ -37,28 +37,28 @@ system_query() {
 
     desired_id=$1
     config=$(read_config)
-    desired=$(echo "$config" \
-        | jq -r --arg desired_id "$desired_id" '.systems[]
+    desired=$(echo "${config}" \
+        | jq -r --arg desired_id "${desired_id}" '.systems[]
             | select(.id == $desired_id)'
     )
-    default="subject:($desired_id)"
-    query=$(echo "$desired" \
-        | jq -r --arg default "$default" '.query // $default'
+    default="subject:(${desired_id})"
+    query=$(echo "${desired}" \
+        | jq -r --arg default "${default}" '.query // $default'
     )
 
 
     # Avoid over filtering if the system name is a substring of desired,
     # i.e. if we want "snes" we wouldn't want to filter out "nes" because.
     # all "snes" entries would also be eliminated.
-    query+=$(echo "$config" \
-        | jq -r --arg desired_id "$desired_id" '.systems
+    query+=$(echo "${config}" \
+        | jq -r --arg desired_id "${desired_id}" '.systems
             | map(
                 select(.id | inside($desired_id) | not)
                 | " AND !subject:(\(.id))")
             | join("")'
     )
 
-    echo "$query"
+    echo "${query}"
 }
 
 # Searches for romsets that are compatible with a given system ID and returns
@@ -74,17 +74,17 @@ search_romsets() {
     local results_count
 
     system_id=$1
-    log "Searching romsets for system: $system_id"
+    log "Searching romsets for system: ${system_id}"
 
-    system_filter=$(system_query "$system_id")
+    system_filter=$(system_query "${system_id}")
     # We need to URL encode the special characters using jq.
-    query=$(echo "mediatype:(software) AND subject:(romset) AND $system_filter" \
+    query=$(echo "mediatype:(software) AND subject:(romset) AND ${system_filter}" \
         | jq -sRr @uri
     )
     projection="identifier,title"
-    search_url="https://archive.org/advancedsearch.php?output=json&q=$query&fl[]=$projection"
+    search_url="https://archive.org/advancedsearch.php?output=json&q=${query}&fl[]=${projection}"
 
-    log "Searching with url: $search_url"
+    log "Searching with url: ${search_url}"
 
     # Response body is JSON data formatted as:
     # {
@@ -101,16 +101,16 @@ search_romsets() {
     #   ...
     # }
     # 
-    response=$(curl -s "$search_url")
-    results=$(echo "$response" \
+    response=$(curl -s "${search_url}")
+    results=$(echo "${response}" \
         | jq .response.docs
     )
-    results_count=$(echo "$results" \
+    results_count=$(echo "${results}" \
         | jq '. | length'
     )
-    log "Found $results_count matching romsets"
+    log "Found ${results_count} matching romsets"
 
-    echo "$results"
+    echo "${results}"
 }
 
 read_files() {
@@ -126,18 +126,18 @@ read_files() {
     romset=$2
 
     config=$(read_config)
-    system_ext=$(echo "$config" \
-        | jq -r --arg system_id "$system_id" '.systems[]
+    system_ext=$(echo "${config}" \
+        | jq -r --arg system_id "${system_id}" '.systems[]
             | select(.id == $system_id)
             | .ext' 
     )
-    romset_id=$(echo "$romset" \
+    romset_id=$(echo "${romset}" \
         | jq -r .identifier
     )
 
-    metadata_url="https://archive.org/metadata/$romset_id"
+    metadata_url="https://archive.org/metadata/${romset_id}"
 
-    log "Loading metadata with url: $metadata_url"
+    log "Loading metadata with url: ${metadata_url}"
 
     # Response body is JSON data formatted as:
     # {
@@ -151,22 +151,22 @@ read_files() {
     #   ],
     #   ...
     # }
-    response=$(curl -s "$metadata_url")
-    results=$(echo "$response" \
-        | jq -r --arg system_ext "$system_ext" --arg romset_id "$romset_id" '.files
+    response=$(curl -s "${metadata_url}")
+    results=$(echo "${response}" \
+        | jq -r --arg system_ext "${system_ext}" '.files
             | map(
                 select(.name | split(".")[-1] | inside($system_ext))
                 | {name: .name, size: .size})'
     )
 
-    echo "$results"
+    echo "${results}"
 }
 
 # Example usage, still WIP.
 log "Starting RomMaster"
 system_id=snes
-romsets=$(search_romsets "$system_id")
-romset=$(echo "$romsets" \
+romsets=$(search_romsets "${system_id}")
+romset=$(echo "${romsets}" \
     | jq -r .[0])
-files=$(read_files "$system_id" "$romset")
-echo "$files"
+files=$(read_files "${system_id}" "${romset}")
+echo "${files}"
