@@ -5,6 +5,16 @@
 # Description : main script
 #
 
+log() {
+    local message
+    local ts
+
+    message=$1
+    ts=$(date +"%Y-%m-%dT%H:%M:%S%z")
+
+    echo "$ts: $message" >&2
+}
+
 # Reads config JSON in which contains information about supported systems, the
 # expected extensions for suitable roms, and query overrides for better search
 # results.
@@ -61,8 +71,10 @@ search_romsets() {
     local search_url
     local response
     local results
+    local results_count
 
     system_id=$1
+    log "Searching romsets for system: $system_id"
 
     system_filter=$(system_query "$system_id")
     # We need to URL encode the special characters using jq.
@@ -72,9 +84,10 @@ search_romsets() {
     projection="identifier,title"
     search_url="https://archive.org/advancedsearch.php?output=json&q=$query&fl[]=$projection"
 
+    log "Searching with url: $search_url"
+
     # Response body is JSON data formatted as:
     # {
-    #   ...,
     #   "response": {
     #     "docs": [
     #       {
@@ -92,6 +105,10 @@ search_romsets() {
     results=$(echo "$response" \
         | jq .response.docs
     )
+    results_count=$(echo "$results" \
+        | jq '. | length'
+    )
+    log "Found $results_count matching romsets"
 
     echo "$results"
 }
@@ -120,14 +137,14 @@ read_files() {
 
     metadata_url="https://archive.org/metadata/$romset_id"
 
+    log "Loading metadata with url: $metadata_url"
+
     # Response body is JSON data formatted as:
     # {
-    #   ...,
     #   "files": [
     #     {
     #       "name": "foo",
     #       "size": "bar",
-    #       "format": "baz",
     #       ...
     #     },
     #   ...
@@ -136,15 +153,17 @@ read_files() {
     # }
     response=$(curl -s "$metadata_url")
     results=$(echo "$response" \
-        | jq -r --arg romset_id "$romset_id" '.files[]
-            | select( .format == "7z" or .format == "ZIP" or .format == "ISO Image" or .format == "Unknown")
-            | "https://archive.org/download/\($romset_id)/\(.name)"
-    ')
+        | jq -r --arg system_ext "$system_ext" --arg romset_id "$romset_id" '.files
+            | map(
+                select(.name | split(".")[-1] | inside($system_ext))
+                | {name: .name, size: .size})'
+    )
 
     echo "$results"
 }
 
 # Example usage, still WIP.
+log "Starting RomMaster"
 system_id=snes
 romsets=$(search_romsets "$system_id")
 romset=$(echo "$romsets" \
