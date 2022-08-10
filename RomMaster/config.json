@@ -1,4 +1,5 @@
 {
+    "query": "mediatype:software",
     "systems": [
         {
             "id": "arcade",
@@ -6,7 +7,8 @@
             "ext": [
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(arcade)"
         },
         {
             "id": "atomiswave",
@@ -17,14 +19,16 @@
                 "dat",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(atomiswave)"
         },
         {
             "id": "daphne",
             "name": "Daphne",
             "ext": [
                 "daphne"
-            ]
+            ],
+            "query": "subject:(daphne)"
         },
         {
             "id": "fbneo",
@@ -32,7 +36,8 @@
             "ext": [
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(fbneo)"
         },
         {
             "id": "mame",
@@ -40,7 +45,8 @@
             "ext": [
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(mame)"
         },
         {
             "id": "naomi",
@@ -51,7 +57,8 @@
                 "dat",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(naomi)"
         },
         {
             "id": "neogeo",
@@ -59,7 +66,8 @@
             "ext": [
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(neogeo)"
         },
         {
             "id": "atari2600",
@@ -69,7 +77,8 @@
                 "bin",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(atari2600)"
         },
         {
             "id": "atari5200",
@@ -87,7 +96,8 @@
                 "xex",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(atari5200)"
         },
         {
             "id": "atari7800",
@@ -97,7 +107,8 @@
                 "bin",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(atari7800)"
         },
         {
             "id": "atarilynx",
@@ -107,7 +118,8 @@
                 "o",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(atarilynx)"
         },
         {
             "id": "sufami",
@@ -116,7 +128,8 @@
                 "st",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(sufami)"
         },
         {
             "id": "wonderswan",
@@ -125,7 +138,8 @@
                 "ws",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(wonderswan)"
         },
         {
             "id": "wonderswancolor",
@@ -134,14 +148,16 @@
                 "wsc",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(wonderswancolor)"
         },
         {
             "id": "uzebox",
             "name": "Uzebox",
             "ext": [
                 "uze"
-            ]
+            ],
+            "query": "subject:(uzebox)"
         },
         {
             "id": "coleco",
@@ -152,7 +168,8 @@
                 "rom",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(coleco)"
         },
         {
             "id": "channelf",
@@ -162,7 +179,8 @@
                 "chf",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(channelf)"
         },
         {
             "id": "odyssey",
@@ -171,7 +189,8 @@
                 "bin",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(odyssey)"
         },
         {
             "id": "intellivision",
@@ -182,7 +201,8 @@
                 "rom",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(intellivision)"
         },
         {
             "id": "vectrex",
@@ -193,7 +213,8 @@
                 "vec",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(vectrex)"
         },
         {
             "id": "pcengine",
@@ -203,7 +224,8 @@
                 "bin",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(pcengine)"
         },
         {
             "id": "pcenginecd",
@@ -214,7 +236,8 @@
                 "chd",
                 "toc",
                 "m3u"
-            ]
+            ],
+            "query": "subject:(pcenginecd)"
         },
         {
             "id": "pcfx",
@@ -224,7 +247,8 @@
                 "cue",
                 "ccd",
                 "toc"
-            ]
+            ],
+            "query": "subject:(pcfx)"
         },
         {
             "id": "sgfx",
@@ -237,7 +261,8 @@
                 "chd",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(sgfx)"
         },
         {
             "id": "tg16",
@@ -247,7 +272,8 @@
                 "bin",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(tg16)"
         },
         {
             "id": "tg16cd",
@@ -258,7 +284,8 @@
                 "chd",
                 "toc",
                 "m3u"
-            ]
+            ],
+            "query": "subject:(tg16cd)"
         },
         {
             "id": "famicom",
@@ -269,7 +296,8 @@
                 "unf",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(famicom)"
         },
         {
             "id": "fds",
@@ -278,7 +306,8 @@
                 "fds",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(fds)"
         },
         {
             "id": "gameanswatch",
@@ -287,7 +316,8 @@
                 "mgw",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(gameanswatch)"
         },
         {
             "id": "gb",
@@ -298,7 +328,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gb) AND !subject:(hack)"
+            "query": "subject:((gb OR gameboy OR \"game boy\") (rom OR roms OR romset) NOT hack)"
         },
         {
             "id": "gbh",
@@ -309,7 +339,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gb) AND subject:(hack)"
+            "query": "subject:((gb OR gameboy OR \"game boy\") (rom OR roms OR romset) hack)"
         },
         {
             "id": "gba",
@@ -319,7 +349,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gba) AND !subject:(hack)"
+            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") (rom OR roms OR romset) NOT hack)"
         },
         {
             "id": "gbah",
@@ -329,7 +359,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gba) AND subject:(hack)"
+            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") (rom OR roms OR romset) hack)"
         },
         {
             "id": "gbc",
@@ -340,7 +370,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gbc) AND !subject:(hack)"
+            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") (rom OR roms OR romset) NOT hack)"
         },
         {
             "id": "gbch",
@@ -351,7 +381,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gbc) AND subject:(hack)"
+            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") (rom OR roms OR romset) hack)"
         },
         {
             "id": "snesmsu1",
@@ -363,7 +393,8 @@
                 "swc",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(snesmsu1)"
         },
         {
             "id": "n64",
@@ -374,7 +405,8 @@
                 "v64",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(n64)"
         },
         {
             "id": "nes",
@@ -386,7 +418,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(nes) AND !subject:(hack)"
+            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") (rom OR roms OR romset) NOT hack)"
         },
         {
             "id": "nesh",
@@ -398,7 +430,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(nes) AND subject:(hack)"
+            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") (rom OR roms OR romset) hack)"
         },
         {
             "id": "pokemini",
@@ -407,7 +439,8 @@
                 "min",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(pokemini)"
         },
         {
             "id": "snes",
@@ -420,11 +453,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(snes) AND !subject:(hack)"
+            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") (rom OR roms OR romset) NOT hack)"
         },
         {
             "id": "snesh",
-            "name": "NO_NAME",
+            "name": "Super Nintendo (Hacks)",
             "ext": [
                 "smc",
                 "fig",
@@ -433,7 +466,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(snes) AND subject:(hack)"
+            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") (rom OR roms OR romset) hack)"
         },
         {
             "id": "sfc",
@@ -445,7 +478,8 @@
                 "swc",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(sfc)"
         },
         {
             "id": "satellaview",
@@ -459,7 +493,8 @@
                 "swc",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(satellaview)"
         },
         {
             "id": "virtualboy",
@@ -468,7 +503,8 @@
                 "vb",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(virtualboy)"
         },
         {
             "id": "3do",
@@ -477,7 +513,8 @@
                 "bin",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(3do)"
         },
         {
             "id": "videopac",
@@ -486,7 +523,8 @@
                 "vin",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(videopac)"
         },
         {
             "id": "dreamcast",
@@ -496,7 +534,8 @@
                 "gdi",
                 "chd",
                 "m3u"
-            ]
+            ],
+            "query": "subject:(dreamcast)"
         },
         {
             "id": "gamegear",
@@ -507,18 +546,18 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gamegear) AND !subject:(hack)"
+            "query": "subject:((gg OR gamegear OR \"game gear\") (rom OR roms OR romset) NOT hack)"
         },
         {
             "id": "gamegearh",
-            "name": "NO_NAME",
+            "name": "Game Gear (Hacks)",
             "ext": [
                 "bin",
                 "gg",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gamegear) AND subject:(hack)"
+            "query": "subject:((gg OR gamegear OR \"game gear\") (rom OR roms OR romset) hack)"
         },
         {
             "id": "megadrive-japan",
@@ -531,7 +570,8 @@
                 "smd",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(megadrive-japan)"
         },
         {
             "id": "sega32x",
@@ -543,7 +583,8 @@
                 "md",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(sega32x)"
         },
         {
             "id": "segacd",
@@ -553,7 +594,8 @@
                 "cue",
                 "iso",
                 "m3u"
-            ]
+            ],
+            "query": "subject:(segacd)"
         },
         {
             "id": "megacd",
@@ -563,7 +605,8 @@
                 "cue",
                 "iso",
                 "m3u"
-            ]
+            ],
+            "query": "subject:(megacd)"
         },
         {
             "id": "genesis",
@@ -577,11 +620,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(genesis) AND !subject:(hack)"
+            "query": "subject:((genesis OR \"sega genesis\") (rom OR roms OR romset) NOT hack)"
         },
         {
             "id": "genh",
-            "name": "NO_NAME",
+            "name": "Sega Genesis (Hacks)",
             "ext": [
                 "bin",
                 "gen",
@@ -591,7 +634,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(genesis) AND subject:(hack)"
+            "query": "subject:((genesis OR \"sega genesis\") (rom OR roms OR romset) hack)"
         },
         {
             "id": "mastersystem",
@@ -601,7 +644,8 @@
                 "sms",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(mastersystem)"
         },
         {
             "id": "megadrive",
@@ -614,7 +658,8 @@
                 "smd",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(megadrive)"
         },
         {
             "id": "saturn",
@@ -623,7 +668,8 @@
                 "cue",
                 "chd",
                 "iso"
-            ]
+            ],
+            "query": "subject:(saturn)"
         },
         {
             "id": "sg-1000",
@@ -633,7 +679,8 @@
                 "sg",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(sg-1000)"
         },
         {
             "id": "neocd",
@@ -642,7 +689,8 @@
                 "cue",
                 "iso",
                 "chd"
-            ]
+            ],
+            "query": "subject:(neocd)"
         },
         {
             "id": "ngp",
@@ -652,7 +700,8 @@
                 "ngp",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(ngp)"
         },
         {
             "id": "ngpc",
@@ -661,7 +710,8 @@
                 "ngc",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(ngpc)"
         },
         {
             "id": "psx",
@@ -678,7 +728,8 @@
                 "ccd",
                 "chd",
                 "iso"
-            ]
+            ],
+            "query": "subject:(psx)"
         },
         {
             "id": "psp",
@@ -687,7 +738,8 @@
                 "iso",
                 "cso",
                 "pbp"
-            ]
+            ],
+            "query": "subject:(psp)"
         },
         {
             "id": "pspminis",
@@ -696,7 +748,8 @@
                 "iso",
                 "cso",
                 "pbp"
-            ]
+            ],
+            "query": "subject:(pspminis)"
         },
         {
             "id": "supervision",
@@ -705,7 +758,8 @@
                 "sv",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(supervision)"
         },
         {
             "id": "megaduck",
@@ -714,7 +768,8 @@
                 "bin",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(megaduck)"
         },
         {
             "id": "amstradcpc",
@@ -729,7 +784,8 @@
                 "m3u",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(amstradcpc)"
         },
         {
             "id": "atari800",
@@ -747,7 +803,8 @@
                 "xex",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(atari800)"
         },
         {
             "id": "atarist",
@@ -761,7 +818,8 @@
                 "m3u",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(atarist)"
         },
         {
             "id": "amiga",
@@ -777,7 +835,8 @@
                 "m3u",
                 "hdf",
                 "hdz"
-            ]
+            ],
+            "query": "subject:(amiga)"
         },
         {
             "id": "amigacd32",
@@ -787,7 +846,8 @@
                 "cue",
                 "ha",
                 "chd"
-            ]
+            ],
+            "query": "subject:(amigacd32)"
         },
         {
             "id": "c128",
@@ -819,7 +879,8 @@
                 "nib",
                 "nbz",
                 "zip"
-            ]
+            ],
+            "query": "subject:(c128)"
         },
         {
             "id": "c16",
@@ -851,7 +912,8 @@
                 "nib",
                 "nbz",
                 "zip"
-            ]
+            ],
+            "query": "subject:(c16)"
         },
         {
             "id": "c64",
@@ -883,7 +945,8 @@
                 "nib",
                 "nbz",
                 "zip"
-            ]
+            ],
+            "query": "subject:(c64)"
         },
         {
             "id": "vic20",
@@ -921,7 +984,8 @@
                 "nib",
                 "nbz",
                 "zip"
-            ]
+            ],
+            "query": "subject:(vic20)"
         },
         {
             "id": "pc",
@@ -931,7 +995,8 @@
                 "bat",
                 "exe",
                 "dosz"
-            ]
+            ],
+            "query": "subject:(pc)"
         },
         {
             "id": "msx",
@@ -944,7 +1009,8 @@
                 "zip",
                 "7z",
                 "m3u"
-            ]
+            ],
+            "query": "subject:(msx)"
         },
         {
             "id": "msx2",
@@ -957,7 +1023,8 @@
                 "zip",
                 "7z",
                 "m3u"
-            ]
+            ],
+            "query": "subject:(msx2)"
         },
         {
             "id": "pc88",
@@ -965,7 +1032,8 @@
             "ext": [
                 "d88",
                 "m3u"
-            ]
+            ],
+            "query": "subject:(pc88)"
         },
         {
             "id": "pc98",
@@ -988,7 +1056,8 @@
                 "nhd",
                 "hdd",
                 "hdn"
-            ]
+            ],
+            "query": "subject:(pc98)"
         },
         {
             "id": "sc-3000",
@@ -998,7 +1067,8 @@
                 "sg",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(sc-3000)"
         },
         {
             "id": "x1",
@@ -1017,7 +1087,8 @@
                 "cmd",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(x1)"
         },
         {
             "id": "x68000",
@@ -1036,7 +1107,8 @@
                 "m3u",
                 "zip",
                 "1z"
-            ]
+            ],
+            "query": "subject:(x68000)"
         },
         {
             "id": "zxspectrum",
@@ -1051,7 +1123,8 @@
                 "dsk",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(zxspectrum)"
         },
         {
             "id": "zx81",
@@ -1061,7 +1134,8 @@
                 "p",
                 "zip",
                 "7z"
-            ]
+            ],
+            "query": "subject:(zx81)"
         }
     ]
 }

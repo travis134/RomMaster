@@ -32,7 +32,6 @@ system_query() {
     local desired_id
     local config
     local desired
-    local default
     local query
 
     desired_id=$1
@@ -41,9 +40,12 @@ system_query() {
         | jq -r --arg desired_id "${desired_id}" '.systems[]
             | select(.id == $desired_id)'
     )
-    default="subject:(${desired_id})"
-    query=$(echo "${desired}" \
-        | jq -r --arg default "${default}" '.query // $default'
+    query=$(echo "${config}" \
+        | jq -r .query
+    )
+    query+=" AND "
+    query+=$(echo "${desired}" \
+        | jq -r '.query'
     )
 
 
@@ -67,6 +69,7 @@ search_romsets() {
     local system_id
     local system_filter
     local query
+    local search_romsets
     local projection
     local search_url
     local response
@@ -78,11 +81,12 @@ search_romsets() {
 
     system_filter=$(system_query "${system_id}")
     # We need to URL encode the special characters using jq.
-    query=$(echo "mediatype:(software) AND subject:(romset) AND ${system_filter}" \
+    query=$(echo "${system_filter}" \
         | jq -sRr @uri
     )
+    sort="downloads+desc"
     projection="identifier,title"
-    search_url="https://archive.org/advancedsearch.php?output=json&q=${query}&fl[]=${projection}"
+    search_url="https://archive.org/advancedsearch.php?output=json&q=${query}&fl[]=${projection}&sort[]=${sort}"
 
     log "Searching with url: ${search_url}"
 
