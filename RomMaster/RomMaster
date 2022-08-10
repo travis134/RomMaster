@@ -26,24 +26,38 @@ read_config() {
     echo "${config}"
 }
 
+# Reads the desired system info from the config file given the desired system
+# id.
+get_system() {
+    local systems
+    local desired_id
+    local desired
+
+    systems=$1
+    desired_id=$2
+
+    desired=$(echo "${systems}" \
+        | jq -r --arg desired_id "${desired_id}" '.[]
+            | select(.id == $desired_id)'
+    )
+
+    echo "${desired}"
+}
+
 # Creates a query string for eliminating results for all systems except for
 # the system desired.
-system_query() {
-    local desired_id
-    local config
+create_query() {
+    local base_query
+    local systems
     local desired
     local query
     local retain
 
-    desired_id=$1
-    config=$(read_config)
-    desired=$(echo "${config}" \
-        | jq -r --arg desired_id "${desired_id}" '.systems[]
-            | select(.id == $desired_id)'
-    )
-    query=$(echo "${config}" \
-        | jq -r .query
-    )
+    base_query=$1
+    systems=$2
+    desired=$3
+
+    query=${base_query}
     query+=" AND "
     query+=$(echo "${desired}" \
         | jq -r '.query'
@@ -56,8 +70,8 @@ system_query() {
     # Avoid over filtering if the system name is a substring of desired,
     # i.e. if we want "snes" we wouldn't want to filter out "nes" because.
     # all "snes" entries would also be eliminated.
-    query+=$(echo "${config}" \
-        | jq -r --arg desired_id "${desired_id}" --arg retain "${retain}" '.systems
+    query+=$(echo "${systems}" \
+        | jq -r --arg desired_id "${desired_id}" --arg retain "${retain}" '.
             | map(
                 select((.id | inside($desired_id)) or (.id | inside($retain)) | not)
                 | "NOT \(.id)")
@@ -65,30 +79,35 @@ system_query() {
     )
     query+=")"
 
-    echo "${query}"
+    # We need to URL encode the special characters using jq.
+    echo "${query}" \
+        | jq -sRr @uri
 }
 
-# Searches for romsets that are compatible with a given system ID and returns
-# results as a JSON array of identifiers and titles.
-search_romsets() {
-    local system_id
-    local system_filter
+# Searches for items that are compatible with a given system.
+search_system() {
+    local base_query
+    local systems
+    local desired
+    local name
     local query
-    local search_romsets
+    local sort
     local projection
     local search_url
     local response
     local results
     local results_count
 
-    system_id=$1
-    log "Searching romsets for system: ${system_id}"
+    base_query=$1
+    systems=$2
+    desired=$3
 
-    system_filter=$(system_query "${system_id}")
-    # We need to URL encode the special characters using jq.
-    query=$(echo "${system_filter}" \
-        | jq -sRr @uri
-    )
+    name=$(echo "${desired}" \
+        | jq -r .name)
+
+    log "Searching romsets for system: ${name}"
+
+    query=$(create_query "${base_query}" "${systems}" "${desired}")
     sort="downloads+desc"
     projection="identifier,title"
     search_url="https://archive.org/advancedsearch.php?output=json&q=${query}&fl[]=${projection}&sort[]=${sort}"
@@ -122,29 +141,27 @@ search_romsets() {
     echo "${results}"
 }
 
-read_files() {
-    local system_id
-    local romset
-    local system_ext
-    local romset_id
+# Lists files within a given item.
+list_files() {
+    local desired
+    local item
+    local ext
+    local item_id
     local metadata_url
     local response
     local results
 
-    system_id=$1
-    romset=$2
+    desired=$1
+    item=$2
 
-    config=$(read_config)
-    system_ext=$(echo "${config}" \
-        | jq -r --arg system_id "${system_id}" '.systems[]
-            | select(.id == $system_id)
-            | .ext' 
+    ext=$(echo "${desired}" \
+        | jq -r .ext
     )
-    romset_id=$(echo "${romset}" \
+    item_id=$(echo "${item}" \
         | jq -r .identifier
     )
 
-    metadata_url="https://archive.org/metadata/${romset_id}"
+    metadata_url="https://archive.org/metadata/${item_id}"
 
     log "Loading metadata with url: ${metadata_url}"
 
@@ -162,9 +179,9 @@ read_files() {
     # }
     response=$(curl -s "${metadata_url}")
     results=$(echo "${response}" \
-        | jq -r --arg system_ext "${system_ext}" '.files
+        | jq -r --arg ext "${ext}" '.files
             | map(
-                select(.name | split(".")[-1] | inside($system_ext))
+                select(.name | split(".")[-1] | inside($ext))
                 | {name: .name, size: .size})'
     )
 
@@ -173,9 +190,18 @@ read_files() {
 
 # Example usage, still WIP.
 log "Starting RomMaster"
-system_id=snes
-romsets=$(search_romsets "${system_id}")
-romset=$(echo "${romsets}" \
-    | jq -r .[0])
-files=$(read_files "${system_id}" "${romset}")
+
+config=$(read_config)
+base_query=$(echo "${config}" \
+    | jq -r .query
+)
+systems=$(echo "${config}" \
+    | jq .systems
+)
+desired_id="snes"
+desired=$(get_system "${systems}" "${desired_id}")
+items=$(search_system "${base_query}" "${systems}" "${desired}")
+item=$(echo "${items}" \
+    | jq .[0])
+files=$(list_files "${desired}" "${item}")
 echo "${files}"
