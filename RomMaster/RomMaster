@@ -210,8 +210,6 @@ download_file() {
     item=$3
     file=$4
 
-    # TODO: split out the system rom path definition from the identifier value.
-
     item_id=$(echo "${item}" \
         | jq -r .identifier
     )
@@ -225,7 +223,7 @@ download_file() {
     download_url="https://archive.org/download/${item_id}/${name_uri}"
     echo "${download_url}"
     desired_path=$(echo "${desired}" \
-        | jq -r .id)
+        | jq -r .path)
     download_path="${base_path}${desired_path}/${name}"
 
     log "Downloading ${name} to ${download_path} from ${download_url}"

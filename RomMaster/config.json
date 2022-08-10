@@ -4,6 +4,7 @@
     "systems": [
         {
             "id": "arcade",
+            "path": "arcade",
             "retain": [
                 "mame"
             ],
@@ -16,6 +17,7 @@
         },
         {
             "id": "atomiswave",
+            "path": "atomiswave",
             "retain": [
                 "arcade"
             ],
@@ -31,6 +33,7 @@
         },
         {
             "id": "daphne",
+            "path": "daphne",
             "retain": [],
             "name": "Daphne",
             "ext": [
@@ -40,6 +43,7 @@
         },
         {
             "id": "fbneo",
+            "path": "fbneo",
             "retain": [
                 "arcade"
             ],
@@ -52,6 +56,7 @@
         },
         {
             "id": "mame",
+            "path": "mame",
             "retain": [
                 "arcade"
             ],
@@ -64,6 +69,7 @@
         },
         {
             "id": "naomi",
+            "path": "naomi",
             "retain": [
                 "arcade"
             ],
@@ -79,6 +85,7 @@
         },
         {
             "id": "neogeo",
+            "path": "neogeo",
             "retain": [],
             "name": "Neo Geo",
             "ext": [
@@ -89,6 +96,7 @@
         },
         {
             "id": "atari2600",
+            "path": "atari2600",
             "retain": [],
             "name": "Atari 2600",
             "ext": [
@@ -101,6 +109,7 @@
         },
         {
             "id": "atari5200",
+            "path": "atari5200",
             "retain": [],
             "name": "Atari 5200",
             "ext": [
@@ -121,6 +130,7 @@
         },
         {
             "id": "atari7800",
+            "path": "atari7800",
             "retain": [],
             "name": "Atari 7800",
             "ext": [
@@ -133,6 +143,7 @@
         },
         {
             "id": "atarilynx",
+            "path": "atarilynx",
             "retain": [],
             "name": "Lynx",
             "ext": [
@@ -145,6 +156,7 @@
         },
         {
             "id": "sufami",
+            "path": "sufami",
             "retain": [],
             "name": "SuFami Turbo",
             "ext": [
@@ -156,6 +168,7 @@
         },
         {
             "id": "wonderswan",
+            "path": "wonderswan",
             "retain": [],
             "name": "Wonderswan",
             "ext": [
@@ -167,6 +180,7 @@
         },
         {
             "id": "wonderswancolor",
+            "path": "wonderswancolor",
             "retain": [
                 "wonderswan"
             ],
@@ -180,6 +194,7 @@
         },
         {
             "id": "uzebox",
+            "path": "uzebox",
             "retain": [],
             "name": "Uzebox",
             "ext": [
@@ -189,6 +204,7 @@
         },
         {
             "id": "coleco",
+            "path": "coleco",
             "retain": [],
             "name": "ColecoVision",
             "ext": [
@@ -202,6 +218,7 @@
         },
         {
             "id": "channelf",
+            "path": "channelf",
             "retain": [],
             "name": "Channel F",
             "ext": [
@@ -214,6 +231,7 @@
         },
         {
             "id": "odyssey",
+            "path": "odyssey",
             "retain": [],
             "name": "Odyssey 2",
             "ext": [
@@ -225,6 +243,7 @@
         },
         {
             "id": "intellivision",
+            "path": "intellivision",
             "retain": [],
             "name": "Intellivision",
             "ext": [
@@ -238,6 +257,7 @@
         },
         {
             "id": "vectrex",
+            "path": "vectrex",
             "retain": [],
             "name": "Vectrex",
             "ext": [
@@ -251,6 +271,7 @@
         },
         {
             "id": "pcengine",
+            "path": "pcengine",
             "retain": [],
             "name": "PC Engine",
             "ext": [
@@ -263,6 +284,7 @@
         },
         {
             "id": "pcenginecd",
+            "path": "pcenginecd",
             "retain": [
                 "pcengine"
             ],
@@ -278,6 +300,7 @@
         },
         {
             "id": "pcfx",
+            "path": "pcfx",
             "retain": [],
             "name": "PC-FX",
             "ext": [
@@ -290,6 +313,7 @@
         },
         {
             "id": "sgfx",
+            "path": "sgfx",
             "retain": [
                 "pcengine"
             ],
@@ -307,6 +331,7 @@
         },
         {
             "id": "tg16",
+            "path": "tg16",
             "retain": [
                 "pcengine"
             ],
@@ -321,6 +346,7 @@
         },
         {
             "id": "tg16cd",
+            "path": "tg16cd",
             "retain": [
                 "pcengine"
             ],
@@ -336,6 +362,7 @@
         },
         {
             "id": "famicom",
+            "path": "famicom",
             "retain": [],
             "name": "Famicom",
             "ext": [
@@ -349,6 +376,7 @@
         },
         {
             "id": "fds",
+            "path": "fds",
             "retain": [
                 "famicom"
             ],
@@ -362,6 +390,7 @@
         },
         {
             "id": "gameandwatch",
+            "path": "gameandwatch",
             "retain": [],
             "name": "Game and Watch",
             "ext": [
@@ -373,6 +402,7 @@
         },
         {
             "id": "gb",
+            "path": "gb",
             "retain": [],
             "name": "Game Boy",
             "ext": [
@@ -385,6 +415,7 @@
         },
         {
             "id": "gbh",
+            "path": "gbh",
             "retain": [
                 "gb"
             ],
@@ -399,6 +430,7 @@
         },
         {
             "id": "gba",
+            "path": "gba",
             "retain": [],
             "name": "Game Boy Advance",
             "ext": [
@@ -410,6 +442,7 @@
         },
         {
             "id": "gbah",
+            "path": "gbah",
             "retain": [
                 "gba"
             ],
@@ -423,6 +456,7 @@
         },
         {
             "id": "gbc",
+            "path": "gbc",
             "retain": [],
             "name": "Game Boy Color",
             "ext": [
@@ -435,6 +469,7 @@
         },
         {
             "id": "gbch",
+            "path": "gbch",
             "retain": [
                 "gbc"
             ],
@@ -449,6 +484,7 @@
         },
         {
             "id": "snesmsu1",
+            "path": "snesmsu1",
             "retain": [
                 "snes"
             ],
@@ -465,6 +501,7 @@
         },
         {
             "id": "n64",
+            "path": "n64",
             "retain": [],
             "name": "Nintendo 64",
             "ext": [
@@ -478,6 +515,7 @@
         },
         {
             "id": "nes",
+            "path": "nes",
             "retain": [],
             "name": "Nintendo Entertainment System",
             "ext": [
@@ -491,6 +529,7 @@
         },
         {
             "id": "nesh",
+            "path": "nesh",
             "retain": [
                 "nes"
             ],
@@ -506,6 +545,7 @@
         },
         {
             "id": "pokemini",
+            "path": "pokemini",
             "retain": [],
             "name": "Pokemon Mini",
             "ext": [
@@ -517,6 +557,7 @@
         },
         {
             "id": "snes",
+            "path": "snes",
             "retain": [],
             "name": "Super Nintendo",
             "ext": [
@@ -531,6 +572,7 @@
         },
         {
             "id": "snesh",
+            "path": "snesh",
             "retain": [
                 "snes"
             ],
@@ -547,6 +589,7 @@
         },
         {
             "id": "sfc",
+            "path": "sfc",
             "retain": [
                 "snes",
                 "famicom"
@@ -564,6 +607,7 @@
         },
         {
             "id": "satellaview",
+            "path": "satellaview",
             "retain": [],
             "name": "Satellaview",
             "ext": [
@@ -580,6 +624,7 @@
         },
         {
             "id": "virtualboy",
+            "path": "virtualboy",
             "retain": [],
             "name": "Virtual Boy",
             "ext": [
@@ -591,6 +636,7 @@
         },
         {
             "id": "3do",
+            "path": "3do",
             "retain": [],
             "name": "3DO",
             "ext": [
@@ -602,6 +648,7 @@
         },
         {
             "id": "videopac",
+            "path": "videopac",
             "retain": [],
             "name": "VideoPac",
             "ext": [
@@ -613,6 +660,7 @@
         },
         {
             "id": "dreamcast",
+            "path": "dreamcast",
             "retain": [],
             "name": "Dreamcast",
             "ext": [
@@ -625,6 +673,7 @@
         },
         {
             "id": "gamegear",
+            "path": "gamegear",
             "retain": [],
             "name": "Game Gear",
             "ext": [
@@ -637,6 +686,7 @@
         },
         {
             "id": "gamegearh",
+            "path": "gamegearh",
             "retain": [],
             "name": "Game Gear (Hacks)",
             "ext": [
@@ -667,6 +717,7 @@
         },
         {
             "id": "sega32x",
+            "path": "sega32x",
             "retain": [
                 "genesis"
             ],
@@ -683,6 +734,7 @@
         },
         {
             "id": "segacd",
+            "path": "segacd",
             "retain": [
                 "megacd"
             ],
@@ -697,6 +749,7 @@
         },
         {
             "id": "megacd",
+            "path": "megacd",
             "retain": [
                 "segacd"
             ],
@@ -711,6 +764,7 @@
         },
         {
             "id": "genesis",
+            "path": "genesis",
             "retain": [],
             "name": "Sega Genesis",
             "ext": [
@@ -726,6 +780,7 @@
         },
         {
             "id": "genh",
+            "path": "genh",
             "retain": [],
             "name": "Sega Genesis (Hacks)",
             "ext": [
@@ -741,6 +796,7 @@
         },
         {
             "id": "mastersystem",
+            "path": "mastersystem",
             "retain": [],
             "name": "Sega Master System",
             "ext": [
@@ -753,6 +809,7 @@
         },
         {
             "id": "megadrive",
+            "path": "megadrive",
             "retain": [],
             "name": "Sega Mega Drive",
             "ext": [
@@ -768,6 +825,7 @@
         },
         {
             "id": "saturn",
+            "path": "saturn",
             "retain": [],
             "name": "Sega Saturn",
             "ext": [
@@ -790,6 +848,7 @@
         },
         {
             "id": "neocd",
+            "path": "neocd",
             "retain": [
                 "neogeo"
             ],
@@ -803,6 +862,7 @@
         },
         {
             "id": "ngp",
+            "path": "ngp",
             "retain": [
                 "neogeo"
             ],
@@ -817,6 +877,7 @@
         },
         {
             "id": "ngpc",
+            "path": "ngpc",
             "retain": [
                 "ngp",
                 "neogeo"
@@ -831,6 +892,7 @@
         },
         {
             "id": "psx",
+            "path": "psx",
             "retain": [],
             "name": "PlayStation",
             "ext": [
@@ -850,6 +912,7 @@
         },
         {
             "id": "psp",
+            "path": "psp",
             "retain": [],
             "name": "PlayStation Portable",
             "ext": [
@@ -861,6 +924,7 @@
         },
         {
             "id": "pspminis",
+            "path": "pspminis",
             "retain": [
                 "psp"
             ],
@@ -874,6 +938,7 @@
         },
         {
             "id": "supervision",
+            "path": "supervision",
             "retain": [],
             "name": "Watara Supervision",
             "ext": [
@@ -885,6 +950,7 @@
         },
         {
             "id": "megaduck",
+            "path": "megaduck",
             "retain": [
                 "mame"
             ],
@@ -898,6 +964,7 @@
         },
         {
             "id": "amstradcpc",
+            "path": "amstradcpc",
             "retain": [],
             "name": "Amstrad CPC",
             "ext": [
@@ -915,6 +982,7 @@
         },
         {
             "id": "atari800",
+            "path": "atari800",
             "retain": [
                 "mame"
             ],
@@ -937,6 +1005,7 @@
         },
         {
             "id": "atarist",
+            "path": "atarist",
             "retain": [],
             "name": "Atari ST",
             "ext": [
@@ -953,6 +1022,7 @@
         },
         {
             "id": "amiga",
+            "path": "amiga",
             "retain": [],
             "name": "Amiga",
             "ext": [
@@ -971,6 +1041,7 @@
         },
         {
             "id": "amigacd32",
+            "path": "amigacd32",
             "retain": [
                 "amiga"
             ],
@@ -985,6 +1056,7 @@
         },
         {
             "id": "c128",
+            "path": "c128",
             "retain": [],
             "name": "Commodore 128",
             "ext": [
@@ -1019,6 +1091,7 @@
         },
         {
             "id": "c16",
+            "path": "c16",
             "retain": [],
             "name": "Comodore 16",
             "ext": [
@@ -1053,6 +1126,7 @@
         },
         {
             "id": "c64",
+            "path": "c64",
             "retain": [],
             "name": "Commodore 64",
             "ext": [
@@ -1087,6 +1161,7 @@
         },
         {
             "id": "vic20",
+            "path": "vic20",
             "retain": [],
             "name": "Comodore VIC-20",
             "ext": [
@@ -1127,6 +1202,7 @@
         },
         {
             "id": "pc",
+            "path": "pc",
             "retain": [],
             "name": "MS-DOS",
             "ext": [
@@ -1139,6 +1215,7 @@
         },
         {
             "id": "msx",
+            "path": "msx",
             "retain": [],
             "name": "MSX",
             "ext": [
@@ -1154,6 +1231,7 @@
         },
         {
             "id": "msx2",
+            "path": "msx2",
             "retain": [
                 "msx"
             ],
@@ -1171,6 +1249,7 @@
         },
         {
             "id": "pc88",
+            "path": "pc88",
             "retain": [],
             "name": "PC-8800",
             "ext": [
@@ -1181,6 +1260,7 @@
         },
         {
             "id": "pc98",
+            "path": "pc98",
             "retain": [],
             "name": "PC-9800",
             "ext": [
@@ -1217,6 +1297,7 @@
         },
         {
             "id": "x1",
+            "path": "x1",
             "retain": [],
             "name": "Sharp X1",
             "ext": [
@@ -1238,6 +1319,7 @@
         },
         {
             "id": "x68000",
+            "path": "x68000",
             "retain": [],
             "name": "x68000",
             "ext": [
@@ -1259,6 +1341,7 @@
         },
         {
             "id": "zxspectrum",
+            "path": "zxspectrum",
             "retain": [],
             "name": "Sinclair ZX Spectrum",
             "ext": [
@@ -1276,6 +1359,7 @@
         },
         {
             "id": "zx81",
+            "path": "zx81",
             "retain": [],
             "name": "Sinclair ZX81",
             "ext": [
