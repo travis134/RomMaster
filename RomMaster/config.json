@@ -880,18 +880,20 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(supervision)"
+            "query": "watara supervision"
         },
         {
             "id": "megaduck",
-            "retain": [],
+            "retain": [
+                "mame"
+            ],
             "name": "Mega Duck",
             "ext": [
                 "bin",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(megaduck)"
+            "query": "subject:((megaduck OR \"mega duck\")  (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "amstradcpc",
@@ -908,11 +910,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(amstradcpc)"
+            "query": "subject:(amstradcpc OR cpc OR \"amstrad cpc\")"
         },
         {
             "id": "atari800",
-            "retain": [],
+            "retain": [
+                "mame"
+            ],
             "name": "Atari 8000",
             "ext": [
                 "rom",
@@ -928,7 +932,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atari800)"
+            "query": "subject:(atari800 OR \"atari 800\")"
         },
         {
             "id": "atarist",
@@ -944,7 +948,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atarist)"
+            "query": "title:(atarist OR \"atari st\")"
         },
         {
             "id": "amiga",
@@ -962,11 +966,13 @@
                 "hdf",
                 "hdz"
             ],
-            "query": "subject:(amiga)"
+            "query": "subject:(amiga) OR collection:softwarelibrary_amiga"
         },
         {
             "id": "amigacd32",
-            "retain": [],
+            "retain": [
+                "amiga"
+            ],
             "name": "Amiga CD32",
             "ext": [
                 "iso",
@@ -974,7 +980,7 @@
                 "ha",
                 "chd"
             ],
-            "query": "subject:(amigacd32)"
+            "query": "title:(amigacd32 OR \"amiga cd32\")"
         },
         {
             "id": "c128",
@@ -1008,7 +1014,7 @@
                 "nbz",
                 "zip"
             ],
-            "query": "subject:(c128)"
+            "query": "title:(c128)"
         },
         {
             "id": "c16",
@@ -1042,7 +1048,7 @@
                 "nbz",
                 "zip"
             ],
-            "query": "subject:(c16)"
+            "query": "title:(c16)"
         },
         {
             "id": "c64",
@@ -1076,7 +1082,7 @@
                 "nbz",
                 "zip"
             ],
-            "query": "subject:(c64)"
+            "query": "title:(c64)"
         },
         {
             "id": "vic20",
@@ -1116,7 +1122,7 @@
                 "nbz",
                 "zip"
             ],
-            "query": "subject:(vic20)"
+            "query": "title:(vic20 OR vic-20)"
         },
         {
             "id": "pc",
@@ -1128,7 +1134,7 @@
                 "exe",
                 "dosz"
             ],
-            "query": "subject:(pc)"
+            "query": "collection:(softwarelibrary_msdos)"
         },
         {
             "id": "msx",
@@ -1143,11 +1149,13 @@
                 "7z",
                 "m3u"
             ],
-            "query": "subject:(msx)"
+            "query": "subject:(msx (games OR software)) NOT magazine"
         },
         {
             "id": "msx2",
-            "retain": [],
+            "retain": [
+                "msx"
+            ],
             "name": "MSX2",
             "ext": [
                 "dsk",
@@ -1158,7 +1166,7 @@
                 "7z",
                 "m3u"
             ],
-            "query": "subject:(msx2)"
+            "query": "title:(msx2 OR msx-2)"
         },
         {
             "id": "pc88",
@@ -1168,7 +1176,7 @@
                 "d88",
                 "m3u"
             ],
-            "query": "subject:(pc88)"
+            "query": "title:(pc88 OR pc-88 OR pc-8800 OR pc-8801)"
         },
         {
             "id": "pc98",
@@ -1204,7 +1212,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sc-3000)"
+            "query": "title:(sc-3000 OR \"SC 3000\" OR \"Sega Computer 3000\")"
         },
         {
             "id": "x1",
@@ -1263,7 +1271,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(zxspectrum)"
+            "query": "collection:(softwarelibrary_zx_spectrum)"
         },
         {
             "id": "zx81",
@@ -1275,7 +1283,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(zx81)"
+            "query": "collection:(softwarelibrary_zx_81)"
         }
     ]
 }
