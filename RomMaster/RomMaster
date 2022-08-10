@@ -5,6 +5,20 @@
 # Description : main script
 #
 
+#
+# Environment settings
+#
+export TERM=linux
+sudo_prefix="sudo"
+# check whether sudo is needed
+if [[ "${EUID}" = 0 ]]; then
+  sudo_prefix=""
+fi
+device=/dev/tty1
+${sudo_prefix} chmod 666 "${device}"
+${sudo_prefix} chmod 666 /dev/uinput
+shopt -s extglob # required for extented pattern recognition
+
 log() {
     local message
     local ts
@@ -26,19 +40,18 @@ read_config() {
     echo "${config}"
 }
 
-# Reads the desired system info from the config file given the desired system
-# id.
-get_system() {
-    local systems
-    local desired_id
+# Reads a JSON array item by index. Mostly used with dialogs for mapping choice
+# indices back to data.
+get_by_index() {
+    local elements
+    local desired_index
     local desired
 
-    systems=$1
-    desired_id=$2
+    elements=$1
+    desired_index=$2
 
-    desired=$(echo "${systems}" \
-        | jq -r --arg desired_id "${desired_id}" '.[]
-            | select(.id == $desired_id)'
+    desired=$(echo "${elements}" \
+        | jq --arg desired_index "${desired_index}" .["${desired_index}"]
     )
 
     echo "${desired}"
@@ -50,6 +63,7 @@ create_query() {
     local base_query
     local systems
     local desired
+    local desired_id
     local query
     local retain
 
@@ -57,6 +71,9 @@ create_query() {
     systems=$2
     desired=$3
 
+    desired_id=$(echo "${desired}" \
+        | jq -r '.id'
+    )
     query=${base_query}
     query+=" AND "
     query+=$(echo "${desired}" \
@@ -221,7 +238,6 @@ download_file() {
         | jq -sRr @uri
     )
     download_url="https://archive.org/download/${item_id}/${name_uri}"
-    echo "${download_url}"
     desired_path=$(echo "${desired}" \
         | jq -r .path)
     download_path="${base_path}${desired_path}/${name}"
@@ -231,11 +247,184 @@ download_file() {
     curl -L --create-dirs -o "${download_path}" "${download_url}"
 }
 
-# Example usage, this will search for an item matching the desired system, list
-# all files in that item that are valid for the system (by file extension),
-# then download one of the files.
-# TODO: Bind this up to a UI.
-log "Starting RomMaster"
+install_dependencies() {
+    local dependencies
+
+    #Checking required modules (RetroOZ uses odroid)
+    if id "travis" &>/dev/null || id "odroid" &>/dev/null; then
+        dependencies=()
+
+        if ! dpkg -s "dialog" &>/dev/null; then
+            dependencies+=("dialog")
+        fi
+        if ! dpkg -s "curl" &>/dev/null; then
+            dependencies+=("curl")
+        fi
+        if ! dpkg -s "jq" &>/dev/null; then
+            dependencies+=("jq")
+        fi
+        if (( ${#dependencies[@]} )); then
+            dialog --clear
+            dialog --infobox "Installing dependencies, please wait..." 5 50
+            ${sudo_prefix} apt update && ${sudo_prefix} apt install -y "${dependencies[@]}" --no-install-recommends
+        fi
+    fi
+}
+
+dialog() {
+    command dialog "$@" --input-fd 3 3<"${device}" >"${device}"
+}
+
+start() {
+    local status
+
+    dialog --clear
+    dialog --infobox "Initializing, please wait..." 5 50
+    sleep 1
+    #Checking internet access
+    status=$(${sudo_prefix} ping -c 1 google.com &> /dev/null)
+    if [[ ${status} -eq 0 ]]; then
+        install_dependencies
+        main_menu
+    else
+        dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run!" 10 50
+        exit
+    fi
+}
+
+main_menu() {
+    log "Starting RomMaster"
+
+    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    options=(
+        A "Find ROMs"
+        B "Settings"
+        C "Exit"
+    )
+    choice=$("${cmd[@]}" "${options[@]}" 2>&1)
+    status=$?
+
+    case ${status} in
+    0)
+        case ${choice} in
+        A) systems_menu ;;
+        B) settings_menu ;;
+        *) exit 0 ;;
+        esac
+        ;;
+    *) exit 1 ;;
+    esac
+}
+
+systems_menu() {
+    local cmd
+    local options
+    local system_options
+    local index
+    local system_option
+    local desired_index
+    local status
+    local desired
+
+    log "Selected Find ROMs"
+
+    cmd=(dialog --no-cancel --backtitle "Pick a system" --title " [ Systems Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    options=()
+
+    system_options=$(echo "${systems}" \
+        | jq -r .[].name
+    )
+    index=0
+    while read -r system_option; do
+        options+=( $((index++)) "${system_option}")
+    done <<< "${system_options}"
+    
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
+    status=$?
+
+    desired=$(get_by_index "${systems}" "${desired_index}")
+
+    case ${status} in
+    0)
+        roms_menu "${desired}" ;;
+    *) exit 1 ;;
+    esac
+}
+
+roms_menu() {
+    local system
+    local name
+    local items
+    local cmd
+    local options
+    local item_options
+    local index
+    local item_option
+    local desired_index
+    local status
+    local desired
+
+    system=$1
+
+    name=$(echo "${system}" \
+        | jq -r .name
+    )
+    log "Selected ${name}"
+
+    items=$(search_system "${base_query}" "${systems}" "${system}")
+
+    cmd=(dialog --no-cancel --backtitle "Pick an item" --title " [ ROMs Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    options=()
+
+    item_options=$(echo "${items}" \
+        | jq -r .[].title
+    )
+    index=0
+    while read -r item_option; do
+        options+=( $((index++)) "${item_option}")
+    done <<< "${item_options}"
+    
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
+    status=$?
+
+    desired=$(get_by_index "${items}" "${desired_index}")
+
+    case ${status} in
+    0) item_menu "${desired}" ;;
+    *) exit 1 ;;
+    esac 
+}
+
+item_menu() {
+    local desired
+    local name
+
+    desired=$1
+
+    name=$(echo "${desired}" \
+        | jq -r .title
+    )
+    log "Selected ${name}"
+
+    log "Nothing else has been implemented yet, bailing out."
+
+    exit 1
+}
+
+settings_menu() {
+    log "Nothing else has been implemented yet, bailing out."
+
+    exit 1
+}
+
+stop() {
+    log "Stopping RomMaster"
+
+    clear > "${device}"
+}
+
+clear
+trap stop EXIT
 
 config=$(read_config)
 base_path=$(echo "${config}" \
@@ -247,12 +436,5 @@ base_query=$(echo "${config}" \
 systems=$(echo "${config}" \
     | jq .systems
 )
-desired_id="snes"
-desired=$(get_system "${systems}" "${desired_id}")
-items=$(search_system "${base_query}" "${systems}" "${desired}")
-item=$(echo "${items}" \
-    | jq .[0])
-files=$(list_files "${desired}" "${item}")
-file=$(echo "${files}" \
-    | jq .[0])
-download_file "${base_path}" "${desired}" "${item}" "${file}"
+
+start
