@@ -1,4 +1,5 @@
 {
+    "path": "/storage/roms/",
     "query": "mediatype:software",
     "systems": [
         {

@@ -80,7 +80,7 @@ create_query() {
     query+=")"
 
     # We need to URL encode the special characters using jq.
-    echo "${query}" \
+    echo -n "${query}" \
         | jq -sRr @uri
 }
 
@@ -105,7 +105,7 @@ search_system() {
     name=$(echo "${desired}" \
         | jq -r .name)
 
-    log "Searching romsets for system: ${name}"
+    log "Searching items for system: ${name}"
 
     query=$(create_query "${base_query}" "${systems}" "${desired}")
     sort="downloads+desc"
@@ -136,7 +136,7 @@ search_system() {
     results_count=$(echo "${results}" \
         | jq '. | length'
     )
-    log "Found ${results_count} matching romsets"
+    log "Found ${results_count} matching items for ${name}"
 
     echo "${results}"
 }
@@ -150,6 +150,7 @@ list_files() {
     local metadata_url
     local response
     local results
+    local results_count
 
     desired=$1
     item=$2
@@ -184,14 +185,64 @@ list_files() {
                 select(.name | split(".")[-1] | inside($ext))
                 | {name: .name, size: .size})'
     )
+    results_count=$(echo "${results}" \
+        | jq '. | length'
+    )
+    log "Found ${results_count} matching files in ${item_id}"
 
     echo "${results}"
 }
 
-# Example usage, still WIP.
+# Download a given file to its corresponding system folder.
+download_file() {
+    local base_path
+    local desired
+    local item
+    local file
+    local item_id
+    local name
+    local name_uri
+    local download_url
+    local download_path
+
+    base_path=$1
+    desired=$2
+    item=$3
+    file=$4
+
+    # TODO: split out the system rom path definition from the identifier value.
+
+    item_id=$(echo "${item}" \
+        | jq -r .identifier
+    )
+    name=$(echo "${file}" \
+        | jq -r .name
+    )
+    # We need to URL encode the special characters using jq.
+    name_uri=$(echo -n "${name}" \
+        | jq -sRr @uri
+    )
+    download_url="https://archive.org/download/${item_id}/${name_uri}"
+    echo "${download_url}"
+    desired_path=$(echo "${desired}" \
+        | jq -r .id)
+    download_path="${base_path}${desired_path}/${name}"
+
+    log "Downloading ${name} to ${download_path} from ${download_url}"
+
+    curl -L --create-dirs -o "${download_path}" "${download_url}"
+}
+
+# Example usage, this will search for an item matching the desired system, list
+# all files in that item that are valid for the system (by file extension),
+# then download one of the files.
+# TODO: Bind this up to a UI.
 log "Starting RomMaster"
 
 config=$(read_config)
+base_path=$(echo "${config}" \
+    | jq -r .path
+)
 base_query=$(echo "${config}" \
     | jq -r .query
 )
@@ -204,4 +255,6 @@ items=$(search_system "${base_query}" "${systems}" "${desired}")
 item=$(echo "${items}" \
     | jq .[0])
 files=$(list_files "${desired}" "${item}")
-echo "${files}"
+file=$(echo "${files}" \
+    | jq .[0])
+download_file "${base_path}" "${desired}" "${item}" "${file}"
