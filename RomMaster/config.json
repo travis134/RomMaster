@@ -3,15 +3,21 @@
     "systems": [
         {
             "id": "arcade",
+            "retain": [
+                "mame"
+            ],
             "name": "Arcade",
             "ext": [
                 "zip",
                 "7z"
             ],
-            "query": "subject:(arcade)"
+            "query": "subject:((arcade OR mame) (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "atomiswave",
+            "retain": [
+                "arcade"
+            ],
             "name": "Atomiswave",
             "ext": [
                 "lst",
@@ -20,36 +26,46 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atomiswave)"
+            "query": "subject:(atomiswave (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "daphne",
+            "retain": [],
             "name": "Daphne",
             "ext": [
                 "daphne"
             ],
-            "query": "subject:(daphne)"
+            "query": "subject:(daphne (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "fbneo",
+            "retain": [
+                "arcade"
+            ],
             "name": "Final Burn Neo",
             "ext": [
                 "zip",
                 "7z"
             ],
-            "query": "subject:(fbneo)"
+            "query": "subject:((fbneo OR finalburn OR \"final burn\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "mame",
+            "retain": [
+                "arcade"
+            ],
             "name": "MAME",
             "ext": [
                 "zip",
                 "7z"
             ],
-            "query": "subject:(mame)"
+            "query": "subject:((arcade OR mame) (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "naomi",
+            "retain": [
+                "arcade"
+            ],
             "name": "Naomi",
             "ext": [
                 "lst",
@@ -58,19 +74,21 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(naomi)"
+            "query": "subject:(naomi (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "neogeo",
+            "retain": [],
             "name": "Neo Geo",
             "ext": [
                 "zip",
                 "7z"
             ],
-            "query": "subject:(neogeo)"
+            "query": "subject:((neogeo OR neo-geo OR \"neo geo\" (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "atari2600",
+            "retain": [],
             "name": "Atari 2600",
             "ext": [
                 "a26",
@@ -78,10 +96,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atari2600)"
+            "query": "subject:((atari2600 OR \"atari 2600\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "atari5200",
+            "retain": [],
             "name": "Atari 5200",
             "ext": [
                 "rom",
@@ -97,10 +116,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atari5200)"
+            "query": "subject:((atari5200 OR \"atari 5200\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "atari7800",
+            "retain": [],
             "name": "Atari 7800",
             "ext": [
                 "a78",
@@ -108,10 +128,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atari7800)"
+            "query": "subject:((atari7800 OR \"atari 7800\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "atarilynx",
+            "retain": [],
             "name": "Lynx",
             "ext": [
                 "lnx",
@@ -119,40 +140,46 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atarilynx)"
+            "query": "subject:((atarilynx OR lynx OR \"atari lynx\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "sufami",
+            "retain": [],
             "name": "SuFami Turbo",
             "ext": [
                 "st",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sufami)"
+            "query": "subject:((sufami OR \"sufami turbo\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "wonderswan",
+            "retain": [],
             "name": "Wonderswan",
             "ext": [
                 "ws",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(wonderswan)"
+            "query": "subject:(wonderswan (rom OR roms OR romset OR retrorom OR ghostware)))"
         },
         {
             "id": "wonderswancolor",
+            "retain": [
+                "wonderswan"
+            ],
             "name": "Wonderswan Color",
             "ext": [
                 "wsc",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(wonderswancolor)"
+            "query": "subject:((wonderswancolor OR \"wonderswan color\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "uzebox",
+            "retain": [],
             "name": "Uzebox",
             "ext": [
                 "uze"
@@ -161,6 +188,7 @@
         },
         {
             "id": "coleco",
+            "retain": [],
             "name": "ColecoVision",
             "ext": [
                 "bin",
@@ -169,10 +197,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(coleco)"
+            "query": "subject:((coleco OR colecovision) (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "channelf",
+            "retain": [],
             "name": "Channel F",
             "ext": [
                 "bin",
@@ -180,20 +209,22 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(channelf)"
+            "query": "subject:((channelf OR \"channel f\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "odyssey",
+            "retain": [],
             "name": "Odyssey 2",
             "ext": [
                 "bin",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(odyssey)"
+            "query": "subject:((odyssey OR \"odyssey 2\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "intellivision",
+            "retain": [],
             "name": "Intellivision",
             "ext": [
                 "int",
@@ -202,10 +233,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(intellivision)"
+            "query": "subject:(intellivision (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "vectrex",
+            "retain": [],
             "name": "Vectrex",
             "ext": [
                 "bin",
@@ -214,10 +246,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(vectrex)"
+            "query": "subject:(vectrex (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "pcengine",
+            "retain": [],
             "name": "PC Engine",
             "ext": [
                 "pce",
@@ -225,10 +258,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(pcengine)"
+            "query": "subject:((pcengine OR \"pc engine\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "pcenginecd",
+            "retain": [
+                "pcengine"
+            ],
             "name": "PC Engine CD",
             "ext": [
                 "cue",
@@ -237,10 +273,11 @@
                 "toc",
                 "m3u"
             ],
-            "query": "subject:(pcenginecd)"
+            "query": "subject:((pcenginecd OR \"pc engine cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "pcfx",
+            "retain": [],
             "name": "PC-FX",
             "ext": [
                 "chd",
@@ -248,10 +285,13 @@
                 "ccd",
                 "toc"
             ],
-            "query": "subject:(pcfx)"
+            "query": "subject:((pcfx OR pc-fx) (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "sgfx",
+            "retain": [
+                "pcengine"
+            ],
             "name": "Super Grafx",
             "ext": [
                 "pce",
@@ -262,10 +302,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sgfx)"
+            "query": "subject:((sgfx OR supergrafx OR \"super grafx\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "tg16",
+            "retain": [
+                "pcengine"
+            ],
             "name": "TurboGrafx-16",
             "ext": [
                 "pce",
@@ -273,10 +316,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(tg16)"
+            "query": "subject:((tg16 OR turbografx16 OR turbografx-16) (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "tg16cd",
+            "retain": [
+                "pcengine"
+            ],
             "name": "TurboGrafx-CD",
             "ext": [
                 "cue",
@@ -285,10 +331,11 @@
                 "toc",
                 "m3u"
             ],
-            "query": "subject:(tg16cd)"
+            "query": "subject:((tg16cd OR tgcd OR turbografxcd OR \"turbografx cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "famicom",
+            "retain": [],
             "name": "Famicom",
             "ext": [
                 "nes",
@@ -297,30 +344,35 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(famicom)"
+            "query": "subject:((famicom OR \"family computer\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "fds",
+            "retain": [
+                "famicom"
+            ],
             "name": "Famicom Disk System",
             "ext": [
                 "fds",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(fds)"
+            "query": "subject:((fds OR \"family computer disk system\" OR \"famicom disk system\") (rom OR roms OR romset OR retrorom OR disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
-            "id": "gameanswatch",
+            "id": "gameandwatch",
+            "retain": [],
             "name": "Game and Watch",
             "ext": [
                 "mgw",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gameanswatch)"
+            "query": "subject:((gameanswatch OR game&watch OR \"game & watch\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "gb",
+            "retain": [],
             "name": "Game Boy",
             "ext": [
                 "gb",
@@ -328,10 +380,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gb OR gameboy OR \"game boy\") (rom OR roms OR romset) NOT hack)"
+            "query": "subject:((gb OR gameboy OR \"game boy\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
         },
         {
             "id": "gbh",
+            "retain": [
+                "gb"
+            ],
             "name": "Game Boy (Hacks)",
             "ext": [
                 "gb",
@@ -339,30 +394,35 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gb OR gameboy OR \"game boy\") (rom OR roms OR romset) hack)"
+            "query": "subject:((gb OR gameboy OR \"game boy\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
         },
         {
             "id": "gba",
+            "retain": [],
             "name": "Game Boy Advance",
             "ext": [
                 "gba",
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") (rom OR roms OR romset) NOT hack)"
+            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
         },
         {
             "id": "gbah",
+            "retain": [
+                "gba"
+            ],
             "name": "Game Boy Advance (Hacks)",
             "ext": [
                 "gba",
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") (rom OR roms OR romset) hack)"
+            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
         },
         {
             "id": "gbc",
+            "retain": [],
             "name": "Game Boy Color",
             "ext": [
                 "gb",
@@ -370,10 +430,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") (rom OR roms OR romset) NOT hack)"
+            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
         },
         {
             "id": "gbch",
+            "retain": [
+                "gbc"
+            ],
             "name": "Game Boy Color (Hacks)",
             "ext": [
                 "gb",
@@ -381,10 +444,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") (rom OR roms OR romset) hack)"
+            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
         },
         {
             "id": "snesmsu1",
+            "retain": [
+                "snes"
+            ],
             "name": "MSU-1",
             "ext": [
                 "smc",
@@ -394,10 +460,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(snesmsu1)"
+            "query": "subject:((snesmsu1 OR msu-1 OR msu) (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "n64",
+            "retain": [],
             "name": "Nintendo 64",
             "ext": [
                 "z64",
@@ -406,10 +473,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(n64)"
+            "query": "subject:((n64 OR nintendo64 OR \"nintendo 64\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "nes",
+            "retain": [],
             "name": "Nintendo Entertainment System",
             "ext": [
                 "nes",
@@ -418,10 +486,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") (rom OR roms OR romset) NOT hack)"
+            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
         },
         {
             "id": "nesh",
+            "retain": [
+                "nes"
+            ],
             "name": "Nintendo Entertainment System (Hacks)",
             "ext": [
                 "nes",
@@ -430,20 +501,22 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") (rom OR roms OR romset) hack)"
+            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
         },
         {
             "id": "pokemini",
+            "retain": [],
             "name": "Pokemon Mini",
             "ext": [
                 "min",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(pokemini)"
+            "query": "subject:((pokemini OR \"pokemon mini\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "snes",
+            "retain": [],
             "name": "Super Nintendo",
             "ext": [
                 "smc",
@@ -453,10 +526,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") (rom OR roms OR romset) NOT hack)"
+            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
         },
         {
             "id": "snesh",
+            "retain": [
+                "snes"
+            ],
             "name": "Super Nintendo (Hacks)",
             "ext": [
                 "smc",
@@ -466,10 +542,14 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") (rom OR roms OR romset) hack)"
+            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
         },
         {
             "id": "sfc",
+            "retain": [
+                "snes",
+                "famicom"
+            ],
             "name": "Super Famicom",
             "ext": [
                 "smc",
@@ -479,10 +559,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sfc)"
+            "query": "subject:((sfc OR superfamicom OR \"super famicom\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "satellaview",
+            "retain": [],
             "name": "Satellaview",
             "ext": [
                 "smc",
@@ -494,40 +575,44 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(satellaview)"
+            "query": "subject:(satellaview (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "virtualboy",
+            "retain": [],
             "name": "Virtual Boy",
             "ext": [
                 "vb",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(virtualboy)"
+            "query": "subject:((virtualboy OR \"virtual boy\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "3do",
-            "name": "3D0",
+            "retain": [],
+            "name": "3DO",
             "ext": [
                 "bin",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(3do)"
+            "query": "subject:(3do (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "videopac",
+            "retain": [],
             "name": "VideoPac",
             "ext": [
                 "vin",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(videopac)"
+            "query": "subject:(videopac (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "dreamcast",
+            "retain": [],
             "name": "Dreamcast",
             "ext": [
                 "cdi",
@@ -535,10 +620,11 @@
                 "chd",
                 "m3u"
             ],
-            "query": "subject:(dreamcast)"
+            "query": "subject:(dreamcast (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "gamegear",
+            "retain": [],
             "name": "Game Gear",
             "ext": [
                 "bin",
@@ -546,10 +632,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gg OR gamegear OR \"game gear\") (rom OR roms OR romset) NOT hack)"
+            "query": "subject:((gg OR gamegear OR \"game gear\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
         },
         {
             "id": "gamegearh",
+            "retain": [],
             "name": "Game Gear (Hacks)",
             "ext": [
                 "bin",
@@ -557,10 +644,14 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gg OR gamegear OR \"game gear\") (rom OR roms OR romset) hack)"
+            "query": "subject:((gg OR gamegear OR \"game gear\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
         },
         {
             "id": "megadrive-japan",
+            "retain": [
+                "genesis",
+                "megadrive"
+            ],
             "name": "Sega Mega Drive (Japan)",
             "ext": [
                 "bin",
@@ -571,10 +662,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(megadrive-japan)"
+            "query": "subject:((megadrive OR genesis OR \"mega drive\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "sega32x",
+            "retain": [
+                "genesis"
+            ],
             "name": "Sega 32X",
             "ext": [
                 "32x",
@@ -584,10 +678,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sega32x)"
+            "query": "subject:((sega32x OR 32x OR \"sega 32x\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "segacd",
+            "retain": [
+                "megacd"
+            ],
             "name": "Sega CD",
             "ext": [
                 "chd",
@@ -595,10 +692,13 @@
                 "iso",
                 "m3u"
             ],
-            "query": "subject:(segacd)"
+            "query": "subject:((segacd OR megacd OR \"sega cd\" OR \"mega cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "megacd",
+            "retain": [
+                "segacd"
+            ],
             "name": "Sega Mega-CD",
             "ext": [
                 "chd",
@@ -606,10 +706,11 @@
                 "iso",
                 "m3u"
             ],
-            "query": "subject:(megacd)"
+            "query": "subject:((segacd OR megacd OR \"sega cd\" OR \"mega cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "genesis",
+            "retain": [],
             "name": "Sega Genesis",
             "ext": [
                 "bin",
@@ -620,10 +721,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((genesis OR \"sega genesis\") (rom OR roms OR romset) NOT hack)"
+            "query": "subject:((genesis OR \"sega genesis\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
         },
         {
             "id": "genh",
+            "retain": [],
             "name": "Sega Genesis (Hacks)",
             "ext": [
                 "bin",
@@ -634,10 +736,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((genesis OR \"sega genesis\") (rom OR roms OR romset) hack)"
+            "query": "subject:((genesis OR \"sega genesis\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
         },
         {
             "id": "mastersystem",
+            "retain": [],
             "name": "Sega Master System",
             "ext": [
                 "bin",
@@ -645,10 +748,11 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(mastersystem)"
+            "query": "subject:((mastersystem OR \"master system\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "megadrive",
+            "retain": [],
             "name": "Sega Mega Drive",
             "ext": [
                 "bin",
@@ -659,17 +763,18 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(megadrive)"
+            "query": "subject:((megadrive OR genesis OR \"mega drive\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "saturn",
+            "retain": [],
             "name": "Sega Saturn",
             "ext": [
                 "cue",
                 "chd",
                 "iso"
             ],
-            "query": "subject:(saturn)"
+            "query": "subject:(saturn (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "sg-1000",
@@ -680,41 +785,52 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sg-1000)"
+            "query": "subject:(sg-1000 (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "neocd",
+            "retain": [
+                "neogeo"
+            ],
             "name": "Neo Geo CD",
             "ext": [
                 "cue",
                 "iso",
                 "chd"
             ],
-            "query": "subject:(neocd)"
+            "query": "subject:((neocd OR neogeocd OR \"neo geo cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "ngp",
-            "name": "Neo Geo Pocker",
+            "retain": [
+                "neogeo"
+            ],
+            "name": "Neo Geo Pocket",
             "ext": [
                 "ngc",
                 "ngp",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(ngp)"
+            "query": "subject:((ngp OR neogeopocket OR \"neo geo pocket\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "ngpc",
+            "retain": [
+                "ngp",
+                "neogeo"
+            ],
             "name": "Neo Geo Pocket Color",
             "ext": [
                 "ngc",
                 "zip",
                 "7z"
             ],
-            "query": "subject:(ngpc)"
+            "query": "subject:((ngpc OR neogeopocketcolor OR \"neo geo pocket color\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "psx",
+            "retain": [],
             "name": "PlayStation",
             "ext": [
                 "bin",
@@ -729,30 +845,35 @@
                 "chd",
                 "iso"
             ],
-            "query": "subject:(psx)"
+            "query": "subject:((psx OR playstation) (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "psp",
+            "retain": [],
             "name": "PlayStation Portable",
             "ext": [
                 "iso",
                 "cso",
                 "pbp"
             ],
-            "query": "subject:(psp)"
+            "query": "subject:((psp OR playstationportable OR \"playstation portable\") (disc OR cd-rom OR image OR redump OR ghostware))"
         },
         {
             "id": "pspminis",
+            "retain": [
+                "psp"
+            ],
             "name": "PSP Minis",
             "ext": [
                 "iso",
                 "cso",
                 "pbp"
             ],
-            "query": "subject:(pspminis)"
+            "query": "subject:((pspminis OR \"psp minis\"))"
         },
         {
             "id": "supervision",
+            "retain": [],
             "name": "Watara Supervision",
             "ext": [
                 "sv",
@@ -763,6 +884,7 @@
         },
         {
             "id": "megaduck",
+            "retain": [],
             "name": "Mega Duck",
             "ext": [
                 "bin",
@@ -773,6 +895,7 @@
         },
         {
             "id": "amstradcpc",
+            "retain": [],
             "name": "Amstrad CPC",
             "ext": [
                 "dsk",
@@ -789,6 +912,7 @@
         },
         {
             "id": "atari800",
+            "retain": [],
             "name": "Atari 8000",
             "ext": [
                 "rom",
@@ -808,6 +932,7 @@
         },
         {
             "id": "atarist",
+            "retain": [],
             "name": "Atari ST",
             "ext": [
                 "st",
@@ -823,6 +948,7 @@
         },
         {
             "id": "amiga",
+            "retain": [],
             "name": "Amiga",
             "ext": [
                 "zip",
@@ -840,6 +966,7 @@
         },
         {
             "id": "amigacd32",
+            "retain": [],
             "name": "Amiga CD32",
             "ext": [
                 "iso",
@@ -851,6 +978,7 @@
         },
         {
             "id": "c128",
+            "retain": [],
             "name": "Commodore 128",
             "ext": [
                 "d64",
@@ -884,6 +1012,7 @@
         },
         {
             "id": "c16",
+            "retain": [],
             "name": "Comodore 16",
             "ext": [
                 "d64",
@@ -917,6 +1046,7 @@
         },
         {
             "id": "c64",
+            "retain": [],
             "name": "Commodore 64",
             "ext": [
                 "d64",
@@ -950,6 +1080,7 @@
         },
         {
             "id": "vic20",
+            "retain": [],
             "name": "Comodore VIC-20",
             "ext": [
                 "20",
@@ -989,6 +1120,7 @@
         },
         {
             "id": "pc",
+            "retain": [],
             "name": "MS-DOS",
             "ext": [
                 "com",
@@ -1000,6 +1132,7 @@
         },
         {
             "id": "msx",
+            "retain": [],
             "name": "MSX",
             "ext": [
                 "dsk",
@@ -1014,6 +1147,7 @@
         },
         {
             "id": "msx2",
+            "retain": [],
             "name": "MSX2",
             "ext": [
                 "dsk",
@@ -1028,6 +1162,7 @@
         },
         {
             "id": "pc88",
+            "retain": [],
             "name": "PC-8800",
             "ext": [
                 "d88",
@@ -1037,6 +1172,7 @@
         },
         {
             "id": "pc98",
+            "retain": [],
             "name": "PC-9800",
             "ext": [
                 "d98",
@@ -1072,6 +1208,7 @@
         },
         {
             "id": "x1",
+            "retain": [],
             "name": "Sharp X1",
             "ext": [
                 "dx1",
@@ -1092,6 +1229,7 @@
         },
         {
             "id": "x68000",
+            "retain": [],
             "name": "x68000",
             "ext": [
                 "dim",
@@ -1112,6 +1250,7 @@
         },
         {
             "id": "zxspectrum",
+            "retain": [],
             "name": "Sinclair ZX Spectrum",
             "ext": [
                 "tzx",
@@ -1128,6 +1267,7 @@
         },
         {
             "id": "zx81",
+            "retain": [],
             "name": "Sinclair ZX81",
             "ext": [
                 "tzx",

@@ -33,6 +33,7 @@ system_query() {
     local config
     local desired
     local query
+    local retain
 
     desired_id=$1
     config=$(read_config)
@@ -47,18 +48,22 @@ system_query() {
     query+=$(echo "${desired}" \
         | jq -r '.query'
     )
+    retain=$(echo "${desired}" \
+        | jq '.retain'
+    )
 
-
+    query+=" AND subject:("
     # Avoid over filtering if the system name is a substring of desired,
     # i.e. if we want "snes" we wouldn't want to filter out "nes" because.
     # all "snes" entries would also be eliminated.
     query+=$(echo "${config}" \
-        | jq -r --arg desired_id "${desired_id}" '.systems
+        | jq -r --arg desired_id "${desired_id}" --arg retain "${retain}" '.systems
             | map(
-                select(.id | inside($desired_id) | not)
-                | " AND !subject:(\(.id))")
-            | join("")'
+                select((.id | inside($desired_id)) or (.id | inside($retain)) | not)
+                | "NOT \(.id)")
+            | join(" AND ")'
     )
+    query+=")"
 
     echo "${query}"
 }
