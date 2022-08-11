@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2120,2094,2096
+# shellcheck disable=2069
 
 set -eE -o functrace
 
@@ -17,13 +17,7 @@ sudo_prefix="sudo"
 if [[ "${EUID}" = 0 ]]; then
   sudo_prefix=""
 fi
-local=1
-if [[ "${local}" = 1 ]]; then
-    device=/dev/pts/6
-else
-    device=/dev/tty1
-fi
-${sudo_prefix} chmod 666 "${device}"
+${sudo_prefix} chmod 666 /dev/tty1
 ${sudo_prefix} chmod 666 /dev/uinput
 shopt -s extglob # required for extented pattern recognition
 
@@ -281,17 +275,9 @@ install_dependencies() {
         fi
         if (( ${#dependencies[@]} )); then
             dialog --clear
-            dialog --infobox "Installing dependencies, please wait..." 5 50
+            dialog --infobox "Installing dependencies, please wait..." 5 50 2>&1 >/dev/tty1
             ${sudo_prefix} apt update && ${sudo_prefix} apt install -y "${dependencies[@]}" --no-install-recommends
         fi
-    fi
-}
-
-dialog() {
-    if [[ "${local}" = 1 ]]; then
-        command dialog "$@" --input-fd 3 3<"${device}" >"${device}"
-    else
-        command dialog "$@" 2>&1 >"${device}"
     fi
 }
 
@@ -305,32 +291,30 @@ start() {
     #
     # Load Controls management
     #
-    if [[ "${local}" = 0 ]]; then
-        if [[ -e "/dev/input/by-path/platform-ff300000.usb-usb-0:1.2:1.0-event-joystick" ]]; then
-            param_device="anbernic"
-        elif [[ -e "/dev/input/by-path/platform-singleadc-joypad-event-joystick" ]]; then
-            param_device="rg552"
-        elif [[ -e "/dev/input/by-path/platform-odroidgo2-joypad-event-joystick" ]]; then
-            param_device="oga"
-        elif [[ -e "/dev/input/by-path/platform-odroidgo3-joypad-event-joystick" ]]; then
-            param_device="ogs"
-        elif [[ -e "/dev/input/by-path/platform-gameforce-gamepad-event-joystick" ]]; then
-            param_device="chi"
-        else
-            dialog --clear --backtitle "RomMaster - System" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support."
-            exit 1
-        fi
-        #launch joypad
-        ${sudo_prefix} ./tm-joypad RomMaster "${param_device}" > /dev/null 2>&1 &
+    if [[ -e "/dev/input/by-path/platform-ff300000.usb-usb-0:1.2:1.0-event-joystick" ]]; then
+        param_device="anbernic"
+    elif [[ -e "/dev/input/by-path/platform-singleadc-joypad-event-joystick" ]]; then
+        param_device="rg552"
+    elif [[ -e "/dev/input/by-path/platform-odroidgo2-joypad-event-joystick" ]]; then
+        param_device="oga"
+    elif [[ -e "/dev/input/by-path/platform-odroidgo3-joypad-event-joystick" ]]; then
+        param_device="ogs"
+    elif [[ -e "/dev/input/by-path/platform-gameforce-gamepad-event-joystick" ]]; then
+        param_device="chi"
+    else
+        dialog --clear --backtitle "RomMaster - System" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support." 2>&1 >/dev/tty1
+        exit 1
     fi
+    #launch joypad
+    ${sudo_prefix} ./tm-joypad RomMaster "${param_device}" > /dev/null 2>&1 &
 
     dialog --clear
-    dialog --infobox "Initializing, please wait..." 5 50
+    dialog --infobox "Initializing, please wait..." 5 50 2>&1 >/dev/tty1
 
     #Checking internet access
     status=$(${sudo_prefix} ping -c 1 google.com &> /dev/null)
     if [[ ${status} -ne 0 ]]; then
-        dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run!" 10 50
+        dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run!" 10 50 2>&1 >/dev/tty1
         exit 1
     fi
 
@@ -367,7 +351,7 @@ main_menu() {
         2 "Exit"
     )
 
-    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${desired_index}"
 
@@ -407,7 +391,7 @@ systems_menu() {
         options+=( $((index++)) "${system_option}")
     done <<< "${system_options}"
     
-    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${desired_index}"
 
@@ -455,7 +439,7 @@ items_menu() {
         options+=( $((index++)) "${item_option}")
     done <<< "${item_options}"
     
-    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${desired_index}"
 
@@ -506,7 +490,7 @@ files_menu() {
         options+=( $((index++)) "${file_option}")
     done <<< "${file_options}"
     
-    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${desired_index}"
 
@@ -556,7 +540,7 @@ settings_menu() {
         0 "Not settings exist"
     )
 
-    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${desired_index}"
 
@@ -576,13 +560,11 @@ settings_menu() {
 stop() {
     log "Stopping RomMaster"
 
-    if [[ "${local}" = 0 ]]; then
-        if command -v emulationstation &> /dev/null; then
-            ${sudo_prefix} systemctl restart emulationstation
-        fi
-        if command -v emustation &> /dev/null; then
-            ${sudo_prefix} systemctl restart emustation
-        fi
+    if command -v emulationstation &> /dev/null; then
+        ${sudo_prefix} systemctl restart emulationstation
+    fi
+    if command -v emustation &> /dev/null; then
+        ${sudo_prefix} systemctl restart emustation
     fi
 
     clear > "${device}"
