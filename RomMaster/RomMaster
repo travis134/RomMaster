@@ -1,5 +1,8 @@
 #!/bin/bash
-#
+# shellcheck disable=SC2120,2094,2096
+
+set -eE -o functrace
+
 # RomMaster
 # https://github.com/travis134/RomMaster
 # Description : main script
@@ -14,7 +17,12 @@ sudo_prefix="sudo"
 if [[ "${EUID}" = 0 ]]; then
   sudo_prefix=""
 fi
-device=/dev/tty1
+local=1
+if [[ "${local}" = 1 ]]; then
+    device=/dev/pts/6
+else
+    device=/dev/tty1
+fi
 ${sudo_prefix} chmod 666 "${device}"
 ${sudo_prefix} chmod 666 /dev/uinput
 shopt -s extglob # required for extented pattern recognition
@@ -160,7 +168,7 @@ search_system() {
 
 # Lists files within a given item.
 list_files() {
-    local desired
+    local system
     local item
     local ext
     local item_id
@@ -169,10 +177,10 @@ list_files() {
     local results
     local results_count
 
-    desired=$1
+    system=$1
     item=$2
 
-    ext=$(echo "${desired}" \
+    ext=$(echo "${system}" \
         | jq -r .ext
     )
     item_id=$(echo "${item}" \
@@ -213,7 +221,7 @@ list_files() {
 # Download a given file to its corresponding system folder.
 download_file() {
     local base_path
-    local desired
+    local system
     local item
     local file
     local item_id
@@ -223,7 +231,7 @@ download_file() {
     local download_path
 
     base_path=$1
-    desired=$2
+    system=$2
     item=$3
     file=$4
 
@@ -238,9 +246,9 @@ download_file() {
         | jq -sRr @uri
     )
     download_url="https://archive.org/download/${item_id}/${name_uri}"
-    desired_path=$(echo "${desired}" \
+    system_path=$(echo "${system}" \
         | jq -r .path)
-    download_path="${base_path}${desired_path}/${name}"
+    download_path="${base_path}${system_path}/${name}"
 
     log "Downloading ${name} to ${download_path} from ${download_url}"
 
@@ -251,7 +259,7 @@ install_dependencies() {
     local dependencies
 
     #Checking required modules (RetroOZ uses odroid)
-    if id "travis" &>/dev/null || id "odroid" &>/dev/null; then
+    if id "ark" &>/dev/null || id "odroid" &>/dev/null; then
         dependencies=()
 
         if ! dpkg -s "dialog" &>/dev/null; then
@@ -272,11 +280,38 @@ install_dependencies() {
 }
 
 dialog() {
-    command dialog "$@" --input-fd 3 3<"${device}" >"${device}"
+    if [[ "${local}" = 1 ]]; then
+        command dialog "$@" --input-fd 3 3<"${device}" >"${device}"
+    else
+        command dialog "$@" 2>&1 >"${device}"
+    fi
 }
 
 start() {
+    local param_device
     local status
+
+    #
+    # Load Controls management
+    #
+    if [[ "${local}" = 0 ]]; then
+        if [[ -e "/dev/input/by-path/platform-ff300000.usb-usb-0:1.2:1.0-event-joystick" ]]; then
+            param_device="anbernic"
+        elif [[ -e "/dev/input/by-path/platform-singleadc-joypad-event-joystick" ]]; then
+            param_device="rg552"
+        elif [[ -e "/dev/input/by-path/platform-odroidgo2-joypad-event-joystick" ]]; then
+            param_device="oga"
+        elif [[ -e "/dev/input/by-path/platform-odroidgo3-joypad-event-joystick" ]]; then
+            param_device="ogs"
+        elif [[ -e "/dev/input/by-path/platform-gameforce-gamepad-event-joystick" ]]; then
+            param_device="chi"
+        else
+            dialog --clear --backtitle "RomMaster - System" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support."
+            exit
+        fi
+        #launch joypad
+        ${sudo_prefix} ./tm-joypad RomMaster "${param_device}" > /dev/null 2>&1 &
+    fi
 
     dialog --clear
     dialog --infobox "Initializing, please wait..." 5 50
@@ -293,22 +328,29 @@ start() {
 }
 
 main_menu() {
+    local cmd
+    local options
+    local desired_index
+    local status
+
     log "Starting RomMaster"
 
     cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=(
-        A "Find ROMs"
-        B "Settings"
-        C "Exit"
+        0 "Find ROMs"
+        1 "Settings"
+        2 "Exit"
     )
-    choice=$("${cmd[@]}" "${options[@]}" 2>&1)
+
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
     status=$?
+    log "Status: ${status}, Desired index: ${desired_index}"
 
     case ${status} in
     0)
-        case ${choice} in
-        A) systems_menu ;;
-        B) settings_menu ;;
+        case ${desired_index} in
+        0) systems_menu ;;
+        1) settings_menu ;;
         *) exit 0 ;;
         esac
         ;;
@@ -326,7 +368,7 @@ systems_menu() {
     local status
     local desired
 
-    log "Selected Find ROMs"
+    log "Selected: Find ROMs"
 
     cmd=(dialog --no-cancel --backtitle "Pick a system" --title " [ Systems Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=()
@@ -341,17 +383,17 @@ systems_menu() {
     
     desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
     status=$?
+    log "Status: ${status}, Desired index: ${desired_index}"
 
     desired=$(get_by_index "${systems}" "${desired_index}")
 
     case ${status} in
-    0)
-        roms_menu "${desired}" ;;
+    0) items_menu "${desired}" ;;
     *) exit 1 ;;
     esac
 }
 
-roms_menu() {
+items_menu() {
     local system
     local name
     local items
@@ -369,11 +411,11 @@ roms_menu() {
     name=$(echo "${system}" \
         | jq -r .name
     )
-    log "Selected ${name}"
+    log "Selected: ${name}"
 
     items=$(search_system "${base_query}" "${systems}" "${system}")
 
-    cmd=(dialog --no-cancel --backtitle "Pick an item" --title " [ ROMs Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    cmd=(dialog --no-cancel --backtitle "Pick an item" --title " [ Items Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
     options=()
 
     item_options=$(echo "${items}" \
@@ -386,39 +428,125 @@ roms_menu() {
     
     desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
     status=$?
+    log "Status: ${status}, Desired index: ${desired_index}"
 
     desired=$(get_by_index "${items}" "${desired_index}")
 
     case ${status} in
-    0) item_menu "${desired}" ;;
+    0) files_menu "${system}" "${desired}" ;;
+    1) main_menu ;;
     *) exit 1 ;;
     esac 
 }
 
-item_menu() {
+files_menu() {
+    local system
     local desired
     local name
+    local files
+    local cmd
+    local options
+    local file_options
+    local index
+    local file_option
+    local desired_index
+    local status
+    local desired
 
-    desired=$1
+    system=$1
+    item=$2
 
-    name=$(echo "${desired}" \
+    name=$(echo "${item}" \
         | jq -r .title
     )
-    log "Selected ${name}"
+    log "Selected: ${name}"
 
-    log "Nothing else has been implemented yet, bailing out."
+    files=$(list_files "${system}" "${item}")
 
-    exit 1
+    cmd=(dialog --no-cancel --backtitle "Pick a file" --title " [ Files Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:"  "15" "100" "15")
+    options=()
+
+    file_options=$(echo "${files}" \
+        | jq -r .[].name
+    )
+    index=0
+    while read -r file_option; do
+        options+=( $((index++)) "${file_option}")
+    done <<< "${file_options}"
+    
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
+    status=$?
+    log "Status: ${status}, Desired index: ${desired_index}"
+
+    desired=$(get_by_index "${files}" "${desired_index}")
+
+    case ${status} in
+    0) download_screen "${base_path}" "${system}" "${item}" "${desired}" ;;
+    1) item_menu "${system}" ;;
+    *) exit 1 ;;
+    esac 
+}
+
+download_screen() {
+    local base_path
+    local system
+    local item
+    local file
+
+    base_path=$1
+    system=$2
+    item=$3
+    file=$4
+
+    name=$(echo "${file}" \
+        | jq -r .name
+    )
+    log "Selected: ${name}"
+
+    download_file "${base_path}" "${system}" "${item}" "${file}" 2>&1 | dialog --progressbox 30 120
+
+    files_menu "${system}" "${item}"
 }
 
 settings_menu() {
-    log "Nothing else has been implemented yet, bailing out."
+    local cmd
+    local options
+    local desired_index
+    local status
 
-    exit 1
+    log "Selected: Settings"
+
+    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Settings Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    options=(
+        0 "Not settings exist"
+    )
+
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1)
+    status=$?
+    log "Status: ${status}, Desired index: ${desired_index}"
+
+    case ${status} in
+    0)
+        case ${desired_index} in
+        *) main_menu ;;
+        esac
+        ;;
+    1) main_menu ;;
+    *) exit 1 ;;
+    esac
 }
 
 stop() {
     log "Stopping RomMaster"
+
+    if [[ "${local}" = 0 ]]; then
+        if command -v emulationstation &> /dev/null; then
+            ${sudo_prefix} systemctl restart emulationstation
+        fi
+        if command -v emustation &> /dev/null; then
+            ${sudo_prefix} systemctl restart emustation
+        fi
+    fi
 
     clear > "${device}"
 }
