@@ -27,6 +27,14 @@ ${sudo_prefix} chmod 666 "${device}"
 ${sudo_prefix} chmod 666 /dev/uinput
 shopt -s extglob # required for extented pattern recognition
 
+#####################
+#  GLOBAL VARIABLES #
+#####################
+base_path=""
+base_query=""
+systems=""
+return_index=0
+
 log() {
     local message
     local ts
@@ -290,6 +298,9 @@ dialog() {
 start() {
     local param_device
     local status
+    local config
+
+    log "Starting RomMaster"
 
     #
     # Load Controls management
@@ -307,7 +318,7 @@ start() {
             param_device="chi"
         else
             dialog --clear --backtitle "RomMaster - System" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support."
-            exit
+            exit 1
         fi
         #launch joypad
         ${sudo_prefix} ./tm-joypad RomMaster "${param_device}" > /dev/null 2>&1 &
@@ -315,16 +326,30 @@ start() {
 
     dialog --clear
     dialog --infobox "Initializing, please wait..." 5 50
-    sleep 1
+
     #Checking internet access
     status=$(${sudo_prefix} ping -c 1 google.com &> /dev/null)
-    if [[ ${status} -eq 0 ]]; then
-        install_dependencies
-        main_menu
-    else
+    if [[ ${status} -ne 0 ]]; then
         dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run!" 10 50
-        exit
+        exit 1
     fi
+
+    log "Installing dependencies"
+    install_dependencies
+
+    log "Reading config"
+    config=$(read_config)
+    base_path=$(echo "${config}" \
+        | jq -r .path
+    )
+    base_query=$(echo "${config}" \
+        | jq -r .query
+    )
+    systems=$(echo "${config}" \
+        | jq .systems
+    )
+
+    main_menu
 }
 
 main_menu() {
@@ -333,9 +358,9 @@ main_menu() {
     local desired_index
     local status
 
-    log "Starting RomMaster"
+    log "Showing Main Menu"
 
-    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=(
         0 "Find ROMs"
         1 "Settings"
@@ -348,6 +373,7 @@ main_menu() {
 
     case ${status} in
     0)
+        return_index=${desired_index}
         case ${desired_index} in
         0) systems_menu ;;
         1) settings_menu ;;
@@ -370,7 +396,7 @@ systems_menu() {
 
     log "Selected: Find ROMs"
 
-    cmd=(dialog --no-cancel --backtitle "Pick a system" --title " [ Systems Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    cmd=(dialog --backtitle "Pick a system" --title " [ Systems Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=()
 
     system_options=$(echo "${systems}" \
@@ -388,7 +414,10 @@ systems_menu() {
     desired=$(get_by_index "${systems}" "${desired_index}")
 
     case ${status} in
-    0) items_menu "${desired}" ;;
+    0)
+        return_index=${desired_index}
+        items_menu "${desired}"
+        ;;
     *) exit 1 ;;
     esac
 }
@@ -415,7 +444,7 @@ items_menu() {
 
     items=$(search_system "${base_query}" "${systems}" "${system}")
 
-    cmd=(dialog --no-cancel --backtitle "Pick an item" --title " [ Items Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
+    cmd=(dialog --backtitle "Pick an item" --title " [ Items Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
     options=()
 
     item_options=$(echo "${items}" \
@@ -433,8 +462,11 @@ items_menu() {
     desired=$(get_by_index "${items}" "${desired_index}")
 
     case ${status} in
-    0) files_menu "${system}" "${desired}" ;;
-    1) main_menu ;;
+    0) 
+        return_index=${desired_index}
+        files_menu "${system}" "${desired}"
+        ;;
+    1) systems_menu ;;
     *) exit 1 ;;
     esac 
 }
@@ -463,7 +495,7 @@ files_menu() {
 
     files=$(list_files "${system}" "${item}")
 
-    cmd=(dialog --no-cancel --backtitle "Pick a file" --title " [ Files Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:"  "15" "100" "15")
+    cmd=(dialog --backtitle "Pick a file" --title " [ Files Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
     options=()
 
     file_options=$(echo "${files}" \
@@ -481,7 +513,10 @@ files_menu() {
     desired=$(get_by_index "${files}" "${desired_index}")
 
     case ${status} in
-    0) download_screen "${base_path}" "${system}" "${item}" "${desired}" ;;
+    0) 
+        return_index=${desired_index}
+        download_screen "${base_path}" "${system}" "${item}" "${desired}"
+        ;;
     1) item_menu "${system}" ;;
     *) exit 1 ;;
     esac 
@@ -516,7 +551,7 @@ settings_menu() {
 
     log "Selected: Settings"
 
-    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Settings Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    cmd=(dialog --backtitle "RomMaster" --title " [ Settings Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=(
         0 "Not settings exist"
     )
@@ -526,9 +561,11 @@ settings_menu() {
     log "Status: ${status}, Desired index: ${desired_index}"
 
     case ${status} in
-    0)
+    0) 
+        return_index=${desired_index}
         case ${desired_index} in
-        *) main_menu ;;
+        *) settings_menu
+        ;;
         esac
         ;;
     1) main_menu ;;
@@ -553,16 +590,4 @@ stop() {
 
 clear
 trap stop EXIT
-
-config=$(read_config)
-base_path=$(echo "${config}" \
-    | jq -r .path
-)
-base_query=$(echo "${config}" \
-    | jq -r .query
-)
-systems=$(echo "${config}" \
-    | jq .systems
-)
-
 start
