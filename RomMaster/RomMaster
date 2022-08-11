@@ -27,7 +27,7 @@ shopt -s extglob # required for extented pattern recognition
 base_path=""
 base_query=""
 systems=""
-return_index=0
+index_stack=( "0" )
 
 log() {
     local message
@@ -338,13 +338,16 @@ start() {
 
 main_menu() {
     local cmd
+    local last_index
     local options
     local desired_index
     local status
 
     log "Showing Main Menu"
 
-    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    last_index="${index_stack[-1]}"
+    unset "index_stack[-1]"
+    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] "  --default-item "${last_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=(
         0 "Find ROMs"
         1 "Settings"
@@ -357,7 +360,7 @@ main_menu() {
 
     case ${status} in
     0)
-        return_index=${desired_index}
+        index_stack+=( "${desired_index}" )
         case ${desired_index} in
         0) systems_menu ;;
         1) settings_menu ;;
@@ -370,6 +373,7 @@ main_menu() {
 
 systems_menu() {
     local cmd
+    local last_index
     local options
     local system_options
     local index
@@ -380,7 +384,9 @@ systems_menu() {
 
     log "Selected: Find ROMs"
 
-    cmd=(dialog --backtitle "Pick a system" --title " [ Systems Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    last_index="${index_stack[-1]}"
+    unset "index_stack[-1]"
+    cmd=(dialog --backtitle "Pick a system" --title " [ Systems Menu ] "  --default-item "${last_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=()
 
     system_options=$(echo "${systems}" \
@@ -399,7 +405,7 @@ systems_menu() {
 
     case ${status} in
     0)
-        return_index=${desired_index}
+        index_stack+=( "${desired_index}" )
         items_menu "${desired}"
         ;;
     *) exit 1 ;;
@@ -410,6 +416,7 @@ items_menu() {
     local system
     local name
     local items
+    local last_index
     local cmd
     local options
     local item_options
@@ -428,7 +435,9 @@ items_menu() {
 
     items=$(search_system "${base_query}" "${systems}" "${system}")
 
-    cmd=(dialog --backtitle "Pick an item" --title " [ Items Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
+    last_index="${index_stack[-1]}"
+    unset "index_stack[-1]"
+    cmd=(dialog --backtitle "Pick an item" --title " [ Items Menu ] "  --default-item "${last_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
     options=()
 
     item_options=$(echo "${items}" \
@@ -447,7 +456,7 @@ items_menu() {
 
     case ${status} in
     0) 
-        return_index=${desired_index}
+        index_stack+=( "${desired_index}" )
         files_menu "${system}" "${desired}"
         ;;
     1) systems_menu ;;
@@ -460,6 +469,7 @@ files_menu() {
     local desired
     local name
     local files
+    local last_index
     local cmd
     local options
     local file_options
@@ -479,7 +489,9 @@ files_menu() {
 
     files=$(list_files "${system}" "${item}")
 
-    cmd=(dialog --backtitle "Pick a file" --title " [ Files Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
+    last_index="${index_stack[-1]}"
+    unset "index_stack[-1]"
+    cmd=(dialog --backtitle "Pick a file" --title " [ Files Menu ] "  --default-item "${last_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
     options=()
 
     file_options=$(echo "${files}" \
@@ -498,7 +510,7 @@ files_menu() {
 
     case ${status} in
     0) 
-        return_index=${desired_index}
+        index_stack+=( "${desired_index}" )
         download_screen "${base_path}" "${system}" "${item}" "${desired}"
         ;;
     1) item_menu "${system}" ;;
@@ -529,13 +541,16 @@ download_screen() {
 
 settings_menu() {
     local cmd
+    local last_index
     local options
     local desired_index
     local status
 
     log "Selected: Settings"
 
-    cmd=(dialog --backtitle "RomMaster" --title " [ Settings Menu ] "  --default-item "${return_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    last_index="${index_stack[-1]}"
+    unset "index_stack[-1]"
+    cmd=(dialog --backtitle "RomMaster" --title " [ Settings Menu ] "  --default-item "${last_index}" --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=(
         0 "Not settings exist"
     )
@@ -546,7 +561,7 @@ settings_menu() {
 
     case ${status} in
     0) 
-        return_index=${desired_index}
+        index_stack+=( "${desired_index}" )
         case ${desired_index} in
         *) settings_menu
         ;;
