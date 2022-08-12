@@ -4,7 +4,7 @@
         "zip",
         "7z"
     ],
-    "query": "mediatype:software",
+    "query": "mediatype:software subject:(rom OR roms OR romset OR disc OR cd-rom OR image OR redump OR no-intro OR retrorom OR ghostware)",
     "systems": [
         {
             "id": "arcade",
@@ -14,7 +14,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((arcade OR mame) (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(arcade OR mame)"
         },
         {
             "id": "atomiswave",
@@ -27,13 +27,13 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atomiswave (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(atomiswave)"
         },
         {
             "id": "daphne",
             "path": "daphne",
             "name": "Daphne",
-            "query": "subject:(daphne (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(daphne)"
         },
         {
             "id": "fbneo",
@@ -43,7 +43,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((fbneo OR finalburn OR \"final burn\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(fbneo OR finalburn OR \"final burn\")"
         },
         {
             "id": "mame",
@@ -53,7 +53,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((arcade OR mame) (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(arcade OR mame)"
         },
         {
             "id": "naomi",
@@ -66,7 +66,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(naomi (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(naomi)"
         },
         {
             "id": "neogeo",
@@ -76,7 +76,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((neogeo OR neo-geo OR \"neo geo\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(neogeo OR neo-geo OR \"neo geo\")"
         },
         {
             "id": "atari2600",
@@ -88,7 +88,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((atari2600 OR \"atari 2600\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(atari2600 OR \"atari 2600\")"
         },
         {
             "id": "atari5200",
@@ -108,7 +108,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((atari5200 OR \"atari 5200\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(atari5200 OR \"atari 5200\")"
         },
         {
             "id": "atari7800",
@@ -120,7 +120,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((atari7800 OR \"atari 7800\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(atari7800 OR \"atari 7800\")"
         },
         {
             "id": "atarilynx",
@@ -132,7 +132,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((atarilynx OR lynx OR \"atari lynx\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(atarilynx OR lynx OR \"atari lynx\")"
         },
         {
             "id": "sufami",
@@ -143,7 +143,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((sufami OR \"sufami turbo\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(sufami OR \"sufami turbo\")"
         },
         {
             "id": "wonderswan",
@@ -154,7 +154,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(wonderswan (rom OR roms OR romset OR retrorom OR ghostware)))"
+            "query": "subject:(wonderswan)"
         },
         {
             "id": "wonderswancolor",
@@ -165,7 +165,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((wonderswancolor OR \"wonderswan color\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(wonderswancolor OR \"wonderswan color\")"
         },
         {
             "id": "uzebox",
@@ -187,7 +187,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((coleco OR colecovision) (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(coleco OR colecovision)"
         },
         {
             "id": "channelf",
@@ -199,7 +199,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((channelf OR \"channel f\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(channelf OR \"channel f\")"
         },
         {
             "id": "odyssey",
@@ -210,7 +210,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((odyssey OR \"odyssey 2\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(odyssey OR \"odyssey 2\")"
         },
         {
             "id": "intellivision",
@@ -223,7 +223,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(intellivision (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(intellivision)"
         },
         {
             "id": "vectrex",
@@ -236,7 +236,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(vectrex (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(vectrex)"
         },
         {
             "id": "pcengine",
@@ -248,7 +248,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((pcengine OR \"pc engine\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(pcengine OR \"pc engine\")"
         },
         {
             "id": "pcenginecd",
@@ -261,7 +261,7 @@
                 "toc",
                 "m3u"
             ],
-            "query": "subject:((pcenginecd OR \"pc engine cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(pcenginecd OR \"pc engine cd\")"
         },
         {
             "id": "pcfx",
@@ -273,7 +273,7 @@
                 "ccd",
                 "toc"
             ],
-            "query": "subject:((pcfx OR pc-fx) (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(pcfx OR pc-fx)"
         },
         {
             "id": "sgfx",
@@ -288,7 +288,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((sgfx OR supergrafx OR \"super grafx\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(sgfx OR supergrafx OR \"super grafx\")"
         },
         {
             "id": "tg16",
@@ -300,7 +300,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((tg16 OR turbografx16 OR turbografx-16) (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(tg16 OR turbografx16 OR turbografx-16)"
         },
         {
             "id": "tg16cd",
@@ -313,7 +313,7 @@
                 "toc",
                 "m3u"
             ],
-            "query": "subject:((tg16cd OR tgcd OR turbografxcd OR \"turbografx cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(tg16cd OR tgcd OR turbografxcd OR \"turbografx cd\")"
         },
         {
             "id": "famicom",
@@ -326,7 +326,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((famicom OR \"family computer\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(famicom OR \"family computer\")"
         },
         {
             "id": "fds",
@@ -337,7 +337,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((fds OR \"family computer disk system\" OR \"famicom disk system\") (rom OR roms OR romset OR retrorom OR disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(fds OR \"family computer disk system\" OR \"famicom disk system\")"
         },
         {
             "id": "gameandwatch",
@@ -348,7 +348,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gameanswatch OR game&watch OR \"game & watch\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(gameanswatch OR game&watch OR \"game & watch\")"
         },
         {
             "id": "gb",
@@ -360,7 +360,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gb OR gameboy OR \"game boy\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
+            "query": "subject:(gb OR gameboy OR \"game boy\") NOT hack)"
         },
         {
             "id": "gbh",
@@ -372,7 +372,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gb OR gameboy OR \"game boy\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
+            "query": "subject:(gb OR gameboy OR \"game boy\") hack)"
         },
         {
             "id": "gba",
@@ -383,7 +383,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
+            "query": "subject:(gba OR gameboyadvance OR \"game boy advance\") NOT hack)"
         },
         {
             "id": "gbah",
@@ -394,7 +394,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
+            "query": "subject:(gba OR gameboyadvance OR \"game boy advance\") hack)"
         },
         {
             "id": "gbc",
@@ -406,7 +406,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
+            "query": "subject:(gbc OR gameboycolor OR \"game boy color\") NOT hack)"
         },
         {
             "id": "gbch",
@@ -418,7 +418,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
+            "query": "subject:(gbc OR gameboycolor OR \"game boy color\") hack)"
         },
         {
             "id": "snesmsu1",
@@ -432,7 +432,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((snesmsu1 OR msu-1 OR msu) (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(snesmsu1 OR msu-1 OR msu)"
         },
         {
             "id": "n64",
@@ -445,7 +445,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((n64 OR nintendo64 OR \"nintendo 64\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(n64 OR nintendo64 OR \"nintendo 64\")"
         },
         {
             "id": "nes",
@@ -458,7 +458,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
+            "query": "subject:(nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") NOT hack)"
         },
         {
             "id": "nesh",
@@ -471,7 +471,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
+            "query": "subject:(nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") hack)"
         },
         {
             "id": "pokemini",
@@ -482,7 +482,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((pokemini OR \"pokemon mini\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(pokemini OR \"pokemon mini\")"
         },
         {
             "id": "snes",
@@ -496,7 +496,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
+            "query": "subject:(snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") NOT hack)"
         },
         {
             "id": "snesh",
@@ -510,7 +510,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
+            "query": "subject:(snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") hack)"
         },
         {
             "id": "sfc",
@@ -524,7 +524,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((sfc OR superfamicom OR \"super famicom\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(sfc OR superfamicom OR \"super famicom\")"
         },
         {
             "id": "satellaview",
@@ -540,7 +540,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(satellaview (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(satellaview)"
         },
         {
             "id": "virtualboy",
@@ -551,7 +551,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((virtualboy OR \"virtual boy\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(virtualboy OR \"virtual boy\")"
         },
         {
             "id": "3do",
@@ -562,7 +562,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(3do (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(3do)"
         },
         {
             "id": "videopac",
@@ -573,7 +573,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(videopac (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(videopac)"
         },
         {
             "id": "dreamcast",
@@ -585,7 +585,7 @@
                 "chd",
                 "m3u"
             ],
-            "query": "subject:(dreamcast (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(dreamcast)"
         },
         {
             "id": "gamegear",
@@ -597,7 +597,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gg OR gamegear OR \"game gear\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
+            "query": "subject:(gg OR gamegear OR \"game gear\") NOT hack)"
         },
         {
             "id": "gamegearh",
@@ -609,7 +609,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gg OR gamegear OR \"game gear\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
+            "query": "subject:(gg OR gamegear OR \"game gear\") hack)"
         },
         {
             "id": "megadrive-japan",
@@ -623,7 +623,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((megadrive OR genesis OR \"mega drive\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(megadrive OR genesis OR \"mega drive\")"
         },
         {
             "id": "sega32x",
@@ -637,7 +637,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((sega32x OR 32x OR \"sega 32x\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(sega32x OR 32x OR \"sega 32x\")"
         },
         {
             "id": "segacd",
@@ -649,7 +649,7 @@
                 "iso",
                 "m3u"
             ],
-            "query": "subject:((segacd OR megacd OR \"sega cd\" OR \"mega cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(segacd OR megacd OR \"sega cd\" OR \"mega cd\")"
         },
         {
             "id": "megacd",
@@ -661,7 +661,7 @@
                 "iso",
                 "m3u"
             ],
-            "query": "subject:((segacd OR megacd OR \"sega cd\" OR \"mega cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(segacd OR megacd OR \"sega cd\" OR \"mega cd\")"
         },
         {
             "id": "genesis",
@@ -676,7 +676,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((genesis OR \"sega genesis\") (rom OR roms OR romset OR retrorom OR ghostware) NOT hack)"
+            "query": "subject:(genesis OR \"sega genesis\") NOT hack)"
         },
         {
             "id": "genh",
@@ -691,7 +691,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((genesis OR \"sega genesis\") (rom OR roms OR romset OR retrorom OR ghostware) hack)"
+            "query": "subject:(genesis OR \"sega genesis\") hack)"
         },
         {
             "id": "mastersystem",
@@ -703,7 +703,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((mastersystem OR \"master system\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(mastersystem OR \"master system\")"
         },
         {
             "id": "megadrive",
@@ -718,7 +718,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((megadrive OR genesis OR \"mega drive\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(megadrive OR genesis OR \"mega drive\")"
         },
         {
             "id": "saturn",
@@ -729,7 +729,7 @@
                 "chd",
                 "iso"
             ],
-            "query": "subject:(saturn (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(saturn)"
         },
         {
             "id": "sg-1000",
@@ -740,7 +740,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sg-1000 (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(sg-1000)"
         },
         {
             "id": "neocd",
@@ -751,7 +751,7 @@
                 "iso",
                 "chd"
             ],
-            "query": "subject:((neocd OR neogeocd OR \"neo geo cd\") (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(neocd OR neogeocd OR \"neo geo cd\")"
         },
         {
             "id": "ngp",
@@ -763,7 +763,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((ngp OR neogeopocket OR \"neo geo pocket\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(ngp OR neogeopocket OR \"neo geo pocket\")"
         },
         {
             "id": "ngpc",
@@ -774,7 +774,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((ngpc OR neogeopocketcolor OR \"neo geo pocket color\") (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(ngpc OR neogeopocketcolor OR \"neo geo pocket color\")"
         },
         {
             "id": "psx",
@@ -793,7 +793,7 @@
                 "chd",
                 "iso"
             ],
-            "query": "subject:((psx OR playstation) (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(psx OR playstation)"
         },
         {
             "id": "psp",
@@ -804,7 +804,7 @@
                 "cso",
                 "pbp"
             ],
-            "query": "subject:((psp OR playstationportable OR \"playstation portable\") (disc OR cd-rom OR image OR redump OR ghostware))"
+            "query": "subject:(psp OR playstationportable OR \"playstation portable\")"
         },
         {
             "id": "pspminis",
@@ -815,7 +815,7 @@
                 "cso",
                 "pbp"
             ],
-            "query": "subject:((pspminis OR \"psp minis\"))"
+            "query": "subject:(pspminis OR \"psp minis\")"
         },
         {
             "id": "supervision",
@@ -837,7 +837,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((megaduck OR \"mega duck\")  (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:(megaduck OR \"mega duck\") )"
         },
         {
             "id": "amstradcpc",
