@@ -575,6 +575,8 @@ settings_menu() {
 stop() {
     log "Stopping RomMaster"
 
+    $sudo_prefix pkill tm-joypad > /dev/null 2>&1
+
     if command -v emulationstation &> /dev/null; then
         ${sudo_prefix} systemctl restart emulationstation
     fi
