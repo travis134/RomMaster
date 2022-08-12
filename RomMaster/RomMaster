@@ -1,8 +1,6 @@
 #!/bin/bash
 # shellcheck disable=2069
 
-set -eE -o functrace
-
 # RomMaster
 # https://github.com/travis134/RomMaster
 # Description : main script
@@ -221,39 +219,40 @@ list_files() {
 
 # Download a given file to its corresponding system folder.
 download_file() {
-    local base_path
-    local system
     local item
     local file
-    local item_id
-    local name
-    local name_uri
-    local download_url
     local download_path
+    local item_id
+    local file_name
+    local file_name_enc
+    local download_url
+    local char
+    local keep
+    local progress
 
-    base_path=$1
-    system=$2
-    item=$3
-    file=$4
+    item=$1
+    file=$2
+    download_path=$3
 
     item_id=$(echo "${item}" \
         | jq -r .identifier
     )
-    name=$(echo "${file}" \
+    file_name=$(echo "${file}" \
         | jq -r .name
     )
     # We need to URL encode the special characters using jq.
-    name_uri=$(echo -n "${name}" \
+    file_name_enc=$(echo -n "${file_name}" \
         | jq -sRr @uri
     )
-    download_url="https://archive.org/download/${item_id}/${name_uri}"
-    system_path=$(echo "${system}" \
-        | jq -r .path)
-    download_path="${base_path}${system_path}/${name}"
+    download_url="https://archive.org/download/${item_id}/${file_name_enc}"
 
-    log "Downloading ${name} to ${download_path} from ${download_url}"
+    log "Downloading ${file_name} to ${download_path} from ${download_url}"
 
-    curl -L --create-dirs -o "${download_path}" "${download_url}"
+    curl -# --create-dirs -o "${download_path}" "${download_url}" 2>&1 | while IFS= read -r -n 1 char; do
+        [[ ${char} =~ [0-9] ]] && keep=1 ;
+        [[ ${char} == % ]] && echo "${progress%.*}" && progress="" && keep=0 ;
+        [[ ${keep} == 1 ]] && progress="${progress}${char}" ;
+    done
 }
 
 install_dependencies() {
@@ -346,8 +345,7 @@ main_menu() {
     cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] "  --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=(
         0 "Find ROMs"
-        1 "Settings"
-        2 "Exit"
+        1 "Exit"
     )
 
     desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
@@ -358,7 +356,6 @@ main_menu() {
     0)
         case ${desired_index} in
         0) systems_menu ;;
-        1) settings_menu ;;
         *) exit 0 ;;
         esac
         ;;
@@ -378,7 +375,7 @@ systems_menu() {
 
     log "Selected: Find ROMs"
 
-    cmd=(dialog --backtitle "Pick a system" --title " [ Systems Menu ] "  --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick a system" --title " [ Systems Menu ] "  --menu "D-pad to move, A or B to select" "15" "50" "15")
     options=()
 
     system_options=$(echo "${systems}" \
@@ -397,13 +394,14 @@ systems_menu() {
 
     case ${status} in
     0) items_menu "${desired}" ;;
+    1) main_menu ;;
     *) exit 1 ;;
     esac
 }
 
 items_menu() {
     local system
-    local name
+    local system_name
     local items
     local cmd
     local options
@@ -416,14 +414,14 @@ items_menu() {
 
     system=$1
 
-    name=$(echo "${system}" \
+    system_name=$(echo "${system}" \
         | jq -r .name
     )
-    log "Selected: ${name}"
+    log "Selected: ${system_name}"
 
     items=$(search_system "${base_query}" "${systems}" "${system}")
 
-    cmd=(dialog --backtitle "Pick an item" --title " [ Items Menu ] "  --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick an item" --title " [ Items Menu ] "  --menu "D-pad to move, A or B to select" "15" "100" "15")
     options=()
 
     item_options=$(echo "${items}" \
@@ -450,7 +448,7 @@ items_menu() {
 files_menu() {
     local system
     local desired
-    local name
+    local item_name
     local files
     local cmd
     local options
@@ -464,14 +462,14 @@ files_menu() {
     system=$1
     item=$2
 
-    name=$(echo "${item}" \
+    item_name=$(echo "${item}" \
         | jq -r .title
     )
-    log "Selected: ${name}"
+    log "Selected: ${item_name}"
 
     files=$(list_files "${system}" "${item}")
 
-    cmd=(dialog --backtitle "Pick a file" --title " [ Files Menu ] "  --menu "D-pad to move, A for <enter>, B for <space>:" "15" "100" "15")
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick a file" --title " [ Files Menu ] "  --menu "D-pad to move, A or B to select" "15" "100" "15")
     options=()
 
     file_options=$(echo "${files}" \
@@ -490,7 +488,7 @@ files_menu() {
 
     case ${status} in
     0) download_screen "${base_path}" "${system}" "${item}" "${desired}" ;;
-    1) item_menu "${system}" ;;
+    1) items_menu "${system}" ;;
     *) exit 1 ;;
     esac 
 }
@@ -500,47 +498,54 @@ download_screen() {
     local system
     local item
     local file
+    local file_name
+    local system_path
+    local download_path
 
     base_path=$1
     system=$2
     item=$3
     file=$4
 
-    name=$(echo "${file}" \
+    file_name=$(echo "${file}" \
         | jq -r .name
     )
-    log "Selected: ${name}"
+    log "Selected: ${file_name}"
 
-    download_file "${base_path}" "${system}" "${item}" "${file}" 2>&1 | dialog --progressbox 30 120
+    system_path=$(echo "${system}" \
+        | jq -r .path)
+    download_path="${base_path}${system_path}/${file_name}"
 
-    files_menu "${system}" "${item}"
+    download_file "${item}" "${file}" "${download_path}" | dialog --gauge "Downloading ${file_name}, please wait..." 15 50 0 2>&1 >/dev/tty1
+
+    downloaded_screen "${system}" "${item}" "${file}" "${download_path}"
 }
 
-settings_menu() {
-    local cmd
-    local options
-    local desired_index
+downloaded_screen() {
+    local system
+    local item
+    local file
+    local download_path
+    local file_name
     local status
 
-    log "Selected: Settings"
+    system=$1
+    item=$2
+    file=$3
+    download_path=$4
 
-    cmd=(dialog --backtitle "RomMaster" --title " [ Settings Menu ] "  --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
-    options=(
-        0 "Not settings exist"
+    file_name=$(echo "${file}" \
+        | jq -r .name
     )
+    log "Downloaded: ${file_name}"
 
-    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
+    dialog --backtitle "Download complete" --title " [ ${file_name} ] "  --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
     status=$?
-    log "Status: ${status}, Desired index: ${desired_index}"
+    log "Status: ${status}"
 
     case ${status} in
-    0)
-        case ${desired_index} in
-        *) settings_menu
-        ;;
-        esac
-        ;;
-    1) main_menu ;;
+    0) exit 0 ;;
+    1) files_menu "${system}" "${item}" ;;
     *) exit 1 ;;
     esac
 }
@@ -550,10 +555,10 @@ stop() {
 
     $sudo_prefix pkill tm-joypad > /dev/null 2>&1
 
-    if command -v emulationstation &> /dev/null; then
+    if [[ $(systemctl is-active emulationstation.service) = "active" ]]; then
         ${sudo_prefix} systemctl restart emulationstation
     fi
-    if command -v emustation &> /dev/null; then
+    if [[ $(systemctl is-active emustation.service) = "active" ]]; then
         ${sudo_prefix} systemctl restart emustation
     fi
 
