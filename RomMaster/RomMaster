@@ -70,38 +70,17 @@ create_query() {
     local base_query
     local systems
     local desired
-    local desired_id
     local query
-    local retain
 
     base_query=$1
     systems=$2
     desired=$3
 
-    desired_id=$(echo "${desired}" \
-        | jq -r '.id'
-    )
     query=${base_query}
     query+=" AND "
     query+=$(echo "${desired}" \
         | jq -r '.query'
     )
-    retain=$(echo "${desired}" \
-        | jq '.retain'
-    )
-
-    query+=" AND subject:("
-    # Avoid over filtering if the system name is a substring of desired,
-    # i.e. if we want "snes" we wouldn't want to filter out "nes" because.
-    # all "snes" entries would also be eliminated.
-    query+=$(echo "${systems}" \
-        | jq -r --arg desired_id "${desired_id}" --arg retain "${retain}" '.
-            | map(
-                select((.id | inside($desired_id)) or (.id | inside($retain)) | not)
-                | "NOT \(.id)")
-            | join(" AND ")'
-    )
-    query+=")"
 
     # We need to URL encode the special characters using jq.
     echo -n "${query}" \
