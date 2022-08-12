@@ -92,7 +92,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((neogeo OR neo-geo OR \"neo geo\" (rom OR roms OR romset OR retrorom OR ghostware))"
+            "query": "subject:((neogeo OR neo-geo OR \"neo geo\") (rom OR roms OR romset OR retrorom OR ghostware))"
         },
         {
             "id": "atari2600",
