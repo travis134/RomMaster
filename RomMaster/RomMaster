@@ -248,7 +248,7 @@ download_file() {
 
     log "Downloading ${file_name} to ${download_path} from ${download_url}"
 
-    curl -# --create-dirs -o "${download_path}" "${download_url}" 2>&1 | while IFS= read -r -n 1 char; do
+    curl -L -# --create-dirs -o "${download_path}" "${download_url}" 2>&1 | while IFS= read -r -n 1 char; do
         [[ ${char} =~ [0-9] ]] && keep=1 ;
         [[ ${char} == % ]] && echo "${progress%.*}" && progress="" && keep=0 ;
         [[ ${keep} == 1 ]] && progress="${progress}${char}" ;
@@ -421,7 +421,7 @@ items_menu() {
 
     items=$(search_system "${base_query}" "${systems}" "${system}")
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick an item" --title " [ Items Menu ] "  --menu "D-pad to move, A or B to select" "15" "100" "15")
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick an item" --title " [ Items Menu ] "  --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
     item_options=$(echo "${items}" \
@@ -469,7 +469,7 @@ files_menu() {
 
     files=$(list_files "${system}" "${item}")
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick a file" --title " [ Files Menu ] "  --menu "D-pad to move, A or B to select" "15" "100" "15")
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick a file" --title " [ Files Menu ] "  --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
     file_options=$(echo "${files}" \
@@ -516,7 +516,7 @@ download_screen() {
         | jq -r .path)
     download_path="${base_path}${system_path}/${file_name}"
 
-    download_file "${item}" "${file}" "${download_path}" | dialog --gauge "Downloading ${file_name}, please wait..." 15 50 0 2>&1 >/dev/tty1
+    download_file "${item}" "${file}" "${download_path}" | dialog --gauge "Downloading ${file_name}, please wait..." 7 75 0 2>&1 >/dev/tty1
 
     downloaded_screen "${system}" "${item}" "${file}" "${download_path}"
 }
