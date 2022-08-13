@@ -48,6 +48,8 @@ human_readable() {
     echo "${i}${d} ${S[${s}]}"
 }
 
+urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
+
 # Reads config JSON in which contains information about supported systems, the
 # expected extensions for suitable roms, and query overrides for better search
 # results.
@@ -196,7 +198,7 @@ list_files() {
         | jq -r --arg all_ext "${all_ext}" '.files
             | map(
                 select(.name | split(".")[-1] | inside($all_ext))
-                | {name: .name, size: .size})'
+                | {name: .name | @uri, size: .size})'
     )
     results_count=$(echo "${results}" \
         | jq '. | length'
@@ -206,6 +208,83 @@ list_files() {
     echo "${results}"
 }
 
+
+# Lists files within a given archive.
+list_sub_files() {
+    local system
+    local item
+    local file
+    local file_name
+    local ext
+    local all_ext
+    local item_id
+    local item_name
+    local sub_files_url
+    local response
+    local sub_file_lines
+    local sub_file_names
+    local sub_file_sizes
+    local results
+    local results_count
+
+    system=$1
+    item=$2
+    file=$3
+
+    file_name=$(echo "${file}" \
+        | jq -r .name
+    )
+    ext=$(echo "${system}" \
+        | jq -r .ext
+    )
+    all_ext="${base_ext} ${ext}"
+    item_id=$(echo "${item}" \
+        | jq -r .identifier
+    )
+    item_name=$(echo "${item}" \
+        | jq -r .title
+    )
+
+    sub_files_url="https://archive.org/download/${item_id}/${file_name}/"
+
+    log "Loading sub files with url: ${sub_files_url}"
+
+    # Response body is HTML data formatted as:
+    # ...
+    # <tr><td><a href="foo">bar</a><td><td>baz<td id="size">qux</tr>
+    # ...
+    response=$(curl -s -L "${sub_files_url}")
+    sub_file_lines=$(echo "${response}" \
+        | grep "archive.org/download/${item_id}/${file_name}/" \
+    )
+    sub_file_names=$(echo "${sub_file_lines}" \
+        | sed -nr 's/.*href="([^"]+)".*/\1/p' \
+        | jq --raw-input --slurp --arg item_id "${item_id}" 'split("\n")
+            | .[0:-1]
+            | map(sub("//archive.org/download/\($item_id)/";""))'
+    )
+    sub_file_sizes=$(echo "${sub_file_lines}" \
+        | sed -nr 's/.*size">([0-9]+).*/\1/p' \
+        | jq --raw-input --slurp 'split("\n")
+            | .[0:-1]'
+    )
+    results=$(jq -n \
+        --argjson sub_file_names "${sub_file_names}" \
+        --argjson sub_file_sizes "${sub_file_sizes}" \
+        --arg all_ext "${all_ext}" \
+        '[$sub_file_names, $sub_file_sizes]
+            | transpose 
+            | map({name: .[0], size: .[1]})'
+    )
+    results_count=$(echo "${results}" \
+        | jq '. | length'
+    )
+    log "Found ${results_count} matching sub files in ${file_name}"
+
+    echo "${results}"
+}
+
+
 # Download a given file to its corresponding system folder.
 download_file() {
     local item
@@ -213,7 +292,6 @@ download_file() {
     local download_path
     local item_id
     local file_name
-    local file_name_enc
     local download_url
     local char
     local keep
@@ -229,11 +307,7 @@ download_file() {
     file_name=$(echo "${file}" \
         | jq -r .name
     )
-    # We need to URL encode the special characters using jq.
-    file_name_enc=$(echo -n "${file_name}" \
-        | jq -sRr @uri
-    )
-    download_url="https://archive.org/download/${item_id}/${file_name_enc}"
+    download_url="https://archive.org/download/${item_id}/${file_name}"
 
     log "Downloading ${file_name} to ${download_path} from ${download_url}"
 
@@ -472,6 +546,7 @@ files_menu() {
     local system
     local item
     local item_name
+    local system_id
     local item_id
     local files_cache_path
     local files_cache
@@ -481,6 +556,7 @@ files_menu() {
     local file_options
     local index
     local file_option
+    local file_option_readable
     local desired_index
     local status
     local desired
@@ -493,6 +569,9 @@ files_menu() {
     )
     log "Selected: ${item_name}"
 
+    system_id=$(echo "${system}" \
+        | jq -r .id
+    )
     item_id=$(echo "${item}" \
         | jq -r .identifier
     )
@@ -517,7 +596,8 @@ files_menu() {
     )
     index=0
     while read -r file_option; do
-        options+=( $((index++)) "${file_option}")
+        file_option_readable=$(urldecode "${file_option}")
+        options+=( $((index++)) "${file_option_readable}" )
     done <<< "${file_options}"
     
     desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
@@ -538,8 +618,10 @@ file_screen() {
     local item
     local file
     local file_name
+    local file_name_readable
     local file_size
     local file_size_readable
+    local extra
     local status
 
     system=$1
@@ -549,26 +631,105 @@ file_screen() {
     file_name=$(echo "${file}" \
         | jq -r .name
     )
-    log "Selected: ${file_name}"
+    file_name_readable=$(urldecode "${file_name}")
+    log "Selected: ${file_name_readable}"
 
     file_size=$(echo "${file}" \
         | jq -r .size
     )
     file_size_readable=$(human_readable "${file_size}")
 
-    dialog --backtitle "Pick an action" --title " [ File Information ] " --ok-label "Download" --cancel-label "Back" --extra-button --extra-label "Open" --yesno "File Name: ${file_name}\nSize: ${file_size_readable}" 15 50 2>&1 >/dev/tty1
+    # Archive.org only provides sub file navigation for archive files.
+    extra=()
+    if [[ $file_name == *.zip || $file_name == *.7z ]]; then
+        extra=("--extra-button" "--extra-label" "Open")
+    fi
+
+    dialog --backtitle "Pick an action" --title " [ File Information ] " --yes-label "Download" --ok-label "Download" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "File Name: ${file_name_readable}\nSize: ${file_size_readable}" 15 50 2>&1 >/dev/tty1
     status=$?
     log "Status: ${status}"
 
     case ${status} in
-    0) download_screen "${system}" "${item}" "${desired}" ;;
+    0) download_screen "${system}" "${item}" "${file}" ;;
     1) files_menu "${system}" "${item}" ;;
-    3)
-        dialog --backtitle "RomMaster" --msgbox "This feature hasn't been implemented yet" 7 50 2>&1 >/dev/tty1
-        file_screen "${system}" "${item}" "${desired}"
-        ;;
+    3) open_file_screen "${system}" "${item}" "${file}" ;;
     *) exit 1 ;;
     esac
+}
+
+open_file_screen() {
+    local system
+    local item
+    local file
+    local file_name
+    local file_name_readable
+    local system_id
+    local item_id
+    local sub_files_cache_path
+    local sub_files_cache
+    local sub_files
+    local cmd
+    local options
+    local sub_file_options
+    local sub_file_option_readable
+    local index
+    local sub_file_option
+    local desired_index
+    local status
+    local desired
+
+    system=$1
+    item=$2
+    file=$3
+
+    file_name=$(echo "${file}" \
+        | jq -r .name
+    )
+    file_name_readable=$(urldecode "${file_name}")
+    log "Selected: ${file_name_readable}"
+
+    system_id=$(echo "${system}" \
+        | jq -r .id
+    )
+    item_id=$(echo "${item}" \
+        | jq -r .identifier
+    )
+
+    sub_files_cache_path="${base_cache}/${system_id}/${item_id}/${file_name}"
+    mkdir -p "${sub_files_cache_path}"
+    sub_files_cache="${sub_files_cache_path}/sub_files.json"
+    if [[ -f "$sub_files_cache" ]]; then
+        log "Reading files for ${item_name} from cache: ${sub_files_cache}"
+        sub_files=$(cat "${sub_files_cache}")
+    else
+        dialog --infobox "Loading sub files for ${file_name_readable}, please wait..." 5 50 2>&1 >/dev/tty1
+        sub_files=$(list_sub_files "${system}" "${item}" "${file}")
+        echo "${files}" > "${sub_files_cache}"
+    fi
+
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick a sub file" --title " [ Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
+    options=()
+
+    sub_file_options=$(echo "${sub_files}" \
+        | jq -r .[].name
+    )
+    index=0
+    while read -r sub_file_option; do
+        sub_file_option_readable=$(urldecode "${sub_file_option}")
+        options+=( $((index++)) "${sub_file_option_readable}")
+    done <<< "${sub_file_options}"
+    
+    desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
+    status=$?
+    log "Status: ${status}, Desired index: ${desired_index}"
+
+    desired=$(get_by_index "${sub_files}" "${desired_index}")
+
+    case ${status} in
+    0) file_screen "${system}" "${item}" "${desired}" true;;
+    1) files_menu "${system}" "${item}" ;;
+    *) exit 1 ;;
+    esac 
 }
 
 download_screen() {
@@ -576,6 +737,7 @@ download_screen() {
     local item
     local file
     local file_name
+    local base_file_name
     local system_path
     local download_path
 
@@ -588,9 +750,13 @@ download_screen() {
     )
     log "Selected: ${file_name}"
 
+    # When we download a file named foo/bar/baz.zip, we want to emplace it at
+    # ${path}/baz.zip, stripping off the foo/bar part.
+    base_file_name=$(basename "${file_name}")
+
     system_path=$(echo "${system}" \
         | jq -r .path)
-    download_path="${base_path}/${system_path}/${file_name}"
+    download_path="${base_path}/${system_path}/${base_file_name}"
 
     download_file "${item}" "${file}" "${download_path}" | dialog --gauge "Downloading ${file_name}, please wait..." 7 75 0 2>&1 >/dev/tty1
 
@@ -615,7 +781,7 @@ downloaded_screen() {
     )
     log "Downloaded: ${file_name}"
 
-    dialog --backtitle "Download complete" --title " [ ${file_name} ] " --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
+    dialog --backtitle "Download complete" --title " [ ${base_file_name} ] " --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
     status=$?
     log "Status: ${status}"
 
