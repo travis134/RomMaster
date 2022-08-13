@@ -173,6 +173,7 @@ list_files() {
         | jq -r .ext
     )
     all_ext="${base_ext} ${ext}"
+    all_ext="${all_ext} ${all_ext^^}"
     item_id=$(echo "${item}" \
         | jq -r .identifier
     )
@@ -238,6 +239,7 @@ list_sub_files() {
         | jq -r .ext
     )
     all_ext="${base_ext} ${ext}"
+    all_ext="${all_ext} ${all_ext^^}"
     item_id=$(echo "${item}" \
         | jq -r .identifier
     )
