@@ -13,7 +13,7 @@ export TERM=linux
 sudo_prefix="sudo"
 # check whether sudo is needed
 if [[ "${EUID}" = 0 ]]; then
-  sudo_prefix=""
+    sudo_prefix=""
 fi
 ${sudo_prefix} chmod 666 /dev/tty1
 ${sudo_prefix} chmod 666 /dev/uinput
@@ -40,7 +40,7 @@ log() {
 
 human_readable() {
     local i=${1:-0} d="" s=0 S=("Bytes" "KiB" "MiB" "GiB" "TiB" "PiB" "EiB" "YiB" "ZiB")
-    while ((i > 1024 && s < ${#S[@]}-1)); do
+    while ((i > 1024 && s < ${#S[@]} - 1)); do
         printf -v d ".%02d" $((i % 1024 * 100 / 1024))
         i=$((i / 1024))
         s=$((s + 1))
@@ -48,7 +48,10 @@ human_readable() {
     echo "${i}${d} ${S[${s}]}"
 }
 
-urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
+urldecode() {
+    : "${*//+/ }"
+    echo -e "${_//%/\\x}"
+}
 
 # Reads config JSON in which contains information about supported systems, the
 # expected extensions for suitable roms, and query overrides for better search
@@ -71,8 +74,9 @@ get_by_index() {
     elements=$1
     desired_index=$2
 
-    desired=$(echo "${elements}" \
-        | jq --arg desired_index "${desired_index}" .["${desired_index}"]
+    desired=$(
+        echo "${elements}" |
+            jq --arg desired_index "${desired_index}" .["${desired_index}"]
     )
 
     echo "${desired}"
@@ -90,13 +94,14 @@ create_query() {
 
     query=${base_query}
     query+=" "
-    query+=$(echo "${desired}" \
-        | jq -r '.query'
+    query+=$(
+        echo "${desired}" |
+            jq -r '.query'
     )
 
     # We need to URL encode the special characters using jq.
-    echo -n "${query}" \
-        | jq -sRr @uri
+    echo -n "${query}" |
+        jq -sRr @uri
 }
 
 # Searches for items that are compatible with a given system.
@@ -115,8 +120,8 @@ search_system() {
     systems=$1
     desired=$2
 
-    name=$(echo "${desired}" \
-        | jq -r .name)
+    name=$(echo "${desired}" |
+        jq -r .name)
 
     log "Searching items for system: ${name}"
 
@@ -141,13 +146,15 @@ search_system() {
     #   },
     #   ...
     # }
-    # 
+    #
     response=$(curl -s "${search_url}")
-    results=$(echo "${response}" \
-        | jq .response.docs
+    results=$(
+        echo "${response}" |
+            jq .response.docs
     )
-    results_count=$(echo "${results}" \
-        | jq '. | length'
+    results_count=$(
+        echo "${results}" |
+            jq '. | length'
     )
     log "Found ${results_count} matching items for ${name}"
 
@@ -169,13 +176,15 @@ list_files() {
     system=$1
     item=$2
 
-    ext=$(echo "${system}" \
-        | jq -r .ext
+    ext=$(
+        echo "${system}" |
+            jq -r .ext
     )
     all_ext="${base_ext} ${ext}"
     all_ext="${all_ext} ${all_ext^^}"
-    item_id=$(echo "${item}" \
-        | jq -r .identifier
+    item_id=$(
+        echo "${item}" |
+            jq -r .identifier
     )
 
     metadata_url="https://archive.org/metadata/${item_id}"
@@ -195,20 +204,21 @@ list_files() {
     #   ...
     # }
     response=$(curl -s "${metadata_url}")
-    results=$(echo "${response}" \
-        | jq -r --arg all_ext "${all_ext}" '.files
+    results=$(
+        echo "${response}" |
+            jq -r --arg all_ext "${all_ext}" '.files
             | map(
                 select(.name | split(".")[-1] | inside($all_ext))
                 | {name: .name | @uri, size: .size})'
     )
-    results_count=$(echo "${results}" \
-        | jq '. | length'
+    results_count=$(
+        echo "${results}" |
+            jq '. | length'
     )
     log "Found ${results_count} matching files in ${item_id}"
 
     echo "${results}"
 }
-
 
 # Lists files within a given archive.
 list_sub_files() {
@@ -238,24 +248,29 @@ list_sub_files() {
     item=$2
     file=$3
 
-    system_id=$(echo "${system}" \
-        | jq -r .id
+    system_id=$(
+        echo "${system}" |
+            jq -r .id
     )
 
-    file_name=$(echo "${file}" \
-        | jq -r .name
+    file_name=$(
+        echo "${file}" |
+            jq -r .name
     )
     file_name_readable=$(urldecode "${file_name}")
-    ext=$(echo "${system}" \
-        | jq -r .ext
+    ext=$(
+        echo "${system}" |
+            jq -r .ext
     )
     all_ext="${base_ext} ${ext}"
     all_ext="${all_ext} ${all_ext^^}"
-    item_id=$(echo "${item}" \
-        | jq -r .identifier
+    item_id=$(
+        echo "${item}" |
+            jq -r .identifier
     )
-    item_name=$(echo "${item}" \
-        | jq -r .title
+    item_name=$(
+        echo "${item}" |
+            jq -r .title
     )
 
     sub_files_url="https://archive.org/download/${item_id}/${file_name}/"
@@ -267,49 +282,54 @@ list_sub_files() {
     # <tr><td><a href="foo">bar</a><td><td>baz<td id="size">qux</tr>
     # ...
     response=$(curl -s -L "${sub_files_url}")
-    sub_file_lines=$(echo "${response}" \
-        | grep "archive.org/download/${item_id}/${file_name}/" \
+    sub_file_lines=$(
+        echo "${response}" |
+            grep "archive.org/download/${item_id}/${file_name}/"
     )
     if [ -z "${sub_file_lines}" ]; then
-        sub_file_lines=$(echo "${response}" \
-            | grep "archive.org/download/${item_id}/${file_name_readable}/" \
+        sub_file_lines=$(
+            echo "${response}" |
+                grep "archive.org/download/${item_id}/${file_name_readable}/"
         )
     fi
-    sub_file_names=$(echo "${sub_file_lines}" \
-        | sed -nr 's/.*href="([^"]+)".*/\1/p' \
-        | jq --raw-input --slurp --arg item_id "${item_id}" 'split("\n")
+    sub_file_names=$(
+        echo "${sub_file_lines}" |
+            sed -nr 's/.*href="([^"]+)".*/\1/p' |
+            jq --raw-input --slurp --arg item_id "${item_id}" 'split("\n")
             | .[0:-1]
             | map(sub("//archive.org/download/\($item_id)/";""))'
     )
     sub_files_names_cache_path="${base_cache}/${system_id}/${item_id}/${file_name_readable}"
     sub_files_names_cache="${sub_files_names_cache_path}/file_names.json"
     mkdir -p "${items_cache_path}"
-    echo "${sub_file_names}" > "${sub_files_names_cache}"
-    sub_file_sizes=$(echo "${sub_file_lines}" \
-        | sed -nr 's/.*size">([0-9]+).*/\1/p' \
-        | jq --raw-input --slurp 'split("\n")
+    echo "${sub_file_names}" >"${sub_files_names_cache}"
+    sub_file_sizes=$(
+        echo "${sub_file_lines}" |
+            sed -nr 's/.*size">([0-9]+).*/\1/p' |
+            jq --raw-input --slurp 'split("\n")
             | .[0:-1]'
     )
     sub_files_sizes_cache_path="${base_cache}/${system_id}/${item_id}/${file_name_readable}"
     sub_files_sizes_cache="${sub_files_sizes_cache_path}/file_sizes.json"
     mkdir -p "${items_cache_path}"
-    echo "${sub_file_sizes}" > "${sub_files_sizes_cache}"
-    results=$(jq -n \
-        --argfile sub_file_names "${sub_files_names_cache}" \
-        --argfile sub_file_sizes "${sub_files_sizes_cache}" \
-        --arg all_ext "${all_ext}" \
-        '[$sub_file_names, $sub_file_sizes]
+    echo "${sub_file_sizes}" >"${sub_files_sizes_cache}"
+    results=$(
+        jq -n \
+            --argfile sub_file_names "${sub_files_names_cache}" \
+            --argfile sub_file_sizes "${sub_files_sizes_cache}" \
+            --arg all_ext "${all_ext}" \
+            '[$sub_file_names, $sub_file_sizes]
             | transpose 
             | map({name: .[0], size: .[1]})'
     )
-    results_count=$(echo "${results}" \
-        | jq '. | length'
+    results_count=$(
+        echo "${results}" |
+            jq '. | length'
     )
     log "Found ${results_count} matching sub files in ${file_name}"
 
     echo "${results}"
 }
-
 
 # Download a given file to its corresponding system folder.
 download_file() {
@@ -327,20 +347,22 @@ download_file() {
     file=$2
     download_path=$3
 
-    item_id=$(echo "${item}" \
-        | jq -r .identifier
+    item_id=$(
+        echo "${item}" |
+            jq -r .identifier
     )
-    file_name=$(echo "${file}" \
-        | jq -r .name
+    file_name=$(
+        echo "${file}" |
+            jq -r .name
     )
     download_url="https://archive.org/download/${item_id}/${file_name}"
 
     log "Downloading ${file_name} to ${download_path} from ${download_url}"
 
     curl -L -# --create-dirs -o "${download_path}" "${download_url}" 2>&1 | while IFS= read -r -n 1 char; do
-        [[ ${char} =~ [0-9] ]] && keep=1 ;
-        [[ ${char} == % ]] && echo "${progress%.*}" && progress="" && keep=0 ;
-        [[ ${keep} == 1 ]] && progress="${progress}${char}" ;
+        [[ ${char} =~ [0-9] ]] && keep=1
+        [[ ${char} == % ]] && echo "${progress%.*}" && progress="" && keep=0
+        [[ ${keep} == 1 ]] && progress="${progress}${char}"
     done
 }
 
@@ -360,7 +382,7 @@ install_dependencies() {
         if ! dpkg -s "jq" &>/dev/null; then
             dependencies+=("jq")
         fi
-        if (( ${#dependencies[@]} )); then
+        if ((${#dependencies[@]})); then
             dialog --clear
             dialog --infobox "Installing dependencies, please wait..." 5 50 2>&1 >/dev/tty1
             ${sudo_prefix} apt update && ${sudo_prefix} apt install -y "${dependencies[@]}" --no-install-recommends
@@ -372,7 +394,7 @@ start() {
     local param_device
     local status
     local config
-    
+
     log "Starting RomMaster"
 
     #
@@ -393,13 +415,13 @@ start() {
         exit 1
     fi
     #launch joypad
-    ${sudo_prefix} ./tm-joypad RomMaster "${param_device}" > /dev/null 2>&1 &
+    ${sudo_prefix} ./tm-joypad RomMaster "${param_device}" >/dev/null 2>&1 &
 
     dialog --clear
     dialog --infobox "Initializing, please wait..." 5 50 2>&1 >/dev/tty1
 
     #Checking internet access
-    status=$(${sudo_prefix} ping -c 1 google.com &> /dev/null)
+    status=$(${sudo_prefix} ping -c 1 google.com &>/dev/null)
     if [[ ${status} -ne 0 ]]; then
         dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run" 10 50 2>&1 >/dev/tty1
         exit 1
@@ -410,20 +432,25 @@ start() {
 
     log "Reading config"
     config=$(read_config)
-    base_cache=$(echo "${config}" \
-        | jq -r .cache
+    base_cache=$(
+        echo "${config}" |
+            jq -r .cache
     )
-    base_ext=$(echo "${config}" \
-        | jq -r .ext
+    base_ext=$(
+        echo "${config}" |
+            jq -r .ext
     )
-    base_path=$(echo "${config}" \
-        | jq -r .path
+    base_path=$(
+        echo "${config}" |
+            jq -r .path
     )
-    base_query=$(echo "${config}" \
-        | jq -r .query
+    base_query=$(
+        echo "${config}" |
+            jq -r .query
     )
-    systems=$(echo "${config}" \
-        | jq .systems
+    systems=$(
+        echo "${config}" |
+            jq .systems
     )
 
     log "Creating cache directory"
@@ -484,14 +511,15 @@ systems_menu() {
     cmd=(dialog --cancel-label "Back" --backtitle "Pick a system" --title " [ Systems Menu ] " --menu "D-pad to move, A or B to select" "15" "50" "15")
     options=()
 
-    system_options=$(echo "${systems}" \
-        | jq -r .[].name
+    system_options=$(
+        echo "${systems}" |
+            jq -r .[].name
     )
     index=0
     while read -r system_option; do
-        options+=( $((index++)) "${system_option}")
-    done <<< "${system_options}"
-    
+        options+=($((index++)) "${system_option}")
+    done <<<"${system_options}"
+
     desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${desired_index}"
@@ -523,13 +551,15 @@ items_menu() {
 
     system=$1
 
-    system_name=$(echo "${system}" \
-        | jq -r .name
+    system_name=$(
+        echo "${system}" |
+            jq -r .name
     )
     log "Selected: ${system_name}"
 
-    system_id=$(echo "${system}" \
-        | jq -r .id
+    system_id=$(
+        echo "${system}" |
+            jq -r .id
     )
 
     items_cache_path="${base_cache}/${system_id}"
@@ -541,20 +571,21 @@ items_menu() {
     else
         dialog --infobox "Loading items for ${system_name}, please wait..." 5 50 2>&1 >/dev/tty1
         items=$(search_system "${systems}" "${system}")
-        echo "${items}" > "${items_cache}"
+        echo "${items}" >"${items_cache}"
     fi
 
     cmd=(dialog --cancel-label "Back" --backtitle "Pick an item" --title " [ Items Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
-    item_options=$(echo "${items}" \
-        | jq -r .[].title
+    item_options=$(
+        echo "${items}" |
+            jq -r .[].title
     )
     index=0
     while read -r item_option; do
-        options+=( $((index++)) "${item_option}")
-    done <<< "${item_options}"
-    
+        options+=($((index++)) "${item_option}")
+    done <<<"${item_options}"
+
     desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${desired_index}"
@@ -565,7 +596,7 @@ items_menu() {
     0) files_menu "${system}" "${desired}" ;;
     1) systems_menu ;;
     *) exit 1 ;;
-    esac 
+    esac
 }
 
 files_menu() {
@@ -590,16 +621,19 @@ files_menu() {
     system=$1
     item=$2
 
-    item_name=$(echo "${item}" \
-        | jq -r .title
+    item_name=$(
+        echo "${item}" |
+            jq -r .title
     )
     log "Selected: ${item_name}"
 
-    system_id=$(echo "${system}" \
-        | jq -r .id
+    system_id=$(
+        echo "${system}" |
+            jq -r .id
     )
-    item_id=$(echo "${item}" \
-        | jq -r .identifier
+    item_id=$(
+        echo "${item}" |
+            jq -r .identifier
     )
 
     files_cache_path="${base_cache}/${system_id}/${item_id}"
@@ -611,21 +645,22 @@ files_menu() {
     else
         dialog --infobox "Loading files for ${item_name}, please wait..." 5 50 2>&1 >/dev/tty1
         files=$(list_files "${system}" "${item}")
-        echo "${files}" > "${files_cache}"
+        echo "${files}" >"${files_cache}"
     fi
 
     cmd=(dialog --cancel-label "Back" --backtitle "Pick a file" --title " [ Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
-    file_options=$(echo "${files}" \
-        | jq -r .[].name
+    file_options=$(
+        echo "${files}" |
+            jq -r .[].name
     )
     index=0
     while read -r file_option; do
         file_option_readable=$(urldecode "${file_option}")
-        options+=( $((index++)) "${file_option_readable}" )
-    done <<< "${file_options}"
-    
+        options+=($((index++)) "${file_option_readable}")
+    done <<<"${file_options}"
+
     desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${desired_index}"
@@ -636,7 +671,7 @@ files_menu() {
     0) file_screen "${system}" "${item}" "${desired}" ;;
     1) items_menu "${system}" ;;
     *) exit 1 ;;
-    esac 
+    esac
 }
 
 file_screen() {
@@ -654,14 +689,16 @@ file_screen() {
     item=$2
     file=$3
 
-    file_name=$(echo "${file}" \
-        | jq -r .name
+    file_name=$(
+        echo "${file}" |
+            jq -r .name
     )
     file_name_readable=$(urldecode "${file_name}")
     log "Selected: ${file_name_readable}"
 
-    file_size=$(echo "${file}" \
-        | jq -r .size
+    file_size=$(
+        echo "${file}" |
+            jq -r .size
     )
     file_size_readable=$(human_readable "${file_size}")
 
@@ -708,17 +745,20 @@ open_file_screen() {
     item=$2
     file=$3
 
-    file_name=$(echo "${file}" \
-        | jq -r .name
+    file_name=$(
+        echo "${file}" |
+            jq -r .name
     )
     file_name_readable=$(urldecode "${file_name}")
     log "Selected: ${file_name_readable}"
 
-    system_id=$(echo "${system}" \
-        | jq -r .id
+    system_id=$(
+        echo "${system}" |
+            jq -r .id
     )
-    item_id=$(echo "${item}" \
-        | jq -r .identifier
+    item_id=$(
+        echo "${item}" |
+            jq -r .identifier
     )
 
     sub_files_cache_path="${base_cache}/${system_id}/${item_id}/${file_name_readable}"
@@ -730,21 +770,22 @@ open_file_screen() {
     else
         dialog --infobox "Loading sub files for ${file_name_readable}, please wait..." 5 50 2>&1 >/dev/tty1
         sub_files=$(list_sub_files "${system}" "${item}" "${file}")
-        echo "${files}" > "${sub_files_cache}"
+        echo "${files}" >"${sub_files_cache}"
     fi
 
     cmd=(dialog --cancel-label "Back" --backtitle "Pick a sub file" --title " [ Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
-    sub_file_options=$(echo "${sub_files}" \
-        | jq -r .[].name
+    sub_file_options=$(
+        echo "${sub_files}" |
+            jq -r .[].name
     )
     index=0
     while read -r sub_file_option; do
         sub_file_option_readable=$(urldecode "${sub_file_option}")
-        options+=( $((index++)) "${sub_file_option_readable}")
-    done <<< "${sub_file_options}"
-    
+        options+=($((index++)) "${sub_file_option_readable}")
+    done <<<"${sub_file_options}"
+
     desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${desired_index}"
@@ -752,10 +793,10 @@ open_file_screen() {
     desired=$(get_by_index "${sub_files}" "${desired_index}")
 
     case ${status} in
-    0) file_screen "${system}" "${item}" "${desired}" true;;
+    0) file_screen "${system}" "${item}" "${desired}" true ;;
     1) files_menu "${system}" "${item}" ;;
     *) exit 1 ;;
-    esac 
+    esac
 }
 
 download_screen() {
@@ -772,8 +813,9 @@ download_screen() {
     item=$2
     file=$3
 
-    file_name=$(echo "${file}" \
-        | jq -r .name
+    file_name=$(
+        echo "${file}" |
+            jq -r .name
     )
     log "Selected: ${file_name}"
 
@@ -782,8 +824,8 @@ download_screen() {
     file_name_readable=$(urldecode "${file_name}")
     base_file_name=$(basename "${file_name_readable}")
 
-    system_path=$(echo "${system}" \
-        | jq -r .path)
+    system_path=$(echo "${system}" |
+        jq -r .path)
     download_path="${base_path}/${system_path}/${base_file_name}"
 
     download_file "${item}" "${file}" "${download_path}" | dialog --gauge "Downloading ${file_name}, please wait..." 7 75 0 2>&1 >/dev/tty1
@@ -804,8 +846,9 @@ downloaded_screen() {
     file=$3
     download_path=$4
 
-    file_name=$(echo "${file}" \
-        | jq -r .name
+    file_name=$(
+        echo "${file}" |
+            jq -r .name
     )
     log "Downloaded: ${file_name}"
 
@@ -823,7 +866,7 @@ downloaded_screen() {
 stop() {
     log "Stopping RomMaster"
 
-    $sudo_prefix pkill tm-joypad > /dev/null 2>&1
+    $sudo_prefix pkill tm-joypad >/dev/null 2>&1
 
     if [[ $(systemctl is-active emulationstation.service) = "active" ]]; then
         ${sudo_prefix} systemctl restart emulationstation
@@ -832,7 +875,7 @@ stop() {
         ${sudo_prefix} systemctl restart emustation
     fi
 
-    clear > /dev/tty1
+    clear >/dev/tty1
 }
 
 clear
