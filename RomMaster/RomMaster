@@ -737,6 +737,7 @@ download_screen() {
     local item
     local file
     local file_name
+    local file_name_readable
     local base_file_name
     local system_path
     local download_path
@@ -752,7 +753,8 @@ download_screen() {
 
     # When we download a file named foo/bar/baz.zip, we want to emplace it at
     # ${path}/baz.zip, stripping off the foo/bar part.
-    base_file_name=$(basename "${file_name}")
+    file_name_readable=$(urldecude "${file_name}")
+    base_file_name=$(basename "${file_name_readable}")
 
     system_path=$(echo "${system}" \
         | jq -r .path)
