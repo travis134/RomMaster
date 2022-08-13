@@ -349,6 +349,7 @@ main_menu() {
             log "Clearing cache: ${base_cache}"
             rm -rf "${base_cache}"
             mkdir -p "${base_cache}"
+            dialog --backtitle "RomMaster" --msgbox "Cache cleared!" 7 50 2>&1 >/dev/tty1
             main_menu
             ;;
         *) exit 0 ;;
@@ -428,6 +429,7 @@ items_menu() {
         log "Reading items for ${system_name} from cache: ${items_cache}"
         items=$(cat "${items_cache}")
     else
+        dialog --infobox "Loading items for ${system_name}, please wait..." 5 50 2>&1 >/dev/tty1
         items=$(search_system "${systems}" "${system}")
         echo "${items}" > "${items_cache}"
     fi
@@ -492,6 +494,7 @@ files_menu() {
         log "Reading files for ${item_name} from cache: ${files_cache}"
         files=$(cat "${files_cache}")
     else
+        dialog --infobox "Loading files for ${item_name}, please wait..." 5 50 2>&1 >/dev/tty1
         files=$(list_files "${system}" "${item}")
         echo "${files}" > "${files_cache}"
     fi
