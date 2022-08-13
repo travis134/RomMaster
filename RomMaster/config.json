@@ -1,5 +1,6 @@
 {
-    "path": "/storage/roms/",
+    "cache": "/tmp/RomMaster",
+    "path": "/storage/roms",
     "ext": [
         "zip",
         "7z"
@@ -143,7 +144,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sufami OR \"sufami turbo\")"
+            "query": "title(sufami)"
         },
         {
             "id": "wonderswan",

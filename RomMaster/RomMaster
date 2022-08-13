@@ -22,6 +22,7 @@ shopt -s extglob # required for extented pattern recognition
 #####################
 #  GLOBAL VARIABLES #
 #####################
+base_cache=""
 base_path=""
 base_query=""
 systems=""
@@ -77,7 +78,7 @@ create_query() {
     desired=$3
 
     query=${base_query}
-    query+=" AND "
+    query+=" "
     query+=$(echo "${desired}" \
         | jq -r '.query'
     )
@@ -262,7 +263,7 @@ start() {
     local param_device
     local status
     local config
-
+    
     log "Starting RomMaster"
 
     #
@@ -300,6 +301,9 @@ start() {
 
     log "Reading config"
     config=$(read_config)
+    base_cache=$(echo "${config}" \
+        | jq -r .cache
+    )
     base_path=$(echo "${config}" \
         | jq -r .path
     )
@@ -309,6 +313,9 @@ start() {
     systems=$(echo "${config}" \
         | jq .systems
     )
+
+    log "Creating cache directory"
+    mkdir -p "${base_cache}"
 
     main_menu
 }
@@ -324,7 +331,8 @@ main_menu() {
     cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] "  --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=(
         0 "Find ROMs"
-        1 "Exit"
+        1 "Clear cache"
+        2 "Exit"
     )
 
     desired_index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
@@ -335,6 +343,12 @@ main_menu() {
     0)
         case ${desired_index} in
         0) systems_menu ;;
+        1)
+            log "Clearing cache: ${base_cache}"
+            rm -rf "${base_cache}"
+            mkdir -p "${base_cache}"
+            main_menu
+            ;;
         *) exit 0 ;;
         esac
         ;;
@@ -381,6 +395,9 @@ systems_menu() {
 items_menu() {
     local system
     local system_name
+    local system_id
+    local items_cache_path
+    local items_cache
     local items
     local cmd
     local options
@@ -398,7 +415,20 @@ items_menu() {
     )
     log "Selected: ${system_name}"
 
-    items=$(search_system "${base_query}" "${systems}" "${system}")
+    system_id=$(echo "${system}" \
+        | jq -r .id
+    )
+
+    items_cache_path="${base_cache}/${system_id}"
+    mkdir -p "${items_cache_path}"
+    items_cache="${items_cache_path}/items.json"
+    if [[ -f "$items_cache" ]]; then
+        log "Reading items for ${system_name} from cache: ${items_cache}"
+        items=$(cat "${items_cache}")
+    else
+        items=$(search_system "${base_query}" "${systems}" "${system}")
+        echo "${items}" > "${items_cache}"
+    fi
 
     cmd=(dialog --cancel-label "Back" --backtitle "Pick an item" --title " [ Items Menu ] "  --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
@@ -428,6 +458,9 @@ files_menu() {
     local system
     local desired
     local item_name
+    local item_id
+    local files_cache_path
+    local files_cache
     local files
     local cmd
     local options
@@ -446,7 +479,20 @@ files_menu() {
     )
     log "Selected: ${item_name}"
 
-    files=$(list_files "${system}" "${item}")
+    item_id=$(echo "${item}" \
+        | jq -r .identifier
+    )
+
+    files_cache_path="${base_cache}/${system_id}/${item_id}"
+    mkdir -p "${files_cache_path}"
+    files_cache="${files_cache_path}/files.json"
+    if [[ -f "$files_cache" ]]; then
+        log "Reading files for ${item_name} from cache: ${files_cache}"
+        files=$(cat "${files_cache}")
+    else
+        files=$(list_files "${system}" "${item}")
+        echo "${files}" > "${files_cache}"
+    fi
 
     cmd=(dialog --cancel-label "Back" --backtitle "Pick a file" --title " [ Files Menu ] "  --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
@@ -493,7 +539,7 @@ download_screen() {
 
     system_path=$(echo "${system}" \
         | jq -r .path)
-    download_path="${base_path}${system_path}/${file_name}"
+    download_path="${base_path}/${system_path}/${file_name}"
 
     download_file "${item}" "${file}" "${download_path}" | dialog --gauge "Downloading ${file_name}, please wait..." 7 75 0 2>&1 >/dev/tty1
 
@@ -541,7 +587,7 @@ stop() {
         ${sudo_prefix} systemctl restart emustation
     fi
 
-    clear > "${device}"
+    clear > /dev/tty1
 }
 
 clear
