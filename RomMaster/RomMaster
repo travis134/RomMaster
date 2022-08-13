@@ -38,6 +38,16 @@ log() {
     echo "${ts}: ${message}" >&2
 }
 
+human_readable() {
+    local i=${1:-0} d="" s=0 S=("Bytes" "KiB" "MiB" "GiB" "TiB" "PiB" "EiB" "YiB" "ZiB")
+    while ((i > 1024 && s < ${#S[@]}-1)); do
+        printf -v d ".%02d" $((i % 1024 * 100 / 1024))
+        i=$((i / 1024))
+        s=$((s + 1))
+    done
+    echo "${i}${d} ${S[${s}]}"
+}
+
 # Reads config JSON in which contains information about supported systems, the
 # expected extensions for suitable roms, and query overrides for better search
 # results.
@@ -291,7 +301,7 @@ start() {
     #Checking internet access
     status=$(${sudo_prefix} ping -c 1 google.com &> /dev/null)
     if [[ ${status} -ne 0 ]]; then
-        dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run!" 10 50 2>&1 >/dev/tty1
+        dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run" 10 50 2>&1 >/dev/tty1
         exit 1
     fi
 
@@ -330,7 +340,7 @@ main_menu() {
 
     log "Showing Main Menu"
 
-    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] "  --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
     options=(
         0 "Find ROMs"
         1 "Clear cache"
@@ -349,7 +359,7 @@ main_menu() {
             log "Clearing cache: ${base_cache}"
             rm -rf "${base_cache}"
             mkdir -p "${base_cache}"
-            dialog --backtitle "RomMaster" --msgbox "Cache cleared!" 7 50 2>&1 >/dev/tty1
+            dialog --backtitle "RomMaster" --msgbox "Cache cleared" 7 50 2>&1 >/dev/tty1
             main_menu
             ;;
         *) exit 0 ;;
@@ -371,7 +381,7 @@ systems_menu() {
 
     log "Selected: Find ROMs"
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick a system" --title " [ Systems Menu ] "  --menu "D-pad to move, A or B to select" "15" "50" "15")
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick a system" --title " [ Systems Menu ] " --menu "D-pad to move, A or B to select" "15" "50" "15")
     options=()
 
     system_options=$(echo "${systems}" \
@@ -434,7 +444,7 @@ items_menu() {
         echo "${items}" > "${items_cache}"
     fi
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick an item" --title " [ Items Menu ] "  --menu "D-pad to move, A or B to select" "15" "75" "15")
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick an item" --title " [ Items Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
     item_options=$(echo "${items}" \
@@ -460,7 +470,7 @@ items_menu() {
 
 files_menu() {
     local system
-    local desired
+    local item
     local item_name
     local item_id
     local files_cache_path
@@ -499,7 +509,7 @@ files_menu() {
         echo "${files}" > "${files_cache}"
     fi
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick a file" --title " [ Files Menu ] "  --menu "D-pad to move, A or B to select" "15" "75" "15")
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick a file" --title " [ Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
     file_options=$(echo "${files}" \
@@ -517,10 +527,48 @@ files_menu() {
     desired=$(get_by_index "${files}" "${desired_index}")
 
     case ${status} in
-    0) download_screen "${system}" "${item}" "${desired}" ;;
+    0) file_screen "${system}" "${item}" "${desired}" ;;
     1) items_menu "${system}" ;;
     *) exit 1 ;;
     esac 
+}
+
+file_screen() {
+    local system
+    local item
+    local file
+    local file_name
+    local file_size
+    local file_size_readable
+    local status
+
+    system=$1
+    item=$2
+    file=$3
+
+    file_name=$(echo "${file}" \
+        | jq -r .name
+    )
+    log "Selected: ${file_name}"
+
+    file_size=$(echo "${file}" \
+        | jq -r .size
+    )
+    file_size_readable=$(human_readable "${file_size}")
+
+    dialog --backtitle "Pick an action" --title " [ File Information ] " --ok-label "Download" --cancel-label "Back" --extra-button --extra-label "Open" --yesno "File Name: ${file_name}\nSize: ${file_size_readable}" 15 50 2>&1 >/dev/tty1
+    status=$?
+    log "Status: ${status}"
+
+    case ${status} in
+    0) download_screen "${system}" "${item}" "${desired}" ;;
+    1) files_menu "${system}" "${item}" ;;
+    3)
+        dialog --backtitle "RomMaster" --msgbox "This feature hasn't been implemented yet" 7 50 2>&1 >/dev/tty1
+        file_screen "${system}" "${item}" "${desired}"
+        ;;
+    *) exit 1 ;;
+    esac
 }
 
 download_screen() {
@@ -567,7 +615,7 @@ downloaded_screen() {
     )
     log "Downloaded: ${file_name}"
 
-    dialog --backtitle "Download complete" --title " [ ${file_name} ] "  --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
+    dialog --backtitle "Download complete" --title " [ ${file_name} ] " --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
     status=$?
     log "Status: ${status}"
 
