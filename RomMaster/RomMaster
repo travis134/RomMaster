@@ -24,6 +24,7 @@ shopt -s extglob # required for extented pattern recognition
 #####################
 base_cache=""
 base_path=""
+base_ext=""
 base_query=""
 systems=""
 
@@ -68,14 +69,12 @@ get_by_index() {
 # Creates a query string for eliminating results for all systems except for
 # the system desired.
 create_query() {
-    local base_query
     local systems
     local desired
     local query
 
-    base_query=$1
-    systems=$2
-    desired=$3
+    systems=$1
+    desired=$2
 
     query=${base_query}
     query+=" "
@@ -90,7 +89,6 @@ create_query() {
 
 # Searches for items that are compatible with a given system.
 search_system() {
-    local base_query
     local systems
     local desired
     local name
@@ -102,16 +100,15 @@ search_system() {
     local results
     local results_count
 
-    base_query=$1
-    systems=$2
-    desired=$3
+    systems=$1
+    desired=$2
 
     name=$(echo "${desired}" \
         | jq -r .name)
 
     log "Searching items for system: ${name}"
 
-    query=$(create_query "${base_query}" "${systems}" "${desired}")
+    query=$(create_query "${systems}" "${desired}")
     sort="downloads+desc"
     projection="identifier,title"
     search_url="https://archive.org/advancedsearch.php?output=json&q=${query}&fl[]=${projection}&sort[]=${sort}"
@@ -150,6 +147,7 @@ list_files() {
     local system
     local item
     local ext
+    local all_ext
     local item_id
     local metadata_url
     local response
@@ -162,6 +160,7 @@ list_files() {
     ext=$(echo "${system}" \
         | jq -r .ext
     )
+    all_ext="${base_ext} ${ext}"
     item_id=$(echo "${item}" \
         | jq -r .identifier
     )
@@ -184,9 +183,9 @@ list_files() {
     # }
     response=$(curl -s "${metadata_url}")
     results=$(echo "${response}" \
-        | jq -r --arg ext "${ext}" '.files
+        | jq -r --arg all_ext "${all_ext}" '.files
             | map(
-                select(.name | split(".")[-1] | inside($ext))
+                select(.name | split(".")[-1] | inside($all_ext))
                 | {name: .name, size: .size})'
     )
     results_count=$(echo "${results}" \
@@ -303,6 +302,9 @@ start() {
     config=$(read_config)
     base_cache=$(echo "${config}" \
         | jq -r .cache
+    )
+    base_ext=$(echo "${config}" \
+        | jq -r .ext
     )
     base_path=$(echo "${config}" \
         | jq -r .path
@@ -426,7 +428,7 @@ items_menu() {
         log "Reading items for ${system_name} from cache: ${items_cache}"
         items=$(cat "${items_cache}")
     else
-        items=$(search_system "${base_query}" "${systems}" "${system}")
+        items=$(search_system "${systems}" "${system}")
         echo "${items}" > "${items_cache}"
     fi
 
@@ -512,14 +514,13 @@ files_menu() {
     desired=$(get_by_index "${files}" "${desired_index}")
 
     case ${status} in
-    0) download_screen "${base_path}" "${system}" "${item}" "${desired}" ;;
+    0) download_screen "${system}" "${item}" "${desired}" ;;
     1) items_menu "${system}" ;;
     *) exit 1 ;;
     esac 
 }
 
 download_screen() {
-    local base_path
     local system
     local item
     local file
@@ -527,10 +528,9 @@ download_screen() {
     local system_path
     local download_path
 
-    base_path=$1
-    system=$2
-    item=$3
-    file=$4
+    system=$1
+    item=$2
+    file=$3
 
     file_name=$(echo "${file}" \
         | jq -r .name
