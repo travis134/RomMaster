@@ -215,7 +215,9 @@ list_sub_files() {
     local system
     local item
     local file
+    local system_id
     local file_name
+    local file_name_readable
     local ext
     local all_ext
     local item_id
@@ -224,7 +226,11 @@ list_sub_files() {
     local response
     local sub_file_lines
     local sub_file_names
+    local sub_files_names_cache_path
+    local sub_files_names_cache
     local sub_file_sizes
+    local sub_files_sizes_cache_path
+    local sub_files_sizes_cache
     local results
     local results_count
 
@@ -232,9 +238,14 @@ list_sub_files() {
     item=$2
     file=$3
 
+    system_id=$(echo "${system}" \
+        | jq -r .id
+    )
+
     file_name=$(echo "${file}" \
         | jq -r .name
     )
+    file_name_readable=$(urldecode "${file_name}")
     ext=$(echo "${system}" \
         | jq -r .ext
     )
@@ -259,20 +270,33 @@ list_sub_files() {
     sub_file_lines=$(echo "${response}" \
         | grep "archive.org/download/${item_id}/${file_name}/" \
     )
+    if [ -z "${sub_file_lines}" ]; then
+        sub_file_lines=$(echo "${response}" \
+            | grep "archive.org/download/${item_id}/${file_name_readable}/" \
+        )
+    fi
     sub_file_names=$(echo "${sub_file_lines}" \
         | sed -nr 's/.*href="([^"]+)".*/\1/p' \
         | jq --raw-input --slurp --arg item_id "${item_id}" 'split("\n")
             | .[0:-1]
             | map(sub("//archive.org/download/\($item_id)/";""))'
     )
+    sub_files_names_cache_path="${base_cache}/${system_id}/${item_id}/${file_name_readable}"
+    sub_files_names_cache="${sub_files_names_cache_path}/file_names.json"
+    mkdir -p "${items_cache_path}"
+    echo "${sub_file_names}" > "${sub_files_names_cache}"
     sub_file_sizes=$(echo "${sub_file_lines}" \
         | sed -nr 's/.*size">([0-9]+).*/\1/p' \
         | jq --raw-input --slurp 'split("\n")
             | .[0:-1]'
     )
+    sub_files_sizes_cache_path="${base_cache}/${system_id}/${item_id}/${file_name_readable}"
+    sub_files_sizes_cache="${sub_files_sizes_cache_path}/file_sizes.json"
+    mkdir -p "${items_cache_path}"
+    echo "${sub_file_sizes}" > "${sub_files_sizes_cache}"
     results=$(jq -n \
-        --argjson sub_file_names "${sub_file_names}" \
-        --argjson sub_file_sizes "${sub_file_sizes}" \
+        --argfile sub_file_names "${sub_files_names_cache}" \
+        --argfile sub_file_sizes "${sub_files_sizes_cache}" \
         --arg all_ext "${all_ext}" \
         '[$sub_file_names, $sub_file_sizes]
             | transpose 
@@ -697,7 +721,7 @@ open_file_screen() {
         | jq -r .identifier
     )
 
-    sub_files_cache_path="${base_cache}/${system_id}/${item_id}/${file_name}"
+    sub_files_cache_path="${base_cache}/${system_id}/${item_id}/${file_name_readable}"
     mkdir -p "${sub_files_cache_path}"
     sub_files_cache="${sub_files_cache_path}/sub_files.json"
     if [[ -f "$sub_files_cache" ]]; then
