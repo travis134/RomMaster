@@ -5,7 +5,7 @@
         "zip",
         "7z"
     ],
-    "query": "mediatype:software subject:(rom OR roms OR romset OR disc OR cd-rom OR image OR redump OR no-intro OR retrorom OR ghostware)",
+    "query": "mediatype:software subject:(rom OR roms OR romset OR disc OR cd-rom OR image OR redump OR no-intro OR retrorom OR ghostware) NOT title:bios",
     "systems": [
         {
             "id": "arcade",
@@ -144,7 +144,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "title(sufami)"
+            "query": "title:(sufami+turbo)"
         },
         {
             "id": "wonderswan",
