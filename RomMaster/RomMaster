@@ -700,12 +700,12 @@ file_screen() {
     case ${status} in
     0) download_screen "${system}" "${item}" "${file}" ;;
     1) files_menu "${system}" "${item}" ;;
-    3) open_file_screen "${system}" "${item}" "${file}" ;;
+    3) archived_files_menu "${system}" "${item}" "${file}" ;;
     *) exit 1 ;;
     esac
 }
 
-open_file_screen() {
+archived_files_menu() {
     local system
     local item
     local file
