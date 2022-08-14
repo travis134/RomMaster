@@ -676,6 +676,7 @@ file_screen() {
     local file_type
     local file_name
     local file_name_readable
+    local base_file_name
     local file_size
     local file_size_readable
     local extra
@@ -691,6 +692,7 @@ file_screen() {
             jq -r .name
     )
     file_name_readable=$(url_decode "${file_name}")
+    base_file_name=$(basename "${file_name_readable}")
     log "Selected: ${file_name_readable}"
 
     file_size=$(
@@ -707,7 +709,7 @@ file_screen() {
         fi
     fi
 
-    dialog --backtitle "Pick an action" --title " [ File Information ] " --yes-label "Download" --ok-label "Download" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "File Name: ${file_name_readable}\nSize: ${file_size_readable}" 15 50 2>&1 >/dev/tty1
+    dialog --backtitle "Pick an action" --title " [ File Information ] " --yes-label "Download" --ok-label "Download" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "File Name: ${base_file_name}\nSize: ${file_size_readable}" 15 50 2>&1 >/dev/tty1
     status=$?
     log "Status: ${status}"
 
@@ -725,6 +727,7 @@ archived_files_menu() {
     local file
     local file_name
     local file_name_readable
+    local base_file_name
     local system_id
     local item_id
     local archived_files_cache_path
@@ -750,7 +753,8 @@ archived_files_menu() {
             jq -r .name
     )
     file_name_readable=$(url_decode "${file_name}")
-    log "Selected: ${file_name_readable}"
+    base_file_name=$(basename "${file_name_readable}")
+    log "Selected: ${base_file_name}"
 
     system_id=$(
         echo "${system}" |
@@ -768,13 +772,13 @@ archived_files_menu() {
         log "Reading files for ${item_name} from cache: ${archived_files_cache}"
         archived_files=$(cat "${archived_files_cache}")
     else
-        dialog --infobox "Loading archived files for ${file_name_readable}, please wait..." 5 50 2>&1 >/dev/tty1
+        dialog --infobox "Loading archived files for ${base_file_name}, please wait..." 5 50 2>&1 >/dev/tty1
         archived_files=$(list_archived_files "${system}" "${item}" "${file}")
         echo "${archived_files}" >"${archived_files_cache}"
     fi
 
     if [[ ${archived_files} = "[]" ]]; then
-        dialog --infobox "No valid files found in ${file_name_readable}" 5 50 2>&1 >/dev/tty1
+        dialog --infobox "No valid files found in ${base_file_name}" 5 50 2>&1 >/dev/tty1
         file_screen "${system}" "${item}" "${file}" "file"
         return
     fi
@@ -831,7 +835,7 @@ download_screen() {
     # ${path}/baz.zip, stripping off the foo/bar part.
     file_name_readable=$(url_decode "${file_name}")
     base_file_name=$(basename "${file_name_readable}")
-    log "Selected: ${file_name_readable}"
+    log "Selected: ${base_file_name}"
 
     system_path=$(echo "${system}" |
         jq -r .path)
