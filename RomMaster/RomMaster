@@ -188,7 +188,7 @@ list_files() {
             jq -r --arg all_ext "${all_ext}" '.files
             | map(
                 select(.name | split(".")[-1] | inside($all_ext))
-                | {name: .name | @uri, size: .size})'
+                | {name: .name | @uri | gsub("\\(";"%28") | gsub("\\)";"%29"), size: .size})'
     )
     results_count=$(
         echo "${results}" |
@@ -599,6 +599,7 @@ files_menu() {
     local index
     local file_option
     local file_option_readable
+    local base_file_option
     local index
     local status
     local file
@@ -649,7 +650,8 @@ files_menu() {
     index=0
     while read -r file_option; do
         file_option_readable=$(url_decode "${file_option}")
-        options+=($((index++)) "${file_option_readable}")
+        base_file_option=$(basename "${file_option_readable}")
+        options+=($((index++)) "${base_file_option}")
     done <<<"${file_options}"
 
     index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
@@ -730,6 +732,7 @@ archived_files_menu() {
     local options
     local archived_file_options
     local archived_file_option_readable
+    local base_archived_file_option
     local index
     local archived_file_option
     local index
@@ -784,7 +787,8 @@ archived_files_menu() {
     index=0
     while read -r archived_file_option; do
         archived_file_option_readable=$(url_decode "${archived_file_option}")
-        options+=($((index++)) "${archived_file_option_readable}")
+        base_archived_file_option=$(basename "${archived_file_option_readable}")
+        options+=($((index++)) "${base_archived_file_option}")
     done <<<"${archived_file_options}"
 
     index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
