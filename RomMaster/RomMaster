@@ -794,7 +794,7 @@ archived_files_menu() {
     archived_file=$(get_by_index "${archived_files}" "${index}")
 
     case ${status} in
-    0) file_screen "${system}" "${item}" "${archived_file}" "archive" ;;
+    0) file_screen "${system}" "${item}" "${archived_file}" "archived_file" ;;
     1) file_screen "${system}" "${item}" "${file}" "file" ;;
     *) exit 1 ;;
     esac
@@ -820,18 +820,22 @@ download_screen() {
         echo "${file}" |
             jq -r .name
     )
-    log "Selected: ${file_name}"
 
     # When we download a file named foo/bar/baz.zip, we want to emplace it at
     # ${path}/baz.zip, stripping off the foo/bar part.
     file_name_readable=$(url_decode "${file_name}")
     base_file_name=$(basename "${file_name_readable}")
+    log "Selected: ${file_name_readable}"
 
     system_path=$(echo "${system}" |
         jq -r .path)
     download_path="${BASE_PATH}/${system_path}/${base_file_name}"
 
-    download_file "${item}" "${file}" "${download_path}" | dialog --gauge "Downloading ${file_name}, please wait..." 7 75 0 2>&1 >/dev/tty1
+    if [[ $file_type = "file" ]]; then
+        download_file "${item}" "${file}" "${download_path}" | dialog --gauge "Downloading ${base_file_name}, please wait..." 7 75 0 2>&1 >/dev/tty1
+    else
+        download_file "${item}" "${file}" "${download_path}" | dialog --infobox "Downloading ${base_file_name}, please wait..." 3 75 2>&1 >/dev/tty1
+    fi
 
     downloaded_screen "${system}" "${item}" "${file}" "${download_path}"
 }
@@ -842,6 +846,8 @@ downloaded_screen() {
     local file
     local download_path
     local file_name
+    local file_name_readable
+    local base_file_name
     local status
 
     system=$1
@@ -853,7 +859,9 @@ downloaded_screen() {
         echo "${file}" |
             jq -r .name
     )
-    log "Downloaded: ${file_name}"
+    file_name_readable=$(url_decode "${file_name}")
+    base_file_name=$(basename "${file_name_readable}")
+    log "Downloaded: ${base_file_name}"
 
     dialog --backtitle "Download complete" --title " [ ${base_file_name} ] " --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
     status=$?
@@ -869,7 +877,7 @@ downloaded_screen() {
 stop() {
     log "Stopping RomMaster"
 
-    $sudo_prefix pkill tm-joypad >/dev/null 2>&1
+    sudo pkill tm-joypad >/dev/null 2>&1
 
     if [[ $(systemctl is-active emulationstation.service) = "active" ]]; then
         sudo systemctl restart emulationstation
