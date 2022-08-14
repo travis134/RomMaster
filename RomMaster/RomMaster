@@ -724,7 +724,7 @@ file_screen() {
     log "Status: ${status}"
 
     case ${status} in
-    0) download_screen "${system}" "${item}" "${file}" "${file_type}" ;;
+    0) download_screen "${system}" "${item}" "${file}" "${file_type}" "${base_file}" ;;
     1)
         if [[ $file_type = "file" ]]; then
             files_menu "${system}" "${item}"
@@ -831,6 +831,7 @@ download_screen() {
     local item
     local file
     local file_type
+    local base_file
     local file_name
     local file_name_readable
     local base_file_name
@@ -841,6 +842,7 @@ download_screen() {
     item=$2
     file=$3
     file_type=$4
+    base_file=$5
 
     file_name=$(
         echo "${file}" |
@@ -863,7 +865,7 @@ download_screen() {
         download_file "${item}" "${file}" "${download_path}" | dialog --infobox "Downloading ${base_file_name}, please wait..." 3 75 2>&1 >/dev/tty1
     fi
 
-    downloaded_screen "${system}" "${item}" "${file}" "${download_path}" "${file_type}"
+    downloaded_screen "${system}" "${item}" "${file}" "${download_path}" "${file_type}" "${base_file}"
 }
 
 downloaded_screen() {
@@ -872,6 +874,7 @@ downloaded_screen() {
     local file
     local download_path
     local file_type
+    local base_file
     local file_name
     local file_name_readable
     local base_file_name
@@ -884,6 +887,7 @@ downloaded_screen() {
     file=$3
     download_path=$4
     file_type=$5
+    base_file=$6
 
     file_name=$(
         echo "${file}" |
@@ -914,7 +918,7 @@ downloaded_screen() {
             archived_files_menu "${system}" "${item}" "${file}"
         fi
         ;;
-    3) extract_screen "${system}" "${item}" "${file}" "${download_path}" "${file_type}" ;;
+    3) extract_screen "${system}" "${item}" "${file}" "${download_path}" "${file_type}" "${base_file}" ;;
     *) exit 1 ;;
     esac
 }
@@ -925,6 +929,7 @@ extract_screen() {
     local file
     local download_path
     local file_type
+    local base_file
     local file_name
     local file_name_readable
     local base_file_name
@@ -937,6 +942,7 @@ extract_screen() {
     file=$3
     download_path=$4
     file_type=$5
+    base_file=$6
 
     file_name=$(
         echo "${file}" |
@@ -960,9 +966,9 @@ extract_screen() {
     elif [[ $base_file_name == *.iso || $base_file_name == *.ISO ]]; then
         mount_path="/tmp/RomMasterMount"
         mkdir -p "${mount_path}"
-        mount -o loop -t iso9660 "${download_path}" "${mount_path}"
+        sudo mount -o loop -t iso9660 "${download_path}" "${mount_path}"
         cp -r "${mount_path}"/* "${extract_path}"
-        umount "${mount_path}"
+        sudo umount "${mount_path}"
         rmdir "${mount_path}"
         rm "${download_path}"
     else
@@ -984,7 +990,7 @@ extract_screen() {
         if [[ $file_type = "file" ]]; then
             files_menu "${system}" "${item}"
         else
-            archived_files_menu "${system}" "${item}" "${file}"
+            archived_files_menu "${system}" "${item}" "${base_file}"
         fi
         ;;
     *) exit 1 ;;
