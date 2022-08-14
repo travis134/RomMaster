@@ -140,6 +140,8 @@ search_system() {
     echo "${results}"
 }
 
+search_bios
+
 # Lists files within a given item.
 list_files() {
     local system
@@ -700,7 +702,7 @@ file_screen() {
     # Archive.org only provides archived file navigation for archive files.
     extra=()
     if [[ $file_type = "file" ]]; then
-        if [[ $file_name == *.zip || $file_name == *.7z || $file_name == *.ZIP || $file_name == *.7Z ]]; then
+        if [[ $file_name == *.zip || $file_name == *.7z || $file_name == *.rar || $file_name == *.ZIP || $file_name == *.7Z || $file_name == *.RAR ]]; then
             extra=("--extra-button" "--extra-label" "Open")
         fi
     fi

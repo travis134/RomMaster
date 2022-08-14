@@ -3,9 +3,11 @@
     "path": "/storage/roms",
     "ext": [
         "zip",
-        "7z"
+        "7z",
+        "rar"
     ],
     "query": "mediatype:software subject:(rom OR roms OR romset OR disc OR cd-rom OR image OR redump OR no-intro OR retrorom OR ghostware) NOT title:bios",
+    "bios": "subject:(retroarch bios emulation emulator)",
     "systems": [
         {
             "id": "arcade",
