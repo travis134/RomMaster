@@ -961,6 +961,7 @@ extract_screen() {
         cp -r "${mount_path}"/* "${extract_path}"
         umount "${mount_path}"
         rmdir "${mount_path}"
+        rm "${download_path}"
     else
         dialog --msgbox "Failed to extract file." 5 50 2>&1 >/dev/tty1
         if [[ $file_type = "file" ]]; then
