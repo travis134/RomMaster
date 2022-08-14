@@ -361,7 +361,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gb OR gameboy OR \"game boy\") NOT hack)"
+            "query": "subject:((gb OR gameboy OR \"game boy\") NOT hack)"
         },
         {
             "id": "gbh",
@@ -373,7 +373,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gb OR gameboy OR \"game boy\") hack)"
+            "query": "subject:((gb OR gameboy OR \"game boy\") hack)"
         },
         {
             "id": "gba",
@@ -384,7 +384,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gba OR gameboyadvance OR \"game boy advance\") NOT hack)"
+            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") NOT hack)"
         },
         {
             "id": "gbah",
@@ -395,7 +395,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gba OR gameboyadvance OR \"game boy advance\") hack)"
+            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") hack)"
         },
         {
             "id": "gbc",
@@ -407,7 +407,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gbc OR gameboycolor OR \"game boy color\") NOT hack)"
+            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") NOT hack)"
         },
         {
             "id": "gbch",
@@ -419,7 +419,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gbc OR gameboycolor OR \"game boy color\") hack)"
+            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") hack)"
         },
         {
             "id": "snesmsu1",
@@ -459,7 +459,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") NOT hack)"
+            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") NOT hack)"
         },
         {
             "id": "nesh",
@@ -472,7 +472,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") hack)"
+            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") hack)"
         },
         {
             "id": "pokemini",
@@ -497,7 +497,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") NOT hack)"
+            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") NOT hack)"
         },
         {
             "id": "snesh",
@@ -511,7 +511,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") hack)"
+            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") hack)"
         },
         {
             "id": "sfc",
@@ -598,7 +598,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gg OR gamegear OR \"game gear\") NOT hack)"
+            "query": "subject:((gg OR gamegear OR \"game gear\") NOT hack)"
         },
         {
             "id": "gamegearh",
@@ -610,7 +610,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gg OR gamegear OR \"game gear\") hack)"
+            "query": "subject:((gg OR gamegear OR \"game gear\") hack)"
         },
         {
             "id": "megadrive-japan",
@@ -677,7 +677,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(genesis OR \"sega genesis\") NOT hack)"
+            "query": "subject:((genesis OR \"sega genesis\") NOT hack)"
         },
         {
             "id": "genh",
@@ -692,7 +692,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(genesis OR \"sega genesis\") hack)"
+            "query": "subject:((genesis OR \"sega genesis\") hack)"
         },
         {
             "id": "mastersystem",
@@ -794,7 +794,7 @@
                 "chd",
                 "iso"
             ],
-            "query": "subject:(psx OR playstation)"
+            "query": "subject:(psx OR playstation) NOT subject:(psp OR portable)"
         },
         {
             "id": "psp",
