@@ -405,7 +405,7 @@ start() {
     sudo ./tm-joypad RomMaster "${param_device}" >/dev/null 2>&1 &
 
     dialog --clear
-    dialog --infobox "Initializing, please wait..." 5 50 2>&1 >/dev/tty1
+    dialog --infobox "Initializing, please wait..." 3 50 2>&1 >/dev/tty1
 
     #Checking internet access
     status=$(sudo ping -c 1 google.com &>/dev/null)
