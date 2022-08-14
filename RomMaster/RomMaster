@@ -200,7 +200,7 @@ list_files() {
 }
 
 # Lists files within a given archive.
-list_sub_files() {
+list_archive_files() {
     local system
     local item
     local file
@@ -211,15 +211,15 @@ list_sub_files() {
     local all_ext
     local item_id
     local item_name
-    local sub_files_url
+    local archive_files_url
     local response
-    local sub_file_lines
-    local sub_file_names
-    local sub_files_names_cache_path
-    local sub_files_names_cache
-    local sub_file_sizes
-    local sub_files_sizes_cache_path
-    local sub_files_sizes_cache
+    local archive_file_lines
+    local archive_file_names
+    local archive_files_names_cache_path
+    local archive_files_names_cache
+    local archive_file_sizes
+    local archive_files_sizes_cache_path
+    local archive_files_sizes_cache
     local results
     local results_count
 
@@ -252,52 +252,52 @@ list_sub_files() {
             jq -r .title
     )
 
-    sub_files_url="https://archive.org/download/${item_id}/${file_name}/"
+    archive_files_url="https://archive.org/download/${item_id}/${file_name}/"
 
-    log "Loading sub files with url: ${sub_files_url}"
+    log "Loading sub files with url: ${archive_files_url}"
 
     # Response body is HTML data formatted as:
     # ...
     # <tr><td><a href="foo">bar</a><td><td>baz<td id="size">qux</tr>
     # ...
-    response=$(curl -s -L "${sub_files_url}")
-    sub_file_lines=$(
+    response=$(curl -s -L "${archive_files_url}")
+    archive_file_lines=$(
         echo "${response}" |
             grep "archive.org/download/${item_id}/${file_name}/"
     )
-    if [ -z "${sub_file_lines}" ]; then
-        sub_file_lines=$(
+    if [ -z "${archive_file_lines}" ]; then
+        archive_file_lines=$(
             echo "${response}" |
                 grep "archive.org/download/${item_id}/${file_name_readable}/"
         )
     fi
-    sub_file_names=$(
-        echo "${sub_file_lines}" |
+    archive_file_names=$(
+        echo "${archive_file_lines}" |
             sed -nr 's/.*href="([^"]+)".*/\1/p' |
             jq --raw-input --slurp --arg item_id "${item_id}" 'split("\n")
             | .[0:-1]
             | map(sub("//archive.org/download/\($item_id)/";""))'
     )
-    sub_files_names_cache_path="${BASE_CACHE}/${system_id}/${item_id}/${file_name_readable}"
-    sub_files_names_cache="${sub_files_names_cache_path}/file_names.json"
+    archive_files_names_cache_path="${BASE_CACHE}/${system_id}/${item_id}/${file_name_readable}"
+    archive_files_names_cache="${archive_files_names_cache_path}/file_names.json"
     mkdir -p "${items_cache_path}"
-    echo "${sub_file_names}" >"${sub_files_names_cache}"
-    sub_file_sizes=$(
-        echo "${sub_file_lines}" |
+    echo "${archive_file_names}" >"${archive_files_names_cache}"
+    archive_file_sizes=$(
+        echo "${archive_file_lines}" |
             sed -nr 's/.*size">([0-9]+).*/\1/p' |
             jq --raw-input --slurp 'split("\n")
             | .[0:-1]'
     )
-    sub_files_sizes_cache_path="${BASE_CACHE}/${system_id}/${item_id}/${file_name_readable}"
-    sub_files_sizes_cache="${sub_files_sizes_cache_path}/file_sizes.json"
+    archive_files_sizes_cache_path="${BASE_CACHE}/${system_id}/${item_id}/${file_name_readable}"
+    archive_files_sizes_cache="${archive_files_sizes_cache_path}/file_sizes.json"
     mkdir -p "${items_cache_path}"
-    echo "${sub_file_sizes}" >"${sub_files_sizes_cache}"
+    echo "${archive_file_sizes}" >"${archive_files_sizes_cache}"
     results=$(
         jq -n \
-            --argfile sub_file_names "${sub_files_names_cache}" \
-            --argfile sub_file_sizes "${sub_files_sizes_cache}" \
+            --argfile archive_file_names "${archive_files_names_cache}" \
+            --argfile archive_file_sizes "${archive_files_sizes_cache}" \
             --arg all_ext "${all_ext}" \
-            '[$sub_file_names, $sub_file_sizes]
+            '[$archive_file_names, $archive_file_sizes]
             | transpose 
             | map({name: .[0], size: .[1]})'
     )
@@ -713,18 +713,18 @@ open_file_screen() {
     local file_name_readable
     local system_id
     local item_id
-    local sub_files_cache_path
-    local sub_files_cache
-    local sub_files
+    local archive_files_cache_path
+    local archive_files_cache
+    local archive_files
     local cmd
     local options
-    local sub_file_options
-    local sub_file_option_readable
+    local archive_file_options
+    local archive_file_option_readable
     local index
-    local sub_file_option
+    local archive_file_option
     local index
     local status
-    local sub_file
+    local archive_file
 
     system=$1
     item=$2
@@ -746,39 +746,39 @@ open_file_screen() {
             jq -r .identifier
     )
 
-    sub_files_cache_path="${BASE_CACHE}/${system_id}/${item_id}/${file_name_readable}"
-    mkdir -p "${sub_files_cache_path}"
-    sub_files_cache="${sub_files_cache_path}/sub_files.json"
-    if [[ -f "$sub_files_cache" ]]; then
-        log "Reading files for ${item_name} from cache: ${sub_files_cache}"
-        sub_files=$(cat "${sub_files_cache}")
+    archive_files_cache_path="${BASE_CACHE}/${system_id}/${item_id}/${file_name_readable}"
+    mkdir -p "${archive_files_cache_path}"
+    archive_files_cache="${archive_files_cache_path}/archive_files.json"
+    if [[ -f "$archive_files_cache" ]]; then
+        log "Reading files for ${item_name} from cache: ${archive_files_cache}"
+        archive_files=$(cat "${archive_files_cache}")
     else
         dialog --infobox "Loading sub files for ${file_name_readable}, please wait..." 5 50 2>&1 >/dev/tty1
-        sub_files=$(list_sub_files "${system}" "${item}" "${file}")
-        echo "${files}" >"${sub_files_cache}"
+        archive_files=$(list_archive_files "${system}" "${item}" "${file}")
+        echo "${files}" >"${archive_files_cache}"
     fi
 
     cmd=(dialog --cancel-label "Back" --backtitle "Pick a sub file" --title " [ Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
-    sub_file_options=$(
-        echo "${sub_files}" |
+    archive_file_options=$(
+        echo "${archive_files}" |
             jq -r .[].name
     )
     index=0
-    while read -r sub_file_option; do
-        sub_file_option_readable=$(url_decode "${sub_file_option}")
-        options+=($((index++)) "${sub_file_option_readable}")
-    done <<<"${sub_file_options}"
+    while read -r archive_file_option; do
+        archive_file_option_readable=$(url_decode "${archive_file_option}")
+        options+=($((index++)) "${archive_file_option_readable}")
+    done <<<"${archive_file_options}"
 
     index=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty1)
     status=$?
     log "Status: ${status}, Desired index: ${index}"
 
-    sub_file=$(get_by_index "${sub_files}" "${index}")
+    archive_file=$(get_by_index "${archive_files}" "${index}")
 
     case ${status} in
-    0) file_screen "${system}" "${item}" "${sub_file}" true ;;
+    0) file_screen "${system}" "${item}" "${archive_file}" true ;;
     1) files_menu "${system}" "${item}" ;;
     *) exit 1 ;;
     esac
