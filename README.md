@@ -34,5 +34,7 @@ RomMaster is a pretty barebones application, but in short -- navigate the menu h
 
 If you ever end up in a wonky state, use the "Clear cache" menu option, which will erase all cached item and file listings. Caching helps speed up repeated navigation to various items/files, so you won't want to clear it often.
 
+If the files you download for a given system won't load with that system, it's likely that you're missing required BIOS files. You can find and install those elsewhere for RetroArch.
+
 ## Notes
 This project uses tm-joypad -- a gamepad controller -> keyboard emulator for dialog navigation. Find out more about that project: https://github.com/JohnIrvine1433/ThemeMaster-Joypad.
