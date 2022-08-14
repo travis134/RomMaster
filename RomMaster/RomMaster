@@ -369,9 +369,15 @@ install_dependencies() {
         if ! dpkg -s "sed" &>/dev/null; then
             dependencies+=("sed")
         fi
+        if ! dpkg -s "unzip" &>/dev/null; then
+            dependencies+=("unzip")
+        fi
+        if ! dpkg -s "p7zip-full" &>/dev/null; then
+            dependencies+=("p7zip-full")
+        fi
         if ((${#dependencies[@]})); then
             dialog --clear
-            dialog --infobox "Installing dependencies, please wait..." 5 50 2>&1 >/dev/tty1
+            dialog --infobox "Installing dependencies, please wait..." 3 50 2>&1 >/dev/tty1
             sudo apt update && sudo apt install -y "${dependencies[@]}" --no-install-recommends
         fi
     fi
@@ -398,7 +404,7 @@ start() {
     elif [[ -e "/dev/input/by-path/platform-gameforce-gamepad-event-joystick" ]]; then
         param_device="chi"
     else
-        dialog --clear --backtitle "RomMaster - System" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support." 2>&1 >/dev/tty1
+        dialog --clear --backtitle "RomMaster - System" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support." 5 50 2>&1 >/dev/tty1
         exit 1
     fi
     #launch joypad
@@ -410,7 +416,7 @@ start() {
     #Checking internet access
     status=$(sudo ping -c 1 google.com &>/dev/null)
     if [[ ${status} -ne 0 ]]; then
-        dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run" 10 50 2>&1 >/dev/tty1
+        dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run" 5 50 2>&1 >/dev/tty1
         exit 1
     fi
 
@@ -473,7 +479,7 @@ main_menu() {
             log "Clearing cache: ${BASE_CACHE}"
             rm -rf "${BASE_CACHE}"
             mkdir -p "${BASE_CACHE}"
-            dialog --backtitle "RomMaster" --msgbox "Cache cleared" 7 50 2>&1 >/dev/tty1
+            dialog --backtitle "RomMaster" --msgbox "Cache cleared" 5 50 2>&1 >/dev/tty1
             main_menu
             ;;
         *) exit 0 ;;
@@ -542,13 +548,14 @@ items_menu() {
         echo "${system}" |
             jq -r .name
     )
-    log "Selected: ${system_name}"
+    log "Selected system: ${system_name}"
 
     system_id=$(
         echo "${system}" |
             jq -r .id
     )
 
+    dialog --infobox "Loading items for ${system_name}, please wait..." 5 50 2>&1 >/dev/tty1
     items_cache_path="${BASE_CACHE}/${system_id}"
     mkdir -p "${items_cache_path}"
     items_cache="${items_cache_path}/items.json"
@@ -556,7 +563,6 @@ items_menu() {
         log "Reading items for ${system_name} from cache: ${items_cache}"
         items=$(cat "${items_cache}")
     else
-        dialog --infobox "Loading items for ${system_name}, please wait..." 5 50 2>&1 >/dev/tty1
         items=$(search_system "${system}")
         echo "${items}" >"${items_cache}"
     fi
@@ -613,7 +619,7 @@ files_menu() {
         echo "${item}" |
             jq -r .title
     )
-    log "Selected: ${item_name}"
+    log "Selected item: ${item_name}"
 
     system_id=$(
         echo "${system}" |
@@ -624,6 +630,7 @@ files_menu() {
             jq -r .identifier
     )
 
+    dialog --infobox "Loading files for ${item_name}, please wait..." 5 50 2>&1 >/dev/tty1
     files_cache_path="${BASE_CACHE}/${system_id}/${item_id}"
     mkdir -p "${files_cache_path}"
     files_cache="${files_cache_path}/files.json"
@@ -631,13 +638,12 @@ files_menu() {
         log "Reading files for ${item_name} from cache: ${files_cache}"
         files=$(cat "${files_cache}")
     else
-        dialog --infobox "Loading files for ${item_name}, please wait..." 5 50 2>&1 >/dev/tty1
         files=$(list_files "${system}" "${item}")
         echo "${files}" >"${files_cache}"
     fi
 
     if [[ ${files} = "[]" ]]; then
-        dialog --infobox "No valid files found in ${item_name}" 5 50 2>&1 >/dev/tty1
+        dialog --msgbox "No valid files found in ${item_name}" 5 50 2>&1 >/dev/tty1
         items_menu "${system}"
         return
     fi
@@ -674,6 +680,7 @@ file_screen() {
     local item
     local file
     local file_type
+    local base_file
     local file_name
     local file_name_readable
     local base_file_name
@@ -686,6 +693,7 @@ file_screen() {
     item=$2
     file=$3
     file_type=$4
+    base_file=$5
 
     file_name=$(
         echo "${file}" |
@@ -693,7 +701,7 @@ file_screen() {
     )
     file_name_readable=$(url_decode "${file_name}")
     base_file_name=$(basename "${file_name_readable}")
-    log "Selected: ${file_name_readable}"
+    log "Selected file: ${file_name_readable} (${file_type})"
 
     file_size=$(
         echo "${file}" |
@@ -704,7 +712,7 @@ file_screen() {
     # Archive.org only provides archived file navigation for archive files.
     extra=()
     if [[ $file_type = "file" ]]; then
-        if [[ $file_name == *.zip || $file_name == *.7z || $file_name == *.rar || $file_name == *.ZIP || $file_name == *.7Z || $file_name == *.RAR ]]; then
+        if [[ $base_file_name == *.zip || $base_file_name == *.7z || $base_file_name == *.rar || $base_file_name == *.iso || $base_file_name == *.ZIP || $base_file_name == *.7Z || $base_file_name == *.RAR || $base_file_name == *.ISO ]]; then
             extra=("--extra-button" "--extra-label" "Open")
         fi
     fi
@@ -715,7 +723,13 @@ file_screen() {
 
     case ${status} in
     0) download_screen "${system}" "${item}" "${file}" "${file_type}" ;;
-    1) files_menu "${system}" "${item}" ;;
+    1)
+        if [[ $file_type = "file" ]]; then
+            files_menu "${system}" "${item}"
+        else
+            archived_files_menu "${system}" "${item}" "${base_file}"
+        fi
+        ;;
     3) archived_files_menu "${system}" "${item}" "${file}" ;;
     *) exit 1 ;;
     esac
@@ -754,7 +768,7 @@ archived_files_menu() {
     )
     file_name_readable=$(url_decode "${file_name}")
     base_file_name=$(basename "${file_name_readable}")
-    log "Selected: ${base_file_name}"
+    log "Selected archive file: ${base_file_name}"
 
     system_id=$(
         echo "${system}" |
@@ -765,20 +779,20 @@ archived_files_menu() {
             jq -r .identifier
     )
 
+    dialog --infobox "Loading archived files for ${base_file_name}, please wait..." 5 50 2>&1 >/dev/tty1
     archived_files_cache_path="${BASE_CACHE}/${system_id}/${item_id}/${file_name_readable}"
     mkdir -p "${archived_files_cache_path}"
     archived_files_cache="${archived_files_cache_path}/archived_files.json"
     if [[ -f "$archived_files_cache" ]]; then
-        log "Reading files for ${item_name} from cache: ${archived_files_cache}"
+        log "Reading files for ${base_file_name} from cache: ${archived_files_cache}"
         archived_files=$(cat "${archived_files_cache}")
     else
-        dialog --infobox "Loading archived files for ${base_file_name}, please wait..." 5 50 2>&1 >/dev/tty1
         archived_files=$(list_archived_files "${system}" "${item}" "${file}")
         echo "${archived_files}" >"${archived_files_cache}"
     fi
 
     if [[ ${archived_files} = "[]" ]]; then
-        dialog --infobox "No valid files found in ${base_file_name}" 5 50 2>&1 >/dev/tty1
+        dialog --msgbox "No valid files found in ${base_file_name}" 5 50 2>&1 >/dev/tty1
         file_screen "${system}" "${item}" "${file}" "file"
         return
     fi
@@ -804,7 +818,7 @@ archived_files_menu() {
     archived_file=$(get_by_index "${archived_files}" "${index}")
 
     case ${status} in
-    0) file_screen "${system}" "${item}" "${archived_file}" "archived_file" ;;
+    0) file_screen "${system}" "${item}" "${archived_file}" "archived_file" "${file}" ;;
     1) file_screen "${system}" "${item}" "${file}" "file" ;;
     *) exit 1 ;;
     esac
@@ -835,7 +849,7 @@ download_screen() {
     # ${path}/baz.zip, stripping off the foo/bar part.
     file_name_readable=$(url_decode "${file_name}")
     base_file_name=$(basename "${file_name_readable}")
-    log "Selected: ${base_file_name}"
+    log "Selected file to download: ${base_file_name}"
 
     system_path=$(echo "${system}" |
         jq -r .path)
@@ -847,7 +861,7 @@ download_screen() {
         download_file "${item}" "${file}" "${download_path}" | dialog --infobox "Downloading ${base_file_name}, please wait..." 3 75 2>&1 >/dev/tty1
     fi
 
-    downloaded_screen "${system}" "${item}" "${file}" "${download_path}"
+    downloaded_screen "${system}" "${item}" "${file}" "${download_path}" "${file_type}"
 }
 
 downloaded_screen() {
@@ -855,15 +869,19 @@ downloaded_screen() {
     local item
     local file
     local download_path
+    local file_type
     local file_name
     local file_name_readable
     local base_file_name
+    local extra
+    local extra_msg
     local status
 
     system=$1
     item=$2
     file=$3
     download_path=$4
+    file_type=$5
 
     file_name=$(
         echo "${file}" |
@@ -873,13 +891,98 @@ downloaded_screen() {
     base_file_name=$(basename "${file_name_readable}")
     log "Downloaded: ${base_file_name}"
 
-    dialog --backtitle "Download complete" --title " [ ${base_file_name} ] " --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
+    # For 7z/zip files the user may want to extract files post download.
+    extra=()
+    extra_msg="\n\nIf this is a collection of games, you may need to extract it first. You can do so by selecting \"Extract\" below."
+    if [[ $base_file_name == *.zip || $base_file_name == *.7z || $base_file_name == *.iso || $base_file_name == *.ZIP || $base_file_name == *.7Z || $base_file_name == *.ISO ]]; then
+        extra=("--extra-button" "--extra-label" "Extract")
+    fi
+
+    dialog --backtitle "Download complete" --title " [ ${base_file_name} ] " --yes-label "Exit" --ok-label "Exit" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?${extra_msg}" 15 50 2>&1 >/dev/tty1
     status=$?
     log "Status: ${status}"
 
     case ${status} in
     0) exit 0 ;;
-    1) files_menu "${system}" "${item}" ;;
+    1)
+        if [[ $file_type = "file" ]]; then
+            files_menu "${system}" "${item}"
+        else
+            archived_files_menu "${system}" "${item}" "${file}"
+        fi
+        ;;
+    3) extract_screen "${system}" "${item}" "${file}" "${download_path}" "${file_type}" ;;
+    *) exit 1 ;;
+    esac
+}
+
+extract_screen() {
+    local system
+    local item
+    local file
+    local download_path
+    local file_type
+    local file_name
+    local file_name_readable
+    local base_file_name
+    local extract_path
+    local mount_path
+    local status
+
+    system=$1
+    item=$2
+    file=$3
+    download_path=$4
+    file_type=$5
+
+    file_name=$(
+        echo "${file}" |
+            jq -r .name
+    )
+    file_name_readable=$(url_decode "${file_name}")
+    base_file_name=$(basename "${file_name_readable}")
+    log "Selected file to extract: ${base_file_name}"
+
+    extract_path="${download_path%.*}"
+    mkdir -p "${extract_path}"
+
+    dialog --infobox "Extracting files to ${extract_path}, please wait..." 5 50 2>&1 >/dev/tty1
+
+    if [[ $base_file_name == *.zip || $base_file_name == *.ZIP ]]; then
+        unzip -qq "${download_path}" -d "${extract_path}"
+        rm "${download_path}"
+    elif [[ $base_file_name == *.7z || $base_file_name == *.7Z ]]; then
+        7za x -y -bsp0 -bso0 "${download_path}" -o"${extract_path}"
+        rm "${download_path}"
+    elif [[ $base_file_name == *.iso || $base_file_name == *.ISO ]]; then
+        mount_path="/tmp/RomMasterMount"
+        mkdir -p "${mount_path}"
+        mount -o loop -t iso9660 "${download_path}" "${mount_path}"
+        cp -r "${mount_path}"/* "${extract_path}"
+        umount "${mount_path}"
+        rmdir "${mount_path}"
+    else
+        dialog --msgbox "Failed to extract file." 5 50 2>&1 >/dev/tty1
+        if [[ $file_type = "file" ]]; then
+            files_menu "${system}" "${item}"
+        else
+            archived_files_menu "${system}" "${item}" "${file}"
+        fi
+    fi
+
+    dialog --backtitle "Extraction complete" --title " [ ${base_file_name} ] " --yes-label "Exit" --ok-label "Exit" --no-label "Back" --cancel-label "Back" --yesno "The selected file has been extracted to ${extract_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
+    status=$?
+    log "Status: ${status}"
+
+    case ${status} in
+    0) exit 0 ;;
+    1)
+        if [[ $file_type = "file" ]]; then
+            files_menu "${system}" "${item}"
+        else
+            archived_files_menu "${system}" "${item}" "${file}"
+        fi
+        ;;
     *) exit 1 ;;
     esac
 }

@@ -4,9 +4,10 @@
     "ext": [
         "zip",
         "7z",
-        "rar"
+        "rar",
+        "iso"
     ],
-    "query": "mediatype:software subject:(rom OR roms OR romset OR disc OR cd-rom OR image OR redump OR no-intro OR retrorom OR ghostware) NOT title:bios",
+    "query": "mediatype:(software OR texts) subject:(rom OR roms OR romset OR collection OR disc OR cd-rom OR image OR redump OR no-intro OR retrorom OR ghostware OR champion) NOT title:bios",
     "systems": [
         {
             "id": "arcade",
@@ -156,7 +157,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(wonderswan)"
+            "query": "subject:(wonderswan NOT color)"
         },
         {
             "id": "wonderswancolor",
@@ -250,7 +251,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(pcengine OR \"pc engine\")"
+            "query": "subject:((pcengine OR \"pc engine\") NOT cd)"
         },
         {
             "id": "pcenginecd",
@@ -795,7 +796,7 @@
                 "chd",
                 "iso"
             ],
-            "query": "subject:(psx OR playstation) NOT subject:(psp OR portable OR ps2 OR \"playstation 2\")"
+            "query": "subject:(psx OR playstation) NOT subject:(ps2 OR \"playstation 2\" OR ps3 OR \"playstation 3\" OR ps4 OR \"playstation 4\" OR ps5 OR \"playstation 5\" OR psp OR portable OR ps2 OR \"playstation 2\")"
         },
         {
             "id": "psp",
@@ -1076,7 +1077,7 @@
                 "exe",
                 "dosz"
             ],
-            "query": "collection:(softwarelibrary_msdos)"
+            "query": "title:(dos)"
         },
         {
             "id": "msx",
@@ -1091,7 +1092,7 @@
                 "7z",
                 "m3u"
             ],
-            "query": "subject:(msx (games OR software)) NOT magazine"
+            "query": "subject:(msx (games OR software))"
         },
         {
             "id": "msx2",
