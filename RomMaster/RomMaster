@@ -774,7 +774,7 @@ archived_files_menu() {
         return
     fi
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick an archived file" --title " [ Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
+    cmd=(dialog --cancel-label "Back" --backtitle "Pick an archived file" --title " [ Archived Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
     archived_file_options=$(
