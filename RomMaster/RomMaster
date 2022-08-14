@@ -633,6 +633,12 @@ files_menu() {
         echo "${files}" >"${files_cache}"
     fi
 
+    if [[ ${files} = "[]" ]]; then
+        dialog --infobox "No valid files found in ${item_name}" 5 50 2>&1 >/dev/tty1
+        items_menu "${system}"
+        return
+    fi
+
     cmd=(dialog --cancel-label "Back" --backtitle "Pick a file" --title " [ Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
     options=()
 
@@ -653,7 +659,7 @@ files_menu() {
     file=$(get_by_index "${files}" "${index}")
 
     case ${status} in
-    0) file_screen "${system}" "${item}" "${file}" ;;
+    0) file_screen "${system}" "${item}" "${file}" "file" ;;
     1) items_menu "${system}" ;;
     *) exit 1 ;;
     esac
@@ -663,6 +669,7 @@ file_screen() {
     local system
     local item
     local file
+    local file_type
     local file_name
     local file_name_readable
     local file_size
@@ -673,6 +680,7 @@ file_screen() {
     system=$1
     item=$2
     file=$3
+    file_type=$4
 
     file_name=$(
         echo "${file}" |
@@ -689,8 +697,10 @@ file_screen() {
 
     # Archive.org only provides archived file navigation for archive files.
     extra=()
-    if [[ $file_name == *.zip || $file_name == *.7z ]]; then
-        extra=("--extra-button" "--extra-label" "Open")
+    if [[ $file_type = "file" ]]; then
+        if [[ $file_name == *.zip || $file_name == *.7z || $file_name == *.ZIP || $file_name == *.7Z ]]; then
+            extra=("--extra-button" "--extra-label" "Open")
+        fi
     fi
 
     dialog --backtitle "Pick an action" --title " [ File Information ] " --yes-label "Download" --ok-label "Download" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "File Name: ${file_name_readable}\nSize: ${file_size_readable}" 15 50 2>&1 >/dev/tty1
@@ -698,7 +708,7 @@ file_screen() {
     log "Status: ${status}"
 
     case ${status} in
-    0) download_screen "${system}" "${item}" "${file}" ;;
+    0) download_screen "${system}" "${item}" "${file}" "${file_type}" ;;
     1) files_menu "${system}" "${item}" ;;
     3) archived_files_menu "${system}" "${item}" "${file}" ;;
     *) exit 1 ;;
@@ -755,7 +765,13 @@ archived_files_menu() {
     else
         dialog --infobox "Loading archived files for ${file_name_readable}, please wait..." 5 50 2>&1 >/dev/tty1
         archived_files=$(list_archived_files "${system}" "${item}" "${file}")
-        echo "${files}" >"${archived_files_cache}"
+        echo "${archived_files}" >"${archived_files_cache}"
+    fi
+
+    if [[ ${archived_files} = "[]" ]]; then
+        dialog --infobox "No valid files found in ${file_name_readable}" 5 50 2>&1 >/dev/tty1
+        file_screen "${system}" "${item}" "${file}" "file"
+        return
     fi
 
     cmd=(dialog --cancel-label "Back" --backtitle "Pick an archived file" --title " [ Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
@@ -778,8 +794,8 @@ archived_files_menu() {
     archived_file=$(get_by_index "${archived_files}" "${index}")
 
     case ${status} in
-    0) file_screen "${system}" "${item}" "${archived_file}" true ;;
-    1) files_menu "${system}" "${item}" ;;
+    0) file_screen "${system}" "${item}" "${archived_file}" "archive" ;;
+    1) file_screen "${system}" "${item}" "${file}" "file" ;;
     *) exit 1 ;;
     esac
 }
@@ -788,6 +804,7 @@ download_screen() {
     local system
     local item
     local file
+    local file_type
     local file_name
     local file_name_readable
     local base_file_name
@@ -797,6 +814,7 @@ download_screen() {
     system=$1
     item=$2
     file=$3
+    file_type=$4
 
     file_name=$(
         echo "${file}" |
