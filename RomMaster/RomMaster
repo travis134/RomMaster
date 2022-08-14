@@ -301,7 +301,9 @@ list_archived_files() {
             --arg all_ext "${all_ext}" \
             '[$archived_file_names, $archived_file_sizes]
             | transpose 
-            | map({name: .[0], size: .[1]})'
+            | map({name: .[0], size: .[1]})
+            | map(
+                select(.name | split(".")[-1] | inside($all_ext)))'
     )
     results_count=$(
         echo "${results}" |
@@ -893,9 +895,10 @@ downloaded_screen() {
 
     # For 7z/zip files the user may want to extract files post download.
     extra=()
-    extra_msg="\n\nIf this is a collection of games, you may need to extract it first. You can do so by selecting \"Extract\" below."
+    extra_msg=""
     if [[ $base_file_name == *.zip || $base_file_name == *.7z || $base_file_name == *.iso || $base_file_name == *.ZIP || $base_file_name == *.7Z || $base_file_name == *.ISO ]]; then
         extra=("--extra-button" "--extra-label" "Extract")
+        extra_msg="\n\nIf this is a collection of games, you may need to extract it first. You can do so by selecting \"Extract\" below."
     fi
 
     dialog --backtitle "Download complete" --title " [ ${base_file_name} ] " --yes-label "Exit" --ok-label "Exit" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?${extra_msg}" 15 50 2>&1 >/dev/tty1
