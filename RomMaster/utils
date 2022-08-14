@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#
+# RomMaster
+# https://github.com/travis134/RomMaster
+# Description : Utility functions, to be included in main script.
+#
+
+sudo() {
+    # Depending on which device we are running, we may already be running as root
+    # (single user systems). So we need to conditionally use sudo.
+    if [[ "${EUID}" = 0 ]]; then
+        "$@"
+    else
+        command sudo "$@"
+    fi
+}
+
+log() {
+    local message
+    local ts
+
+    message=$1
+    ts=$(date +"%Y-%m-%dT%H:%M:%S%z")
+
+    echo "${ts}: ${message}" >&2
+}
+
+parse_size() {
+    local i=${1:-0} d="" s=0 S=("Bytes" "KiB" "MiB" "GiB" "TiB" "PiB" "EiB" "YiB" "ZiB")
+    while ((i > 1024 && s < ${#S[@]} - 1)); do
+        printf -v d ".%02d" $((i % 1024 * 100 / 1024))
+        i=$((i / 1024))
+        s=$((s + 1))
+    done
+    echo "${i}${d} ${S[${s}]}"
+}
+
+url_decode() {
+    : "${*//+/ }"
+    echo -e "${_//%/\\x}"
+}
