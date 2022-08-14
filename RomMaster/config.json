@@ -795,7 +795,7 @@
                 "chd",
                 "iso"
             ],
-            "query": "subject:(psx OR playstation) NOT subject:(psp OR portable)"
+            "query": "subject:(psx OR playstation) NOT subject:(psp OR portable OR ps2 OR \"playstation 2\")"
         },
         {
             "id": "psp",
