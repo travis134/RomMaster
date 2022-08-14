@@ -935,6 +935,8 @@ extract_screen() {
     local base_file_name
     local extract_path
     local mount_path
+    local extraction_failed
+    local file_output
     local status
 
     system=$1
@@ -953,32 +955,57 @@ extract_screen() {
     log "Selected file to extract: ${base_file_name}"
 
     extract_path="${download_path%.*}"
-    mkdir -p "${extract_path}"
 
     dialog --infobox "Extracting files to ${extract_path}, please wait..." 5 50 2>&1 >/dev/tty1
 
+    extraction_failed=true
+    file_output=$(file "${download_path}")
+    log "File output: ${file_output}"
     if [[ $base_file_name == *.zip || $base_file_name == *.ZIP ]]; then
-        unzip -qq "${download_path}" -d "${extract_path}"
-        rm "${download_path}"
+        if [[ $file_output = *"Zip archive"* ]]; then
+            mkdir -p "${extract_path}"
+            unzip -qq "${download_path}" -d "${extract_path}"
+            status=$?
+            if [[ $status = 0 ]]; then
+                extraction_failed=false
+            fi
+        fi
     elif [[ $base_file_name == *.7z || $base_file_name == *.7Z ]]; then
-        7za x -y -bsp0 -bso0 "${download_path}" -o"${extract_path}"
-        rm "${download_path}"
+        if [[ $file_output = *"7-Zip archive"* ]]; then
+            mkdir -p "${extract_path}"
+            7za x -y -bsp0 -bso0 "${download_path}" -o"${extract_path}"
+            status=$?
+            if [[ $status = 0 ]]; then
+                extraction_failed=false
+            fi
+        fi
     elif [[ $base_file_name == *.iso || $base_file_name == *.ISO ]]; then
-        mount_path="/tmp/RomMasterMount"
-        mkdir -p "${mount_path}"
-        sudo mount -o loop -t iso9660 "${download_path}" "${mount_path}"
-        cp -r "${mount_path}"/* "${extract_path}"
-        sudo umount "${mount_path}"
-        rmdir "${mount_path}"
-        rm "${download_path}"
-    else
+        if [[ $file_output = *"ISO 9660"* ]]; then
+            mkdir -p "${extract_path}"
+            mount_path="/tmp/RomMasterMount"
+            mkdir -p "${mount_path}"
+            sudo mount -o loop -t iso9660 "${download_path}" "${mount_path}"
+            status=$?
+            if [[ $status = 0 ]]; then
+                cp -r "${mount_path}"/* "${extract_path}"
+                sudo umount "${mount_path}"
+                extraction_failed=false
+            fi
+            rmdir "${mount_path}"
+        fi
+    fi
+
+    if [[ $extraction_failed = true ]]; then
         dialog --msgbox "Failed to extract file." 5 50 2>&1 >/dev/tty1
         if [[ $file_type = "file" ]]; then
             files_menu "${system}" "${item}"
         else
-            archived_files_menu "${system}" "${item}" "${file}"
+            archived_files_menu "${system}" "${item}" "${base_file}"
         fi
+        return
     fi
+
+    rm "${download_path}"
 
     dialog --backtitle "Extraction complete" --title " [ ${base_file_name} ] " --yes-label "Exit" --ok-label "Exit" --no-label "Back" --cancel-label "Back" --yesno "The selected file has been extracted to ${extract_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
     status=$?
