@@ -85,7 +85,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(wonderswan NOT color)"
+            "query": "subject:(wonderswan) AND -subject:(color) AND -title:(color)"
         },
         {
             "id": "wonderswancolor",
