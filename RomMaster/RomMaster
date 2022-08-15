@@ -462,7 +462,7 @@ main_menu() {
 
     log "Showing Main Menu"
 
-    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] " --menu "D-pad to move, A for <enter>, B for <space>:" "15" "50" "15")
+    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] " --menu "D-pad to move, A or B to select" "15" "50" "15")
     options=(
         0 "Find ROMs"
         1 "Clear cache"
@@ -714,7 +714,7 @@ file_screen() {
     # Archive.org only provides archived file navigation for archive files.
     extra=()
     if [[ $file_type = "file" ]]; then
-        if [[ $base_file_name == *.zip || $base_file_name == *.7z || $base_file_name == *.rar || $base_file_name == *.iso || $base_file_name == *.ZIP || $base_file_name == *.7Z || $base_file_name == *.RAR || $base_file_name == *.ISO ]]; then
+        if [[ ${base_file_name^^} == *.ZIP || ${base_file_name^^} == *.7Z || ${base_file_name^^} == *.RAR || ${base_file_name^^} == *.ISO ]]; then
             extra=("--extra-button" "--extra-label" "Open")
         fi
     fi
@@ -900,7 +900,7 @@ downloaded_screen() {
     # For 7z/zip files the user may want to extract files post download.
     extra=()
     extra_msg=""
-    if [[ $base_file_name == *.zip || $base_file_name == *.7z || $base_file_name == *.iso || $base_file_name == *.ZIP || $base_file_name == *.7Z || $base_file_name == *.ISO ]]; then
+    if [[ ${base_file_name^^} == *.ZIP || ${base_file_name^^} == *.7Z || ${base_file_name^^} == *.ISO ]]; then
         extra=("--extra-button" "--extra-label" "Extract")
         extra_msg="\n\nIf this is a collection of games, you may need to extract it first. You can do so by selecting \"Extract\" below."
     fi
@@ -961,17 +961,8 @@ extract_screen() {
     extraction_failed=true
     file_output=$(file "${download_path}")
     log "File output: ${file_output}"
-    if [[ $base_file_name == *.zip || $base_file_name == *.ZIP ]]; then
-        if [[ $file_output = *"Zip archive"* ]]; then
-            mkdir -p "${extract_path}"
-            unzip -qq "${download_path}" -d "${extract_path}"
-            status=$?
-            if [[ $status = 0 ]]; then
-                extraction_failed=false
-            fi
-        fi
-    elif [[ $base_file_name == *.7z || $base_file_name == *.7Z ]]; then
-        if [[ $file_output = *"7-Zip archive"* ]]; then
+    if [[ ${base_file_name^^} == *.7Z ]]; then
+        if [[ ${file_output^^} = *"7-ZIP ARCHIVE"* ]]; then
             mkdir -p "${extract_path}"
             7za x -y -bsp0 -bso0 "${download_path}" -o"${extract_path}"
             status=$?
@@ -979,8 +970,17 @@ extract_screen() {
                 extraction_failed=false
             fi
         fi
-    elif [[ $base_file_name == *.iso || $base_file_name == *.ISO ]]; then
-        if [[ $file_output = *"ISO 9660"* ]]; then
+    elif [[ ${base_file_name^^} == *.ZIP ]]; then
+        if [[ ${file_output^^} = *"ZIP ARCHIVE"* ]]; then
+            mkdir -p "${extract_path}"
+            unzip -qq "${download_path}" -d "${extract_path}"
+            status=$?
+            if [[ $status = 0 ]]; then
+                extraction_failed=false
+            fi
+        fi
+    elif [[ ${base_file_name^^} == *.ISO ]]; then
+        if [[ ${file_output^^} = *"ISO 9660"* ]]; then
             mkdir -p "${extract_path}"
             mount_path="/tmp/RomMasterMount"
             mkdir -p "${mount_path}"
