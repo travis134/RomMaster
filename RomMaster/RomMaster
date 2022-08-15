@@ -378,8 +378,7 @@ install_dependencies() {
             dependencies+=("p7zip-full")
         fi
         if ((${#dependencies[@]})); then
-            dialog --clear
-            dialog --infobox "Installing dependencies, please wait..." 3 50 2>&1 >/dev/tty1
+            dialog --backtitle "RomMaster" --infobox "Installing dependencies, please wait..." 3 50 2>&1 >/dev/tty1
             sudo apt update && sudo apt install -y "${dependencies[@]}" --no-install-recommends
         fi
     fi
@@ -406,19 +405,18 @@ start() {
     elif [[ -e "/dev/input/by-path/platform-gameforce-gamepad-event-joystick" ]]; then
         param_device="chi"
     else
-        dialog --clear --backtitle "RomMaster - System" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support." 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support." 5 50 2>&1 >/dev/tty1
         exit 1
     fi
     #launch joypad
     sudo ./tm-joypad RomMaster "${param_device}" >/dev/null 2>&1 &
 
-    dialog --clear
-    dialog --infobox "Initializing, please wait..." 3 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Initializing, please wait..." 3 50 2>&1 >/dev/tty1
 
     #Checking internet access
     status=$(sudo ping -c 1 google.com &>/dev/null)
     if [[ ${status} -ne 0 ]]; then
-        dialog --clear --backtitle "RomMaster - System" --msgbox "You appear to be offline, RomMaster require an internet access to run" 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "You appear to be offline, RomMaster require an internet access to run" 5 50 2>&1 >/dev/tty1
         exit 1
     fi
 
@@ -462,7 +460,7 @@ main_menu() {
 
     log "Showing Main Menu"
 
-    cmd=(dialog --no-cancel --backtitle "RomMaster" --title " [ Main Menu ] " --menu "D-pad to move, A or B to select" "15" "50" "15")
+    cmd=(dialog --backtitle "RomMaster" --title " [ Main Menu ] " --no-cancel --menu "D-pad to move, A or B to select" "15" "50" "15")
     options=(
         0 "Find ROMs"
         1 "Clear cache"
@@ -503,7 +501,7 @@ systems_menu() {
 
     log "Selected: Find ROMs"
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick a system" --title " [ Systems Menu ] " --menu "D-pad to move, A or B to select" "15" "50" "15")
+    cmd=(dialog --backtitle "RomMaster" --title " [ Systems Menu ] " --cancel-label "Back" --menu "Configured systems (config.json)" "15" "50" "15")
     options=()
 
     system_options=$(
@@ -557,7 +555,7 @@ items_menu() {
             jq -r .id
     )
 
-    dialog --infobox "Loading items for ${system_name}, please wait..." 5 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Loading items for ${system_name}, please wait..." 5 50 2>&1 >/dev/tty1
     items_cache_path="${BASE_CACHE}/${system_id}"
     mkdir -p "${items_cache_path}"
     items_cache="${items_cache_path}/items.json"
@@ -569,7 +567,7 @@ items_menu() {
         echo "${items}" >"${items_cache}"
     fi
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick an item" --title " [ Items Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
+    cmd=(dialog --backtitle "RomMaster" --title " [ Items Menu ] " --cancel-label "Back" --menu "Pick an item" "15" "75" "15")
     options=()
 
     item_options=$(
@@ -599,6 +597,7 @@ files_menu() {
     local item
     local item_name
     local system_id
+    local ext_string
     local item_id
     local files_cache_path
     local files_cache
@@ -627,12 +626,16 @@ files_menu() {
         echo "${system}" |
             jq -r .id
     )
+    ext_string=$(
+        echo "${system}" |
+            jq -r '.ext | join(", ")'
+    )
     item_id=$(
         echo "${item}" |
             jq -r .identifier
     )
 
-    dialog --infobox "Loading files for ${item_name}, please wait..." 5 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Loading files for ${item_name}, please wait..." 5 50 2>&1 >/dev/tty1
     files_cache_path="${BASE_CACHE}/${system_id}/${item_id}"
     mkdir -p "${files_cache_path}"
     files_cache="${files_cache_path}/files.json"
@@ -645,12 +648,12 @@ files_menu() {
     fi
 
     if [[ ${files} = "[]" ]]; then
-        dialog --msgbox "No valid files found in ${item_name}" 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "No valid files found in ${item_name}" 5 50 2>&1 >/dev/tty1
         items_menu "${system}"
         return
     fi
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick a file" --title " [ Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
+    cmd=(dialog --backtitle "RomMaster" --title " [ Files Menu ] " --cancel-label "Back" --menu "System supports: ${ext_string}" "15" "75" "15")
     options=()
 
     file_options=$(
@@ -719,7 +722,7 @@ file_screen() {
         fi
     fi
 
-    dialog --backtitle "Pick an action" --title " [ File Information ] " --yes-label "Download" --ok-label "Download" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "File Name: ${base_file_name}\nSize: ${file_size_readable}" 15 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --title " [ File Information ] " --yes-label "Download" --ok-label "Download" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "File Name: ${base_file_name}\nSize: ${file_size_readable}" 15 50 2>&1 >/dev/tty1
     status=$?
     log "Status: ${status}"
 
@@ -745,6 +748,7 @@ archived_files_menu() {
     local file_name_readable
     local base_file_name
     local system_id
+    local ext_string
     local item_id
     local archived_files_cache_path
     local archived_files_cache
@@ -776,12 +780,16 @@ archived_files_menu() {
         echo "${system}" |
             jq -r .id
     )
+    ext_string=$(
+        echo "${system}" |
+            jq -r '.ext | join(", ")'
+    )
     item_id=$(
         echo "${item}" |
             jq -r .identifier
     )
 
-    dialog --infobox "Loading archived files for ${base_file_name}, please wait..." 5 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Loading archived files for ${base_file_name}, please wait..." 5 50 2>&1 >/dev/tty1
     archived_files_cache_path="${BASE_CACHE}/${system_id}/${item_id}/${file_name_readable}"
     mkdir -p "${archived_files_cache_path}"
     archived_files_cache="${archived_files_cache_path}/archived_files.json"
@@ -794,12 +802,12 @@ archived_files_menu() {
     fi
 
     if [[ ${archived_files} = "[]" ]]; then
-        dialog --msgbox "No valid files found in ${base_file_name}" 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "No valid files found in ${base_file_name}" 5 50 2>&1 >/dev/tty1
         file_screen "${system}" "${item}" "${file}" "file"
         return
     fi
 
-    cmd=(dialog --cancel-label "Back" --backtitle "Pick an archived file" --title " [ Archived Files Menu ] " --menu "D-pad to move, A or B to select" "15" "75" "15")
+    cmd=(dialog --backtitle "RomMaster" --title " [ Archived Files Menu ] " --cancel-label "Back" --menu "System supports: ${ext_string}" "15" "75" "15")
     options=()
 
     archived_file_options=$(
@@ -860,9 +868,9 @@ download_screen() {
     download_path="${BASE_PATH}/${system_path}/${base_file_name}"
 
     if [[ $file_type = "file" ]]; then
-        download_file "${item}" "${file}" "${download_path}" | dialog --gauge "Downloading ${base_file_name}, please wait..." 7 75 0 2>&1 >/dev/tty1
+        download_file "${item}" "${file}" "${download_path}" | dialog --backtitle "RomMaster" --gauge "Downloading ${base_file_name}, please wait..." 7 75 0 2>&1 >/dev/tty1
     else
-        download_file "${item}" "${file}" "${download_path}" | dialog --infobox "Downloading ${base_file_name}, please wait..." 3 75 2>&1 >/dev/tty1
+        download_file "${item}" "${file}" "${download_path}" | dialog --backtitle "RomMaster" --infobox "Downloading ${base_file_name}, please wait..." 3 75 2>&1 >/dev/tty1
     fi
 
     downloaded_screen "${system}" "${item}" "${file}" "${download_path}" "${file_type}" "${base_file}"
@@ -905,7 +913,7 @@ downloaded_screen() {
         extra_msg="\n\nIf this is a collection of games, you may need to extract it first. You can do so by selecting \"Extract\" below."
     fi
 
-    dialog --backtitle "Download complete" --title " [ ${base_file_name} ] " --yes-label "Exit" --ok-label "Exit" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?${extra_msg}" 15 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --title " [ ${base_file_name} ] " --yes-label "Exit" --ok-label "Exit" --no-label "Back" --cancel-label "Back" "${extra[@]}" --yesno "The selected file has been downloaded to ${download_path}. Do you want to exit so you can play it now?${extra_msg}" 15 50 2>&1 >/dev/tty1
     status=$?
     log "Status: ${status}"
 
@@ -956,7 +964,7 @@ extract_screen() {
 
     extract_path="${download_path%.*}"
 
-    dialog --infobox "Extracting files to ${extract_path}, please wait..." 5 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Extracting files to ${extract_path}, please wait..." 5 50 2>&1 >/dev/tty1
 
     extraction_failed=true
     file_output=$(file "${download_path}")
@@ -996,7 +1004,7 @@ extract_screen() {
     fi
 
     if [[ $extraction_failed = true ]]; then
-        dialog --msgbox "Failed to extract file." 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "Failed to extract file." 5 50 2>&1 >/dev/tty1
         if [[ $file_type = "file" ]]; then
             files_menu "${system}" "${item}"
         else
@@ -1007,7 +1015,7 @@ extract_screen() {
 
     rm "${download_path}"
 
-    dialog --backtitle "Extraction complete" --title " [ ${base_file_name} ] " --yes-label "Exit" --ok-label "Exit" --no-label "Back" --cancel-label "Back" --yesno "The selected file has been extracted to ${extract_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --title " [ ${base_file_name} ] " --yes-label "Exit" --ok-label "Exit" --no-label "Back" --cancel-label "Back" --yesno "The selected file has been extracted to ${extract_path}. Do you want to exit so you can play it now?" 15 50 2>&1 >/dev/tty1
     status=$?
     log "Status: ${status}"
 
