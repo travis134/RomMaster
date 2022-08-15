@@ -378,7 +378,7 @@ install_dependencies() {
             dependencies+=("p7zip-full")
         fi
         if ((${#dependencies[@]})); then
-            dialog --backtitle "RomMaster" --infobox "Installing dependencies, please wait..." 3 50 2>&1 >/dev/tty1
+            dialog --backtitle "RomMaster" --infobox "Installing dependencies, please wait..." 7 50 2>&1 >/dev/tty1
             sudo apt update && sudo apt install -y "${dependencies[@]}" --no-install-recommends
         fi
     fi
@@ -405,18 +405,18 @@ start() {
     elif [[ -e "/dev/input/by-path/platform-gameforce-gamepad-event-joystick" ]]; then
         param_device="chi"
     else
-        dialog --backtitle "RomMaster" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support." 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support." 7 50 2>&1 >/dev/tty1
         exit 1
     fi
     #launch joypad
     sudo ./tm-joypad RomMaster "${param_device}" >/dev/null 2>&1 &
 
-    dialog --backtitle "RomMaster" --infobox "Initializing, please wait..." 3 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Initializing, please wait..." 7 50 2>&1 >/dev/tty1
 
     #Checking internet access
     status=$(sudo ping -c 1 google.com &>/dev/null)
     if [[ ${status} -ne 0 ]]; then
-        dialog --backtitle "RomMaster" --msgbox "You appear to be offline, RomMaster require an internet access to run" 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "You appear to be offline, RomMaster require an internet access to run" 7 50 2>&1 >/dev/tty1
         exit 1
     fi
 
@@ -479,7 +479,7 @@ main_menu() {
             log "Clearing cache: ${BASE_CACHE}"
             rm -rf "${BASE_CACHE}"
             mkdir -p "${BASE_CACHE}"
-            dialog --backtitle "RomMaster" --msgbox "Cache cleared" 5 50 2>&1 >/dev/tty1
+            dialog --backtitle "RomMaster" --msgbox "Cache cleared" 7 50 2>&1 >/dev/tty1
             main_menu
             ;;
         *) exit 0 ;;
@@ -555,7 +555,7 @@ items_menu() {
             jq -r .id
     )
 
-    dialog --backtitle "RomMaster" --infobox "Loading items for ${system_name}, please wait..." 5 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Loading items for ${system_name}, please wait..." 7 50 2>&1 >/dev/tty1
     items_cache_path="${BASE_CACHE}/${system_id}"
     mkdir -p "${items_cache_path}"
     items_cache="${items_cache_path}/items.json"
@@ -640,7 +640,7 @@ files_menu() {
             jq -r .identifier
     )
 
-    dialog --backtitle "RomMaster" --infobox "Loading files for ${item_name}, please wait..." 5 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Loading files for ${item_name}, please wait..." 7 50 2>&1 >/dev/tty1
     files_cache_path="${BASE_CACHE}/${system_id}/${item_id}"
     mkdir -p "${files_cache_path}"
     files_cache="${files_cache_path}/files.json"
@@ -653,7 +653,7 @@ files_menu() {
     fi
 
     if [[ ${files} = "[]" ]]; then
-        dialog --backtitle "RomMaster" --msgbox "No valid files found in ${item_name}" 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "No valid files found in ${item_name}" 7 50 2>&1 >/dev/tty1
         items_menu "${system}"
         return
     fi
@@ -799,7 +799,7 @@ archived_files_menu() {
             jq -r .identifier
     )
 
-    dialog --backtitle "RomMaster" --infobox "Loading archived files for ${base_file_name}, please wait..." 5 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Loading archived files for ${base_file_name}, please wait..." 7 50 2>&1 >/dev/tty1
     archived_files_cache_path="${BASE_CACHE}/${system_id}/${item_id}/${file_name_readable}"
     mkdir -p "${archived_files_cache_path}"
     archived_files_cache="${archived_files_cache_path}/archived_files.json"
@@ -812,7 +812,7 @@ archived_files_menu() {
     fi
 
     if [[ ${archived_files} = "[]" ]]; then
-        dialog --backtitle "RomMaster" --msgbox "No valid files found in ${base_file_name}" 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "No valid files found in ${base_file_name}" 7 50 2>&1 >/dev/tty1
         file_screen "${system}" "${item}" "${file}" "file"
         return
     fi
@@ -880,7 +880,7 @@ download_screen() {
     if [[ $file_type = "file" ]]; then
         download_file "${item}" "${file}" "${download_path}" | dialog --backtitle "RomMaster" --gauge "Downloading ${base_file_name}, please wait..." 7 75 0 2>&1 >/dev/tty1
     else
-        download_file "${item}" "${file}" "${download_path}" | dialog --backtitle "RomMaster" --infobox "Downloading ${base_file_name}, please wait..." 3 75 2>&1 >/dev/tty1
+        download_file "${item}" "${file}" "${download_path}" | dialog --backtitle "RomMaster" --infobox "Downloading ${base_file_name}, please wait..." 7 75 2>&1 >/dev/tty1
     fi
 
     downloaded_screen "${system}" "${item}" "${file}" "${download_path}" "${file_type}" "${base_file}"
@@ -977,7 +977,7 @@ extract_screen() {
         jq -r .path)
     extract_path="${BASE_PATH}/${system_path}"
 
-    dialog --backtitle "RomMaster" --infobox "Extracting files to ${extract_path}, please wait..." 5 50 2>&1 >/dev/tty1
+    dialog --backtitle "RomMaster" --infobox "Extracting files to ${extract_path}, please wait..." 7 50 2>&1 >/dev/tty1
 
     extraction_failed=true
     file_output=$(file "${download_path}")
@@ -1017,7 +1017,7 @@ extract_screen() {
     fi
 
     if [[ $extraction_failed = true ]]; then
-        dialog --backtitle "RomMaster" --msgbox "Failed to extract file." 5 50 2>&1 >/dev/tty1
+        dialog --backtitle "RomMaster" --msgbox "Failed to extract file." 7 50 2>&1 >/dev/tty1
         if [[ $file_type = "file" ]]; then
             files_menu "${system}" "${item}"
         else
