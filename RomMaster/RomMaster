@@ -74,7 +74,7 @@ create_system_query() {
     system=$1
 
     query=${BASE_QUERY}
-    query+=" "
+    query+=" AND "
     query+=$(
         echo "${system}" |
             jq -r '.query'
@@ -567,7 +567,7 @@ items_menu() {
         echo "${items}" >"${items_cache}"
     fi
 
-    cmd=(dialog --backtitle "RomMaster" --title " [ Items Menu ] " --cancel-label "Back" --menu "Pick an item" "15" "75" "15")
+    cmd=(dialog --backtitle "RomMaster" --title " [ Items Menu ] " --cancel-label "Back" --menu "Pick an item for ${system_name}" "15" "75" "15")
     options=()
 
     item_options=$(
@@ -597,6 +597,7 @@ files_menu() {
     local item
     local item_name
     local system_id
+    local system_name
     local ext_string
     local item_id
     local files_cache_path
@@ -626,6 +627,10 @@ files_menu() {
         echo "${system}" |
             jq -r .id
     )
+    system_name=$(
+        echo "${system}" |
+            jq -r .name
+    )
     ext_string=$(
         echo "${system}" |
             jq -r '.ext | join(", ")'
@@ -653,7 +658,7 @@ files_menu() {
         return
     fi
 
-    cmd=(dialog --backtitle "RomMaster" --title " [ Files Menu ] " --cancel-label "Back" --menu "System supports: ${ext_string}" "15" "75" "15")
+    cmd=(dialog --backtitle "RomMaster" --title " [ Files Menu ] " --cancel-label "Back" --menu "${system_name} supports: ${ext_string}" "15" "75" "15")
     options=()
 
     file_options=$(
@@ -748,6 +753,7 @@ archived_files_menu() {
     local file_name_readable
     local base_file_name
     local system_id
+    local system_name
     local ext_string
     local item_id
     local archived_files_cache_path
@@ -780,6 +786,10 @@ archived_files_menu() {
         echo "${system}" |
             jq -r .id
     )
+    system_name=$(
+        echo "${system}" |
+            jq -r .name
+    )
     ext_string=$(
         echo "${system}" |
             jq -r '.ext | join(", ")'
@@ -807,7 +817,7 @@ archived_files_menu() {
         return
     fi
 
-    cmd=(dialog --backtitle "RomMaster" --title " [ Archived Files Menu ] " --cancel-label "Back" --menu "System supports: ${ext_string}" "15" "75" "15")
+    cmd=(dialog --backtitle "RomMaster" --title " [ Archived Files Menu ] " --cancel-label "Back" --menu "${system_name} supports: ${ext_string}" "15" "75" "15")
     options=()
 
     archived_file_options=$(

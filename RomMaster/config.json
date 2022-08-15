@@ -7,80 +7,8 @@
         "rar",
         "iso"
     ],
-    "query": "mediatype:(software OR texts) subject:(rom OR roms OR romset OR collection OR disc OR cd-rom OR image OR redump OR no-intro OR retrorom OR ghostware OR champion) NOT title:bios",
+    "query": "mediatype:(software) AND (subject:(rom OR roms OR romset OR collection OR disc OR cd-rom OR image) OR title:(redump OR no-intro OR retrorom OR ghostware OR champion OR tosec OR cylum OR verevet_dark OR library OR collection)) AND -title:(bios)",
     "systems": [
-        {
-            "id": "arcade",
-            "path": "arcade",
-            "name": "Arcade",
-            "ext": [
-                "zip",
-                "7z"
-            ],
-            "query": "subject:(arcade OR mame)"
-        },
-        {
-            "id": "atomiswave",
-            "path": "atomiswave",
-            "name": "Atomiswave",
-            "ext": [
-                "lst",
-                "bin",
-                "dat",
-                "zip",
-                "7z"
-            ],
-            "query": "subject:(atomiswave)"
-        },
-        {
-            "id": "daphne",
-            "path": "daphne",
-            "name": "Daphne",
-            "query": "subject:(daphne)"
-        },
-        {
-            "id": "fbneo",
-            "path": "fbneo",
-            "name": "Final Burn Neo",
-            "ext": [
-                "zip",
-                "7z"
-            ],
-            "query": "subject:(fbneo OR finalburn OR \"final burn\")"
-        },
-        {
-            "id": "mame",
-            "path": "mame",
-            "name": "MAME",
-            "ext": [
-                "zip",
-                "7z"
-            ],
-            "query": "subject:(arcade OR mame)"
-        },
-        {
-            "id": "naomi",
-            "path": "naomi",
-            "name": "Naomi",
-            "ext": [
-                "lst",
-                "bin",
-                "dat",
-                "zip",
-                "7z"
-            ],
-            "query": "subject:(naomi)"
-        },
-        {
-            "id": "neogeo",
-            "path": "neogeo",
-            "name": "Neo Geo",
-            "ext": [
-                "zip",
-                "7z"
-            ],
-            "query": "subject:(neogeo OR neo-geo OR \"neo geo\")"
-        },
         {
             "id": "atari2600",
             "path": "atari2600",
@@ -251,7 +179,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((pcengine OR \"pc engine\") NOT cd)"
+            "query": "subject:(pcengine OR \"pc engine\") AND -subject:(cd)"
         },
         {
             "id": "pcenginecd",
@@ -329,7 +257,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(famicom OR \"family computer\")"
+            "query": "subject:(famicom OR \"family computer\") AND -subject:(super OR snes OR fds OR disk)"
         },
         {
             "id": "fds",
@@ -363,7 +291,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gb OR gameboy OR \"game boy\") NOT hack)"
+            "query": "subject:(gb OR gameboy OR \"game boy\") AND -subject:(hack OR gbc OR gameboycolor OR \"game boy color\" OR \"gameboy color\" OR gba OR gameboyadvance OR \"gameboy advance\" OR \"game boy advance\")"
         },
         {
             "id": "gbh",
@@ -375,7 +303,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gb OR gameboy OR \"game boy\") hack)"
+            "query": "subject:(gb OR gameboy OR \"game boy\") AND subject:(hack) AND -subject:(gbc OR gameboycolor OR \"game boy color\" OR \"gameboy color\" OR gba OR gameboyadvance OR \"gameboy advance\" OR \"game boy advance\")"
         },
         {
             "id": "gba",
@@ -386,7 +314,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") NOT hack)"
+            "query": "subject:(gba OR gameboyadvance OR \"gameboy advance\" OR \"game boy advance\") AND -subject:(hack)"
         },
         {
             "id": "gbah",
@@ -397,7 +325,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gba OR gameboyadvance OR \"game boy advance\") hack)"
+            "query": "subject:(gba OR gameboyadvance OR \"gameboy advance\" OR \"game boy advance\") AND subject:(hack)"
         },
         {
             "id": "gbc",
@@ -409,7 +337,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") NOT hack)"
+            "query": "subject:(gbc OR gameboycolor OR \"game boy color\" OR \"gameboy color\") AND -subject:(hack)"
         },
         {
             "id": "gbch",
@@ -421,7 +349,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gbc OR gameboycolor OR \"game boy color\") hack)"
+            "query": "subject:(gbc OR gameboycolor OR \"game boy color\" OR \"gameboy color\") AND subject:(hack)"
         },
         {
             "id": "snesmsu1",
@@ -461,7 +389,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") NOT hack)"
+            "query": "subject:(nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") AND -subject:(hack)"
         },
         {
             "id": "nesh",
@@ -474,7 +402,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") hack)"
+            "query": "subject:(nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") AND subject:(hack)"
         },
         {
             "id": "pokemini",
@@ -499,7 +427,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") NOT hack)"
+            "query": "subject:(snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") AND -subject:(hack)"
         },
         {
             "id": "snesh",
@@ -513,7 +441,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") hack)"
+            "query": "subject:(snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") AND subject:(hack)"
         },
         {
             "id": "sfc",
@@ -600,7 +528,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gg OR gamegear OR \"game gear\") NOT hack)"
+            "query": "subject:(gg OR gamegear OR \"game gear\") AND -subject:(hack)"
         },
         {
             "id": "gamegearh",
@@ -612,7 +540,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((gg OR gamegear OR \"game gear\") hack)"
+            "query": "subject:(gg OR gamegear OR \"game gear\") AND subject:(hack)"
         },
         {
             "id": "megadrive-japan",
@@ -679,7 +607,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((genesis OR \"sega genesis\") NOT hack)"
+            "query": "subject:(genesis OR \"sega genesis\") AND -subject:(hack)"
         },
         {
             "id": "genh",
@@ -694,7 +622,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:((genesis OR \"sega genesis\") hack)"
+            "query": "subject:(genesis OR \"sega genesis\") AND subject:(hack)"
         },
         {
             "id": "mastersystem",
@@ -796,7 +724,7 @@
                 "chd",
                 "iso"
             ],
-            "query": "subject:(psx OR playstation) NOT subject:(ps2 OR \"playstation 2\" OR ps3 OR \"playstation 3\" OR ps4 OR \"playstation 4\" OR ps5 OR \"playstation 5\" OR psp OR portable OR ps2 OR \"playstation 2\")"
+            "query": "subject:(psx OR playstation) AND -subject:(ps2 OR \"playstation 2\" OR ps3 OR \"playstation 3\" OR ps4 OR \"playstation 4\" OR ps5 OR \"playstation 5\" OR psp OR portable)"
         },
         {
             "id": "psp",
@@ -840,7 +768,79 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(megaduck OR \"mega duck\") )"
+            "query": "subject:(megaduck OR \"mega duck\")"
+        },
+        {
+            "id": "arcade",
+            "path": "arcade",
+            "name": "Arcade",
+            "ext": [
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(arcade OR mame)"
+        },
+        {
+            "id": "atomiswave",
+            "path": "atomiswave",
+            "name": "Atomiswave",
+            "ext": [
+                "lst",
+                "bin",
+                "dat",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(atomiswave)"
+        },
+        {
+            "id": "daphne",
+            "path": "daphne",
+            "name": "Daphne",
+            "query": "subject:(daphne)"
+        },
+        {
+            "id": "fbneo",
+            "path": "fbneo",
+            "name": "Final Burn Neo",
+            "ext": [
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(fbneo OR finalburn OR \"final burn\")"
+        },
+        {
+            "id": "mame",
+            "path": "mame",
+            "name": "MAME",
+            "ext": [
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(arcade OR mame)"
+        },
+        {
+            "id": "naomi",
+            "path": "naomi",
+            "name": "Naomi",
+            "ext": [
+                "lst",
+                "bin",
+                "dat",
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(naomi)"
+        },
+        {
+            "id": "neogeo",
+            "path": "neogeo",
+            "name": "Neo Geo",
+            "ext": [
+                "zip",
+                "7z"
+            ],
+            "query": "subject:(neogeo OR neo-geo OR \"neo geo\")"
         },
         {
             "id": "amstradcpc",
@@ -911,7 +911,7 @@
                 "hdf",
                 "hdz"
             ],
-            "query": "subject:(amiga) OR collection:softwarelibrary_amiga"
+            "query": "(subject:(amiga) OR collection:(softwarelibrary_amiga)) AND -subject:(cd32)"
         },
         {
             "id": "amigacd32",
@@ -1092,7 +1092,7 @@
                 "7z",
                 "m3u"
             ],
-            "query": "subject:(msx (games OR software))"
+            "query": "subject:(msx AND (games OR software))"
         },
         {
             "id": "msx2",
@@ -1195,7 +1195,7 @@
                 "zip",
                 "1z"
             ],
-            "query": "subject:(x68000)"
+            "query": "title:(x68000)"
         },
         {
             "id": "zxspectrum",
@@ -1212,7 +1212,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "collection:(softwarelibrary_zx_spectrum)"
+            "query": "subject:(zxspectrum OR \"zx spectrum\")"
         },
         {
             "id": "zx81",
@@ -1224,7 +1224,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "collection:(softwarelibrary_zx_81)"
+            "query": "title:(zx81)"
         }
     ]
 }
