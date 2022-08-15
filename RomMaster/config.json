@@ -389,7 +389,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(nes OR nintendoentertainmentsystem OR nintendo+entertainment+system) AND -subject:(hack)"
+            "query": "subject:(nes OR nintendoentertainmentsystem OR nintendo+entertainment+system) AND -subject:(hack OR snes OR super)"
         },
         {
             "id": "nesh",
@@ -402,7 +402,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(nes OR nintendoentertainmentsystem OR nintendo+entertainment+system) AND subject:(hack)"
+            "query": "subject:(nes OR nintendoentertainmentsystem OR nintendo+entertainment+system) AND subject:(hack) AND -subject:(snes OR super)"
         },
         {
             "id": "pokemini",
