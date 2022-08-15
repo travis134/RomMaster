@@ -19,7 +19,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atari2600 OR \"atari 2600\")"
+            "query": "subject:(atari2600 OR atari+2600)"
         },
         {
             "id": "atari5200",
@@ -39,7 +39,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atari5200 OR \"atari 5200\")"
+            "query": "subject:(atari5200 OR atari+5200)"
         },
         {
             "id": "atari7800",
@@ -51,7 +51,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atari7800 OR \"atari 7800\")"
+            "query": "subject:(atari7800 OR atari+7800)"
         },
         {
             "id": "atarilynx",
@@ -63,7 +63,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atarilynx OR lynx OR \"atari lynx\")"
+            "query": "subject:(atarilynx OR lynx OR atari+lynx)"
         },
         {
             "id": "sufami",
@@ -96,7 +96,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(wonderswancolor OR \"wonderswan color\")"
+            "query": "subject:(wonderswancolor OR wonderswan+color)"
         },
         {
             "id": "uzebox",
@@ -130,7 +130,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(channelf OR \"channel f\")"
+            "query": "subject:(channelf OR channel+f)"
         },
         {
             "id": "odyssey",
@@ -141,7 +141,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(odyssey OR \"odyssey 2\")"
+            "query": "subject:(odyssey OR odyssey+2)"
         },
         {
             "id": "intellivision",
@@ -179,7 +179,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(pcengine OR \"pc engine\") AND -subject:(cd)"
+            "query": "subject:(pcengine OR pc+engine) AND -subject:(cd)"
         },
         {
             "id": "pcenginecd",
@@ -192,7 +192,7 @@
                 "toc",
                 "m3u"
             ],
-            "query": "subject:(pcenginecd OR \"pc engine cd\")"
+            "query": "subject:(pcenginecd OR pc+engine+cd)"
         },
         {
             "id": "pcfx",
@@ -219,7 +219,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sgfx OR supergrafx OR \"super grafx\")"
+            "query": "subject:(sgfx OR supergrafx OR super+grafx)"
         },
         {
             "id": "tg16",
@@ -244,7 +244,7 @@
                 "toc",
                 "m3u"
             ],
-            "query": "subject:(tg16cd OR tgcd OR turbografxcd OR \"turbografx cd\")"
+            "query": "subject:(tg16cd OR tgcd OR turbografxcd OR turbografx+cd)"
         },
         {
             "id": "famicom",
@@ -257,7 +257,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(famicom OR \"family computer\") AND -subject:(super OR snes OR fds OR disk)"
+            "query": "subject:(famicom OR family+computer) AND -subject:(super OR snes OR fds OR disk)"
         },
         {
             "id": "fds",
@@ -268,7 +268,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(fds OR \"family computer disk system\" OR \"famicom disk system\")"
+            "query": "subject:(fds OR family+computer+disk+system OR famicom+disk+system)"
         },
         {
             "id": "gameandwatch",
@@ -279,7 +279,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gameanswatch OR game&watch OR \"game & watch\")"
+            "query": "subject:(gameanswatch OR game&watch OR game+&+watch)"
         },
         {
             "id": "gb",
@@ -291,7 +291,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gb OR gameboy OR \"game boy\") AND -subject:(hack OR gbc OR gameboycolor OR \"game boy color\" OR \"gameboy color\" OR gba OR gameboyadvance OR \"gameboy advance\" OR \"game boy advance\")"
+            "query": "subject:(gb OR gameboy OR game+boy) AND -subject:(hack OR gbc OR gameboycolor OR game+boy+color OR gameboy+color OR gba OR gameboyadvance OR gameboy+advance OR game+boy+advance)"
         },
         {
             "id": "gbh",
@@ -303,7 +303,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gb OR gameboy OR \"game boy\") AND subject:(hack) AND -subject:(gbc OR gameboycolor OR \"game boy color\" OR \"gameboy color\" OR gba OR gameboyadvance OR \"gameboy advance\" OR \"game boy advance\")"
+            "query": "subject:(gb OR gameboy OR game+boy) AND subject:(hack) AND -subject:(gbc OR gameboycolor OR game+boy+color OR gameboy+color OR gba OR gameboyadvance OR gameboy+advance OR game+boy+advance)"
         },
         {
             "id": "gba",
@@ -314,7 +314,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gba OR gameboyadvance OR \"gameboy advance\" OR \"game boy advance\") AND -subject:(hack)"
+            "query": "subject:(gba OR gameboyadvance OR gameboy+advance OR game+boy+advance) AND -subject:(hack)"
         },
         {
             "id": "gbah",
@@ -325,7 +325,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gba OR gameboyadvance OR \"gameboy advance\" OR \"game boy advance\") AND subject:(hack)"
+            "query": "subject:(gba OR gameboyadvance OR gameboy+advance OR game+boy+advance) AND subject:(hack)"
         },
         {
             "id": "gbc",
@@ -337,7 +337,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gbc OR gameboycolor OR \"game boy color\" OR \"gameboy color\") AND -subject:(hack)"
+            "query": "subject:(gbc OR gameboycolor OR game+boy+color OR gameboy+color) AND -subject:(hack)"
         },
         {
             "id": "gbch",
@@ -349,7 +349,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gbc OR gameboycolor OR \"game boy color\" OR \"gameboy color\") AND subject:(hack)"
+            "query": "subject:(gbc OR gameboycolor OR game+boy+color OR gameboy+color) AND subject:(hack)"
         },
         {
             "id": "snesmsu1",
@@ -376,7 +376,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(n64 OR nintendo64 OR \"nintendo 64\")"
+            "query": "subject:(n64 OR nintendo64 OR nintendo+64)"
         },
         {
             "id": "nes",
@@ -389,7 +389,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") AND -subject:(hack)"
+            "query": "subject:(nes OR nintendoentertainmentsystem OR nintendo+entertainment+system) AND -subject:(hack)"
         },
         {
             "id": "nesh",
@@ -402,7 +402,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(nes OR nintendoentertainmentsystem OR \"nintendo entertainment system\") AND subject:(hack)"
+            "query": "subject:(nes OR nintendoentertainmentsystem OR nintendo+entertainment+system) AND subject:(hack)"
         },
         {
             "id": "pokemini",
@@ -413,7 +413,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(pokemini OR \"pokemon mini\")"
+            "query": "subject:(pokemini OR pokemon+mini)"
         },
         {
             "id": "snes",
@@ -427,7 +427,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") AND -subject:(hack)"
+            "query": "subject:(snes OR supernintendoentertainmentsystem OR super+nintendo+entertainment+system) AND -subject:(hack)"
         },
         {
             "id": "snesh",
@@ -441,7 +441,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(snes OR supernintendoentertainmentsystem OR \"super nintendo entertainment system\") AND subject:(hack)"
+            "query": "subject:(snes OR supernintendoentertainmentsystem OR super+nintendo+entertainment+system) AND subject:(hack)"
         },
         {
             "id": "sfc",
@@ -455,7 +455,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sfc OR superfamicom OR \"super famicom\")"
+            "query": "subject:(sfc OR superfamicom OR super+famicom)"
         },
         {
             "id": "satellaview",
@@ -482,7 +482,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(virtualboy OR \"virtual boy\")"
+            "query": "subject:(virtualboy OR virtual+boy)"
         },
         {
             "id": "3do",
@@ -528,7 +528,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gg OR gamegear OR \"game gear\") AND -subject:(hack)"
+            "query": "subject:(gg OR gamegear OR game+gear) AND -subject:(hack)"
         },
         {
             "id": "gamegearh",
@@ -540,7 +540,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(gg OR gamegear OR \"game gear\") AND subject:(hack)"
+            "query": "subject:(gg OR gamegear OR game+gear) AND subject:(hack)"
         },
         {
             "id": "megadrive-japan",
@@ -554,7 +554,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(megadrive OR genesis OR \"mega drive\")"
+            "query": "subject:(megadrive OR genesis OR mega+drive)"
         },
         {
             "id": "sega32x",
@@ -568,7 +568,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(sega32x OR 32x OR \"sega 32x\")"
+            "query": "subject:(sega32x OR 32x OR sega+32x)"
         },
         {
             "id": "segacd",
@@ -580,7 +580,7 @@
                 "iso",
                 "m3u"
             ],
-            "query": "subject:(segacd OR megacd OR \"sega cd\" OR \"mega cd\")"
+            "query": "subject:(segacd OR megacd OR sega+cd OR mega+cd)"
         },
         {
             "id": "megacd",
@@ -592,7 +592,7 @@
                 "iso",
                 "m3u"
             ],
-            "query": "subject:(segacd OR megacd OR \"sega cd\" OR \"mega cd\")"
+            "query": "subject:(segacd OR megacd OR sega+cd OR mega+cd)"
         },
         {
             "id": "genesis",
@@ -607,7 +607,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(genesis OR \"sega genesis\") AND -subject:(hack)"
+            "query": "subject:(genesis OR sega+genesis) AND -subject:(hack)"
         },
         {
             "id": "genh",
@@ -622,7 +622,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(genesis OR \"sega genesis\") AND subject:(hack)"
+            "query": "subject:(genesis OR sega+genesis) AND subject:(hack)"
         },
         {
             "id": "mastersystem",
@@ -634,7 +634,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(mastersystem OR \"master system\")"
+            "query": "subject:(mastersystem OR master+system)"
         },
         {
             "id": "megadrive",
@@ -649,7 +649,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(megadrive OR genesis OR \"mega drive\")"
+            "query": "subject:(megadrive OR genesis OR mega+drive)"
         },
         {
             "id": "saturn",
@@ -682,7 +682,7 @@
                 "iso",
                 "chd"
             ],
-            "query": "subject:(neocd OR neogeocd OR \"neo geo cd\")"
+            "query": "subject:(neocd OR neogeocd OR neo+geo+cd)"
         },
         {
             "id": "ngp",
@@ -694,7 +694,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(ngp OR neogeopocket OR \"neo geo pocket\")"
+            "query": "subject:(ngp OR neogeopocket OR neo+geo+pocket)"
         },
         {
             "id": "ngpc",
@@ -705,7 +705,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(ngpc OR neogeopocketcolor OR \"neo geo pocket color\")"
+            "query": "subject:(ngpc OR neogeopocketcolor OR neo+geo+pocket+color)"
         },
         {
             "id": "psx",
@@ -724,7 +724,7 @@
                 "chd",
                 "iso"
             ],
-            "query": "subject:(psx OR playstation) AND -subject:(ps2 OR \"playstation 2\" OR ps3 OR \"playstation 3\" OR ps4 OR \"playstation 4\" OR ps5 OR \"playstation 5\" OR psp OR portable)"
+            "query": "subject:(psx OR playstation) AND -subject:(ps2 OR playstation+2 OR ps3 OR playstation+3 OR ps4 OR playstation+4 OR ps5 OR playstation+5 OR psp OR portable)"
         },
         {
             "id": "psp",
@@ -735,7 +735,7 @@
                 "cso",
                 "pbp"
             ],
-            "query": "subject:(psp OR playstationportable OR \"playstation portable\")"
+            "query": "subject:(psp OR playstationportable OR playstation+portable)"
         },
         {
             "id": "pspminis",
@@ -746,7 +746,7 @@
                 "cso",
                 "pbp"
             ],
-            "query": "subject:(pspminis OR \"psp minis\")"
+            "query": "subject:(pspminis OR psp+minis)"
         },
         {
             "id": "supervision",
@@ -757,7 +757,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "watara supervision"
+            "query": "watara+supervision"
         },
         {
             "id": "megaduck",
@@ -768,7 +768,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(megaduck OR \"mega duck\")"
+            "query": "subject:(megaduck OR mega+duck)"
         },
         {
             "id": "arcade",
@@ -807,7 +807,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(fbneo OR finalburn OR \"final burn\")"
+            "query": "subject:(fbneo OR finalburn OR final+burn)"
         },
         {
             "id": "mame",
@@ -840,7 +840,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(neogeo OR neo-geo OR \"neo geo\")"
+            "query": "subject:(neogeo OR neo-geo OR neo+geo)"
         },
         {
             "id": "amstradcpc",
@@ -857,7 +857,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(amstradcpc OR cpc OR \"amstrad cpc\")"
+            "query": "subject:(amstradcpc OR cpc OR amstrad+cpc)"
         },
         {
             "id": "atari800",
@@ -877,7 +877,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(atari800 OR \"atari 800\")"
+            "query": "subject:(atari800 OR atari+800)"
         },
         {
             "id": "atarist",
@@ -893,7 +893,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "title:(atarist OR \"atari st\")"
+            "query": "title:(atarist OR atari+st)"
         },
         {
             "id": "amiga",
@@ -923,7 +923,7 @@
                 "ha",
                 "chd"
             ],
-            "query": "title:(amigacd32 OR \"amiga cd32\")"
+            "query": "title:(amigacd32 OR amiga+cd32)"
         },
         {
             "id": "c128",
@@ -1153,7 +1153,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "title:(sc-3000 OR \"SC 3000\" OR \"Sega Computer 3000\")"
+            "query": "title:(sc-3000 OR SC+3000 OR Sega+Computer+3000)"
         },
         {
             "id": "x1",
@@ -1212,7 +1212,7 @@
                 "zip",
                 "7z"
             ],
-            "query": "subject:(zxspectrum OR \"zx spectrum\")"
+            "query": "subject:(zxspectrum OR zx+spectrum)"
         },
         {
             "id": "zx81",
