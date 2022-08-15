@@ -951,6 +951,7 @@ extract_screen() {
     local file_name
     local file_name_readable
     local base_file_name
+    local system_path
     local extract_path
     local mount_path
     local extraction_failed
@@ -972,7 +973,9 @@ extract_screen() {
     base_file_name=$(basename "${file_name_readable}")
     log "Selected file to extract: ${base_file_name}"
 
-    extract_path="${download_path%.*}"
+    system_path=$(echo "${system}" |
+        jq -r .path)
+    extract_path="${BASE_PATH}/${system_path}"
 
     dialog --backtitle "RomMaster" --infobox "Extracting files to ${extract_path}, please wait..." 5 50 2>&1 >/dev/tty1
 
