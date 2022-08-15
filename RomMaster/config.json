@@ -797,6 +797,9 @@
             "id": "daphne",
             "path": "daphne",
             "name": "Daphne",
+            "ext": [
+                "daphne"
+            ],
             "query": "subject:(daphne)"
         },
         {
