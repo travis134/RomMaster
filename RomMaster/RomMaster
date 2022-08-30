@@ -23,8 +23,6 @@ source ./utils
 # Environment settings
 #
 export TERM=linux
-sudo chmod 666 /dev/tty1
-sudo chmod 666 /dev/uinput
 shopt -s extglob # required for extented pattern recognition
 
 #
@@ -385,31 +383,14 @@ install_dependencies() {
 }
 
 start() {
-    local param_device
     local status
     local config
 
     log "Starting RomMaster"
 
-    #
-    # Load Controls management
-    #
-    if [[ -e "/dev/input/by-path/platform-ff300000.usb-usb-0:1.2:1.0-event-joystick" ]]; then
-        param_device="anbernic"
-    elif [[ -e "/dev/input/by-path/platform-singleadc-joypad-event-joystick" ]]; then
-        param_device="rg552"
-    elif [[ -e "/dev/input/by-path/platform-odroidgo2-joypad-event-joystick" ]]; then
-        param_device="oga"
-    elif [[ -e "/dev/input/by-path/platform-odroidgo3-joypad-event-joystick" ]]; then
-        param_device="ogs"
-    elif [[ -e "/dev/input/by-path/platform-gameforce-gamepad-event-joystick" ]]; then
-        param_device="chi"
-    else
-        dialog --backtitle "RomMaster" --msgbox "Controls can't be loaded, device not recognised. Please report for additional support." 7 50 2>&1 >/dev/tty1
-        exit 1
-    fi
-    #launch joypad
-    sudo ./tm-joypad RomMaster "${param_device}" >/dev/null 2>&1 &
+    chmod 666 /dev/tty1
+    chmod 666 /dev/uinput
+    gptokeyb -c controls.gptk &
 
     dialog --backtitle "RomMaster" --infobox "Initializing, please wait..." 7 50 2>&1 >/dev/tty1
 
@@ -1048,15 +1029,9 @@ extract_screen() {
 stop() {
     log "Stopping RomMaster"
 
-    sudo pkill tm-joypad >/dev/null 2>&1
-
-    if [[ $(systemctl is-active emulationstation.service) = "active" ]]; then
-        sudo systemctl restart emulationstation
-    fi
-    if [[ $(systemctl is-active emustation.service) = "active" ]]; then
-        sudo systemctl restart emustation
-    fi
-
+    # shellcheck disable=SC2046
+    kill -9 $(pidof gptokeyb)
+    systemctl restart emustation
     clear >/dev/tty1
 }
 

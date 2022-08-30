@@ -7,7 +7,7 @@
         "rar",
         "iso"
     ],
-    "query": "mediatype:(software OR image) AND (subject:(rom OR roms OR romset OR collection OR disc OR cd-rom OR image) OR title:(redump OR no-intro OR retrorom OR ghostware OR champion OR tosec OR cylum OR verevet_dark OR library OR collection)) AND -title:(bios)",
+    "query": "mediatype:(software OR image) AND (subject:(rom OR roms OR romset OR collection OR disc OR cd-rom OR image OR game) OR title:(redump OR no-intro OR retrorom OR ghostware OR champion OR tosec OR cylum OR verevet_dark OR library OR collection) OR collection:(open_source_software)) AND -title:(bios)",
     "systems": [
         {
             "id": "atari2600",
@@ -769,6 +769,17 @@
                 "7z"
             ],
             "query": "subject:(megaduck OR mega+duck)"
+        },
+        {
+            "id": "build",
+            "path": "build",
+            "name": "Build Engine",
+            "ext": [
+                "zip",
+                "7z",
+                "iso"
+            ],
+            "query": "subject:(build+engine)"
         },
         {
             "id": "arcade",
