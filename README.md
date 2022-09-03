@@ -19,8 +19,8 @@ To install, download all of the files in this repository, and emplace them on yo
 ├── ports
 |   ├── RomMaster
 |   │   ├── config.json
+|   │   ├── controls.gptk
 |   │   ├── RomMaster
-|   │   ├── tm-joypad
 |   │   └── utils
 |   ├── RomMaster.sh
 ```
